@@ -1,0 +1,15 @@
+/bin/
+/build/
+/config/
+/eclipse/
+/gradle/
+/logs/
+/mods/
+/.gradle/
+/.settings/
+/resourcepacks/
+/saves/
+/.classpath
+/.project
+/gradlew
+/gradlew.bat
