@@ -1,9 +1,69 @@
 package io.darkcraft.darkcore.mod;
 
+import net.minecraftforge.common.MinecraftForge;
+import io.darkcraft.darkcore.mod.config.ConfigHandler;
+import io.darkcraft.darkcore.mod.config.ConfigHandlerFactory;
+import io.darkcraft.darkcore.mod.handlers.ChunkLoadingHandler;
+import io.darkcraft.darkcore.mod.handlers.SoundPacketHandler;
+import io.darkcraft.darkcore.mod.interfaces.IConfigHandlerMod;
+import io.darkcraft.darkcore.mod.network.PacketHandler;
+import io.darkcraft.darkcore.mod.proxy.CommonProxy;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
+import cpw.mods.fml.common.Mod.EventHandler;
+import cpw.mods.fml.common.SidedProxy;
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.event.FMLServerAboutToStartEvent;
+import cpw.mods.fml.common.network.FMLEventChannel;
+import cpw.mods.fml.common.network.NetworkRegistry;
 
 @Mod(modid="darkcore", version="0.1")
-public class DarkcoreMod
+public class DarkcoreMod implements IConfigHandlerMod
 {
+	@SidedProxy(clientSide="io.darkcraft.darkcore.mod.proxy.ClientProxy",
+				serverSide="io.darkcraft.darkcore.mod.proxy.CommonProxy")
+	public static CommonProxy proxy;
+	public static DarkcoreMod i;
+	
+	public static ChunkLoadingHandler chunkLoadingHandler = null;
+	public static ConfigHandler configHandler = null;
+	public static FMLEventChannel networkChannel;
+	public static PacketHandler packetHandler = new PacketHandler();
+	public static SoundPacketHandler soundPacketHandler = new SoundPacketHandler();
+	
+	@EventHandler
+	public void preInit(FMLPreInitializationEvent ev)
+	{
+		i = this;
+		ConfigHandlerFactory.setConfigDir(ev.getModConfigurationDirectory());
+		configHandler = ConfigHandlerFactory.getConfigHandler(this);
+		networkChannel = NetworkRegistry.INSTANCE.newEventDrivenChannel("darkcore");
+		networkChannel.register(packetHandler);
+		packetHandler.registerHandler(0, soundPacketHandler);
+		
+	}
+	
+	@EventHandler
+	public void preServerStarting(FMLServerAboutToStartEvent ev)
+	{
+		resetChunkLoadingHandler();
+	}
+	
+	private void resetChunkLoadingHandler()
+	{
+		if(chunkLoadingHandler != null)
+		{
+			MinecraftForge.EVENT_BUS.unregister(chunkLoadingHandler);
+			FMLCommonHandler.instance().bus().unregister(chunkLoadingHandler);
+		}
+		chunkLoadingHandler = new ChunkLoadingHandler();
+		MinecraftForge.EVENT_BUS.register(chunkLoadingHandler);
+		FMLCommonHandler.instance().bus().register(chunkLoadingHandler);
+	}
 
+	@Override
+	public String getModID()
+	{
+		return "darkcore";
+	}
 }
