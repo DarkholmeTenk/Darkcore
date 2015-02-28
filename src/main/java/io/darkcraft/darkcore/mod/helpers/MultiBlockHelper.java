@@ -1,5 +1,6 @@
 package io.darkcraft.darkcore.mod.helpers;
 
+import io.darkcraft.darkcore.mod.datastore.SimpleCoordStore;
 import io.darkcraft.darkcore.mod.interfaces.IMultiBlockCore;
 import io.darkcraft.darkcore.mod.interfaces.IMultiBlockPart;
 import io.darkcraft.darkcore.mod.multiblock.BlockState;
@@ -97,5 +98,21 @@ public class MultiBlockHelper
 			}
 		}
 		return true;
+	}
+	
+	public static boolean doesCoreExist(IMultiBlockCore core)
+	{
+		SimpleCoordStore scs = core.getCoords();
+		World w = scs.getWorldObj();
+		int x = scs.x;
+		int y = scs.y;
+		int z = scs.z;
+		TileEntity te = w.getTileEntity(x, y, z);
+		if(te instanceof IMultiBlockCore)
+		{
+			if(te.equals(core))
+				return true;
+		}
+		return false;
 	}
 }

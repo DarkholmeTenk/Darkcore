@@ -2,6 +2,7 @@ package io.darkcraft.darkcraft.mod.common.tileent;
 
 import net.minecraft.entity.player.EntityPlayer;
 import io.darkcraft.darkcore.mod.abstracts.AbstractTileEntity;
+import io.darkcraft.darkcore.mod.datastore.SimpleCoordStore;
 import io.darkcraft.darkcore.mod.helpers.MultiBlockHelper;
 import io.darkcraft.darkcore.mod.interfaces.IActivatable;
 import io.darkcraft.darkcore.mod.interfaces.IMultiBlockCore;
@@ -65,6 +66,12 @@ public class MultiBlockCoreTE extends AbstractTileEntity implements IMultiBlockC
 	public int getCoreZ()
 	{
 		return 2;
+	}
+
+	@Override
+	public SimpleCoordStore getCoords()
+	{
+		return new SimpleCoordStore(this);
 	}
 
 }

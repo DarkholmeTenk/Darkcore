@@ -2,6 +2,7 @@ package io.darkcraft.darkcore.mod.abstracts;
 
 import io.darkcraft.darkcore.mod.interfaces.IActivatable;
 import io.darkcraft.darkcore.mod.interfaces.IBlockUpdateDetector;
+import io.darkcraft.darkcore.mod.interfaces.IMultiBlockPart;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.entity.item.EntityItem;
@@ -42,10 +43,13 @@ public abstract class AbstractBlockContainer extends AbstractBlock implements IT
     }
     
     @Override
-    public void breakBlock(World par1World, int par2, int par3, int par4, Block par5, int par6)
+    public void breakBlock(World w, int x, int y, int z, Block par5, int par6)
     {
-        super.breakBlock(par1World, par2, par3, par4, par5, par6);
-        par1World.removeTileEntity(par2, par3, par4);
+    	TileEntity te = w.getTileEntity(x, y, z);
+    	if(te instanceof IMultiBlockPart)
+    		((IMultiBlockPart)te).recheckCore();
+        super.breakBlock(w, x, y, z, par5, par6);
+        w.removeTileEntity(x, y, z);
     }
     
     @Override

@@ -1,20 +1,20 @@
 package io.darkcraft.darkcore.mod.datastore;
 
 import io.darkcraft.darkcore.mod.helpers.WorldHelper;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.World;
 
-public class SimpleCoordStore
+public class SimpleDoubleCoordStore
 {
 	public final int world;
-	public final int x;
-	public final int y;
-	public final int z;
+	public final double x;
+	public final double y;
+	public final double z;
 	
-	public SimpleCoordStore(TileEntity te)
+	public SimpleDoubleCoordStore(TileEntity te)
 	{
 		world = WorldHelper.getWorldID(te);
 		x = te.xCoord;
@@ -22,7 +22,7 @@ public class SimpleCoordStore
 		z = te.zCoord;
 	}
 	
-	public SimpleCoordStore(int win, int xin, int yin, int zin)
+	public SimpleDoubleCoordStore(int win, double xin, double yin, double zin)
 	{
 		world = win;
 		x = xin;
@@ -30,7 +30,7 @@ public class SimpleCoordStore
 		z = zin;
 	}
 	
-	public SimpleCoordStore(World w, int xin, int yin, int zin)
+	public SimpleDoubleCoordStore(World w, double xin, double yin, double zin)
 	{
 		world = WorldHelper.getWorldID(w);
 		x = xin;
@@ -38,12 +38,20 @@ public class SimpleCoordStore
 		z = zin;
 	}
 	
-	public SimpleCoordStore(EntityPlayer player)
+	public SimpleDoubleCoordStore(int w, Entity ent)
 	{
-		world = WorldHelper.getWorldID(player);
-		x = (int) Math.floor(player.posX);
-		y = (int) Math.floor(player.posY);
-		z = (int) Math.floor(player.posZ);
+		world = w;
+		x = ent.posX;
+		y = ent.posY;
+		z = ent.posZ;
+	}
+	
+	public SimpleDoubleCoordStore(EntityLivingBase ent)
+	{
+		world = WorldHelper.getWorldID(ent);
+		x = ent.posX;
+		y = ent.posY;
+		z = ent.posZ;
 	}
 
 	public World getWorldObj()
@@ -68,9 +76,13 @@ public class SimpleCoordStore
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + world;
-		result = prime * result + x;
-		result = prime * result + y;
-		result = prime * result + z;
+		long temp;
+		temp = Double.doubleToLongBits(x);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		temp = Double.doubleToLongBits(y);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		temp = Double.doubleToLongBits(z);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
 		return result;
 	}
 
@@ -79,9 +91,11 @@ public class SimpleCoordStore
 	{
 		if (this == obj)
 			return true;
-		if (!(obj instanceof SimpleCoordStore))
+		if (obj == null)
 			return false;
-		SimpleCoordStore other = (SimpleCoordStore) obj;
+		if (!(obj instanceof SimpleDoubleCoordStore))
+			return false;
+		SimpleDoubleCoordStore other = (SimpleDoubleCoordStore) obj;
 		if (world != other.world)
 			return false;
 		if (x != other.x || y != other.y || z != other.z)
@@ -99,24 +113,19 @@ public class SimpleCoordStore
 	public void writeToNBT(NBTTagCompound nbt)
 	{
 		nbt.setInteger("w", world);
-		nbt.setInteger("x", x);
-		nbt.setInteger("y", y);
-		nbt.setInteger("z", z);
+		nbt.setDouble("x", x);
+		nbt.setDouble("y", y);
+		nbt.setDouble("z", z);
 	}
 	
-	public static SimpleCoordStore readFromNBT(NBTTagCompound nbt)
+	public static SimpleDoubleCoordStore readFromNBT(NBTTagCompound nbt)
 	{
 		if(!(nbt.hasKey("w") && nbt.hasKey("x") && nbt.hasKey("y") && nbt.hasKey("z")))
 			return null;
 		int w = nbt.getInteger("w");
-		int x = nbt.getInteger("x");
-		int y = nbt.getInteger("y");
-		int z = nbt.getInteger("z");
-		return new SimpleCoordStore(w,x,y,z);
-	}
-
-	public ChunkCoordIntPair toChunkCoords()
-	{
-		return new ChunkCoordIntPair(x>>4,z>>4);
+		double x = nbt.getDouble("x");
+		double y = nbt.getDouble("y");
+		double z = nbt.getDouble("z");
+		return new SimpleDoubleCoordStore(w,x,y,z);
 	}
 }
