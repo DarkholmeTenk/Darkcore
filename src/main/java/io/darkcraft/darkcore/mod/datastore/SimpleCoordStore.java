@@ -6,6 +6,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public class SimpleCoordStore
 {
@@ -44,6 +45,24 @@ public class SimpleCoordStore
 		x = (int) Math.floor(player.posX);
 		y = (int) Math.floor(player.posY);
 		z = (int) Math.floor(player.posZ);
+	}
+	
+	public SimpleCoordStore(SimpleDoubleCoordStore pos)
+	{
+		this(pos.world,(int)Math.floor(pos.x),(int)Math.floor(pos.y),(int)Math.floor(pos.z));
+	}
+	
+	public SimpleDoubleCoordStore getCenter()
+	{
+		return new SimpleDoubleCoordStore(world,x+0.5,y+0.5,z+0.5);
+	}
+	
+	public SimpleCoordStore getNearby(ForgeDirection dir)
+	{
+		int oX = dir.offsetX;
+		int oY = dir.offsetY;
+		int oZ = dir.offsetZ;
+		return new SimpleCoordStore(world,x+oX,y+oY,z+oZ);
 	}
 
 	public World getWorldObj()

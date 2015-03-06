@@ -1,10 +1,12 @@
 package io.darkcraft.darkcore.mod.datastore;
 
+import io.darkcraft.darkcore.mod.helpers.MathHelper;
 import io.darkcraft.darkcore.mod.helpers.WorldHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 
 public class SimpleDoubleCoordStore
@@ -53,10 +55,67 @@ public class SimpleDoubleCoordStore
 		y = ent.posY;
 		z = ent.posZ;
 	}
+	
+	/**Returns the distance between this and other simple double coord store
+	 * @param other
+	 * @return -1 if not in same world or abs(distance between the two)
+	 */
+	public double distance(SimpleDoubleCoordStore other)
+	{
+		if(other == null || world != other.world)
+			return -1;
+		double total = 0;
+		double temp = (other.x-x);
+		total += (temp * temp);
+		temp = (other.y-y);
+		total += (temp * temp);
+		temp = (other.z-z);
+		total += (temp * temp);
+		return Math.sqrt(total);
+	}
+	
+	public double distance(EntityLivingBase e)
+	{
+		return distance(new SimpleDoubleCoordStore(e));
+	}
 
 	public World getWorldObj()
 	{
 		return WorldHelper.getWorld(world);
+	}
+	
+	public SimpleCoordStore floor()
+	{
+		int _x = MathHelper.floor(x);
+		int _y = MathHelper.floor(y);
+		int _z = MathHelper.floor(z);
+		return new SimpleCoordStore(world,_x,_y,_z);
+	}
+	
+	public SimpleCoordStore round()
+	{
+		int _x = MathHelper.round(x);
+		int _y = MathHelper.round(y);
+		int _z = MathHelper.round(z);
+		return new SimpleCoordStore(world,_x,_y,_z);
+	}
+	
+	public SimpleCoordStore ceil()
+	{
+		int _x = MathHelper.ceil(x);
+		int _y = MathHelper.ceil(y);
+		int _z = MathHelper.ceil(z);
+		return new SimpleCoordStore(world,_x,_y,_z);
+	}
+	
+	/**returns an AABB centred around this coord store
+	 * with lengths 2r in each direction.
+	 * @param r the 'radius' of the AABB
+	 * @return
+	 */
+	public AxisAlignedBB getAABB(double r)
+	{
+		return AxisAlignedBB.getBoundingBox(x-r, y-r, z-r, x+r, y+r, z+r);
 	}
 	
 	@Override

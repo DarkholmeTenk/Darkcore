@@ -7,7 +7,7 @@ import net.minecraft.entity.EntityLivingBase;
 import io.darkcraft.darkcore.mod.datastore.SimpleCoordStore;
 import io.darkcraft.darkcore.mod.datastore.SimpleDoubleCoordStore;
 
-public interface ISpellShape
+public interface ISpellShape extends ISpellComponent
 {
 	/**Gets the coefficient of the spell cost for the exponent given.
 	 * Spells will normally have exponents 0 (linear), 1 (constant) and 2 (quadratic).
@@ -52,7 +52,4 @@ public interface ISpellShape
 	 * @return an int specifying the number of ticks which it should take place over
 	 */
 	public int getDuration();
-	
-	public String getID();
-	public ISpellShape create();
 }

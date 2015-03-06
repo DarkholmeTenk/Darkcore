@@ -9,6 +9,7 @@ import io.darkcraft.darkcraft.mod.common.spellsystem.interfaces.ISpellShape;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.Random;
 import java.util.Set;
 
 import net.minecraft.entity.EntityLivingBase;
@@ -16,12 +17,20 @@ import net.minecraft.nbt.NBTTagCompound;
 
 public class SpellInstance
 {
+	private Random rand = new Random();
 	private final LinkedList<ISpellShape> remainingShapes;
 	private final ArrayList<ISpellEffect> effects;
 	private final ArrayList<ISpellModifier> mods;
 	private final SimpleDoubleCoordStore pos;
 	private boolean dead = false;
-	private int age = 0;
+	private int age = -1;
+	private int extAge = -1;
+	private static final int ageMult = 4;
+	
+	private int getStartOffset()
+	{
+		return rand.nextInt(ageMult-1)-(ageMult-1);
+	}
 	
 	public SpellInstance(BaseSpell base,SimpleDoubleCoordStore _pos)
 	{
@@ -29,6 +38,7 @@ public class SpellInstance
 		effects = base.getEffects();
 		mods = base.getMods();
 		pos = _pos;
+		extAge = getStartOffset();
 		DarkcraftMod.spellInstanceRegistry.registerSpellInstance(this);
 	}
 	
@@ -38,6 +48,7 @@ public class SpellInstance
 		effects = parent.effects;
 		mods = parent.mods;
 		pos = _pos;
+		extAge = getStartOffset();
 		DarkcraftMod.spellInstanceRegistry.registerSpellInstance(this);
 	}
 	
@@ -48,11 +59,13 @@ public class SpellInstance
 		mods = m;
 		age = a;
 		pos = _pos;
+		extAge = getStartOffset();
 		DarkcraftMod.spellInstanceRegistry.registerSpellInstance(this);
 	}
 	
 	public void die()
 	{
+		//System.out.println("Dead spell instance!");
 		dead = true;
 	}
 	
@@ -82,27 +95,30 @@ public class SpellInstance
 	
 	public void tick()
 	{
+		extAge++;
+		if(extAge >= 0 && extAge % ageMult != 0)
+			return;
 		age++;
 		ISpellShape myShape = headShape();
 		int myDur = myShape.getDuration();
-		if(age >= myDur)
+		if(age >= myDur && age > 0)
 		{
 			die();
 			return;
 		}
-		
+		//System.out.println("Ticking spell instance!");
 		ISpellShape child = nextShape();
 		if(child != null)
 		{
 			int childDur = Math.max(1,child.getDuration());
 			int timeLeft = childDur - (age % childDur);
-			if(timeLeft > (age - myDur))
+			if(age % childDur == 0)
+				createChildren();
+			if(timeLeft > (myDur - age))
 			{
 				die();
 				return;
 			}
-			if(age % childDur == 0)
-				createChildren();
 		}
 		else
 		{
@@ -116,12 +132,15 @@ public class SpellInstance
 			Set<SimpleCoordStore> blocks = myShape.getAffectedBlocks(pos);
 			for(ISpellEffect e : effects)
 			{
+				System.out.println("Ticking effect " + e.getID());
 				if(age % e.getInterval() != 0)
 					continue;
-				for(EntityLivingBase ent : ents)
-					e.applyEffect(ent);
-				for(SimpleCoordStore scs : blocks)
-					e.applyEffect(scs);
+				if(ents != null)
+					for(EntityLivingBase ent : ents)
+						e.applyEffect(ent);
+				if(blocks != null)
+					for(SimpleCoordStore scs : blocks)
+						e.applyEffect(scs);
 			}
 		}
 	}

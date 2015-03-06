@@ -1,6 +1,6 @@
 package io.darkcraft.darkcraft.mod.common.spellsystem.interfaces;
 
-public interface ISpellModifier
+public interface ISpellModifier extends ISpellComponent
 {
 	/**Gets the coefficient of the spell cost for the exponent given.
 	 * Spells will normally have exponents 0 (linear), 1 (constant) and 2 (quadratic).
@@ -14,7 +14,4 @@ public interface ISpellModifier
 	 */
 	public void setStrength(int strength);
 	public int getStrength();
-	
-	public String getID();
-	public ISpellModifier create();
 }

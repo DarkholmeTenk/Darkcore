@@ -7,7 +7,7 @@ import java.util.Set;
 
 import net.minecraft.entity.EntityLivingBase;
 
-public interface ISpellEffect
+public interface ISpellEffect extends ISpellComponent
 {
 	/**Returns the amount of mana that this spell will take to cast
 	 */
@@ -32,7 +32,4 @@ public interface ISpellEffect
 	 * Should only be called once.
 	 */
 	public void applyModifiers(List<ISpellModifier> modifiers);
-	
-	public String getID();
-	public ISpellEffect create();
 }

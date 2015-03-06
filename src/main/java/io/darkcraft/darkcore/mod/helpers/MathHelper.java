@@ -13,4 +13,19 @@ public class MathHelper
 	{
 		return Math.min(max, Math.max(min,value));
 	}
+	
+	public static int floor(double in)
+	{
+		return (int)Math.floor(in);
+	}
+	
+	public static int ceil(double in)
+	{
+		return (int)Math.ceil(in);
+	}
+	
+	public static int round(double in)
+	{
+		return (int)Math.round(in);
+	}
 }

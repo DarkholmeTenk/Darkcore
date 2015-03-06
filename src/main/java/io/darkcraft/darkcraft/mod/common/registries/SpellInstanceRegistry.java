@@ -21,13 +21,13 @@ public class SpellInstanceRegistry
 	@SubscribeEvent
 	public void tickNotify(TickEvent ev)
 	{
-		if(Math.random() < 0.05)
+		/*if(Math.random() < 0.05)
 		{
 			EntityLivingBase pl = Minecraft.getMinecraft().thePlayer;
 			SimpleDoubleCoordStore d = PlayerMagicHelper.getAimingAt(pl, 20);
 			if(d != null)
 				System.out.println(d.toSimpleString());
-		}
+		}*/
 		if(ev.phase.equals(Phase.END))
 		{
 			processInstances();

@@ -4,6 +4,7 @@ import net.minecraftforge.common.MinecraftForge;
 import io.darkcraft.darkcore.mod.config.ConfigHandler;
 import io.darkcraft.darkcore.mod.config.ConfigHandlerFactory;
 import io.darkcraft.darkcore.mod.handlers.ChunkLoadingHandler;
+import io.darkcraft.darkcore.mod.handlers.CommandHandler;
 import io.darkcraft.darkcore.mod.handlers.SoundPacketHandler;
 import io.darkcraft.darkcore.mod.interfaces.IConfigHandlerMod;
 import io.darkcraft.darkcore.mod.network.PacketHandler;
@@ -14,6 +15,7 @@ import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerAboutToStartEvent;
+import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.network.FMLEventChannel;
 import cpw.mods.fml.common.network.NetworkRegistry;
 
@@ -30,6 +32,7 @@ public class DarkcoreMod implements IConfigHandlerMod
 	public static FMLEventChannel networkChannel;
 	public static PacketHandler packetHandler = new PacketHandler();
 	public static SoundPacketHandler soundPacketHandler = new SoundPacketHandler();
+	public static CommandHandler comHandler = new CommandHandler();
 	
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent ev)
@@ -47,6 +50,12 @@ public class DarkcoreMod implements IConfigHandlerMod
 	public void preServerStarting(FMLServerAboutToStartEvent ev)
 	{
 		resetChunkLoadingHandler();
+	}
+	
+	@EventHandler
+	public void serverStarting(FMLServerStartingEvent event)
+	{
+		comHandler.registerCommands(event);
 	}
 	
 	private void resetChunkLoadingHandler()

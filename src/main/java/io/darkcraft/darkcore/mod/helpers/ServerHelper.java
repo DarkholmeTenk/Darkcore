@@ -15,7 +15,7 @@ public class ServerHelper
 {
 	public static boolean isServer()
 	{
-		return FMLCommonHandler.instance().getSide().equals(Side.SERVER);
+		return !FMLCommonHandler.instance().getEffectiveSide().equals(Side.CLIENT);
 	}
 	
 	public static NBTTagCompound readNBT(InputStream in)

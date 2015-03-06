@@ -23,7 +23,7 @@ public class MultiBlockCoreTE extends AbstractTileEntity implements IMultiBlockC
 	@Override
 	public void recheckValidity()
 	{
-		System.out.println("Checking MB VALID");
+		//System.out.println("Checking MB VALID");
 		validMB = MultiBlockHelper.isMultiblockValid(this, this);
 	}
 

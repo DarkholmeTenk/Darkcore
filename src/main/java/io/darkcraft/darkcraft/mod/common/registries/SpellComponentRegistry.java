@@ -1,5 +1,6 @@
 package io.darkcraft.darkcraft.mod.common.registries;
 
+import io.darkcraft.darkcraft.mod.common.spellsystem.interfaces.ISpellComponent;
 import io.darkcraft.darkcraft.mod.common.spellsystem.interfaces.ISpellEffect;
 import io.darkcraft.darkcraft.mod.common.spellsystem.interfaces.ISpellModifier;
 import io.darkcraft.darkcraft.mod.common.spellsystem.interfaces.ISpellShape;
@@ -15,22 +16,32 @@ public class SpellComponentRegistry
 	public static ISpellShape getShape(String id)
 	{
 		if(shapes.containsKey(id))
-			return shapes.get(id).create();
+			return (ISpellShape) shapes.get(id).create();
 		return null;
 	}
 	
 	public static ISpellEffect getEffect(String id)
 	{
 		if(effects.containsKey(id))
-			return effects.get(id).create();
+			return (ISpellEffect) effects.get(id).create();
 		return null;
 	}
 	
 	public static ISpellModifier getModifier(String id)
 	{
 		if(modifiers.containsKey(id))
-			return modifiers.get(id).create();
+			return (ISpellModifier) modifiers.get(id).create();
 		return null;
+	}
+	
+	public static void add(ISpellComponent com)
+	{
+		if(com instanceof ISpellShape)
+			shapes.put(com.getID(),(ISpellShape)com);
+		if(com instanceof ISpellEffect)
+			effects.put(com.getID(),(ISpellEffect)com);
+		if(com instanceof ISpellModifier)
+			modifiers.put(com.getID(),(ISpellModifier) com);
 	}
 	
 }

@@ -18,11 +18,11 @@ public class MultiBlockHelper
 	{
 		//if(!(core instanceof IMultiBlockCore))
 		//	return false;
-		System.out.println("[MBH]Checking if multiblock is valid!");
+		//System.out.println("[MBH]Checking if multiblock is valid!");
 		boolean valid = false;
 		for(ForgeDirection dir : rotDirs)
 		{
-			System.out.println("Checking dir " + dir.toString());
+			//System.out.println("Checking dir " + dir.toString());
 			valid = valid || isMultiblockValid(dir,core,structure);
 		}
 		return valid;
@@ -59,7 +59,7 @@ public class MultiBlockHelper
 							zToCheck = (z + (xO*(structure.getCoreZ() - zI)));
 						else
 							xToCheck = (x + (zO*(structure.getCoreZ() - zI)));
-						System.out.println("Block at "+xToCheck +","+yToCheck+","+zToCheck);
+						//System.out.println("Block at "+xToCheck +","+yToCheck+","+zToCheck);
 						if(!cell.equals(w, xToCheck, yToCheck, zToCheck))
 						{
 							return false;
