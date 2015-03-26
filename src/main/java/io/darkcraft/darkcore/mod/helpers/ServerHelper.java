@@ -4,10 +4,16 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.List;
 import java.util.zip.ZipException;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.management.ServerConfigurationManager;
+import net.minecraft.util.ChatComponentText;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 
@@ -60,5 +66,49 @@ public class ServerHelper
 			System.err.println("[SH]Error writing NBT: "+ e.getMessage());
 			e.printStackTrace();
 		}
+	}
+	
+	public static MinecraftServer getServer()
+	{
+		return MinecraftServer.getServer();
+	}
+	
+	public static ServerConfigurationManager getConfigManager()
+	{
+		return MinecraftServer.getServer().getConfigurationManager();
+	}
+	
+	public static EntityPlayerMP getPlayer(String username)
+	{
+		List playerEnts = getConfigManager().playerEntityList;
+		for (Object o : playerEnts)
+		{
+			if (o instanceof EntityPlayerMP)
+			{
+				if (((EntityPlayerMP) o).getCommandSenderName().equalsIgnoreCase(username))
+					return (EntityPlayerMP) o;
+			}
+		}
+		return null;
+	}
+	
+	public static String getUsername(EntityPlayer player)
+	{
+		return player.getCommandSenderName();
+	}
+	
+	public static void sendString(EntityPlayer pl, String source, String s)
+	{
+		sendString(pl, new ChatComponentText("[" + source + "] " + s));
+	}
+
+	public static void sendString(EntityPlayer pl, ChatComponentText message)
+	{
+		pl.addChatMessage(message);
+	}
+	
+	public static void sendString(EntityPlayer pl, String string)
+	{
+		sendString(pl, new ChatComponentText(string));
 	}
 }

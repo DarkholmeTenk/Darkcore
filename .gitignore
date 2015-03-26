@@ -15,5 +15,6 @@
 /.project
 /gradlew
 /gradlew.bat
+/screenshots/
 options.txt
 usernamecache.json

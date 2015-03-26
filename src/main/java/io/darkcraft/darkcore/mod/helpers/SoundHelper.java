@@ -53,6 +53,7 @@ public class SoundHelper
 		data.setInteger("y", y);
 		data.setInteger("z", z);
 		data.setFloat("vol", vol);
+		System.out.println("PlayingSound:" + sound);
 		if (speed != 1)
 			data.setFloat("spe", speed);
 		DataPacket packet = new DataPacket(data, (byte)0);

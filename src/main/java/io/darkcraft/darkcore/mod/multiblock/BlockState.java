@@ -52,4 +52,10 @@ public class BlockState
 		int meta = w.getBlockMetadata(x, y, z);
 		return block == b && (m == -1 || meta == m);
 	}
+	
+	@Override
+	public String toString()
+	{
+		return b.getClass().getSimpleName();
+	}
 }

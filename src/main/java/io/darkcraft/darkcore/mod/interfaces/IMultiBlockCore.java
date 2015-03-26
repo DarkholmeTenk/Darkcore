@@ -7,4 +7,5 @@ public interface IMultiBlockCore
 	public boolean isValid();
 	public void recheckValidity();
 	public SimpleCoordStore getCoords();
+	public boolean keepRechecking();
 }

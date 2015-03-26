@@ -12,30 +12,17 @@ import cpw.mods.fml.common.network.internal.FMLProxyPacket;
 
 public class DataPacket extends FMLProxyPacket
 {
-	public enum PacketType
-	{
-		SOUND, PARTICLE;
-
-		public static PacketType find(int i)
-		{
-			PacketType[] vals = PacketType.values();
-			if (i >= 0 && i < vals.length)
-				return vals[i];
-			return null;
-		}
-	}
-
 	public ByteBuf	buffer;
 
 	public DataPacket(ByteBuf payload, String channel)
 	{
-		super(payload, channel);
+		super(payload, "darkcore");
 		buffer = payload;
 	}
 
 	public DataPacket(ByteBuf payload, NBTTagCompound nbt, byte discriminator)
 	{
-		super(payload, "tardis");
+		super(payload, "darkcore");
 		payload.writeByte(discriminator);
 		payload.writerIndex(1);
 		try

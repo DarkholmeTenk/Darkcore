@@ -29,6 +29,7 @@ public class PacketHandler
 	@SubscribeEvent
 	public void handleCustomPacket(CustomPacketEvent event)
 	{
+		System.out.println("Packet received!");
 		FMLProxyPacket p = event.packet;
 		int discriminator = p.payload().getByte(0);
 		p.payload().readerIndex(1);

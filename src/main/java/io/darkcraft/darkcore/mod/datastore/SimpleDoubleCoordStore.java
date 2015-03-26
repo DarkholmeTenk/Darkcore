@@ -144,6 +144,22 @@ public class SimpleDoubleCoordStore
 		result = prime * result + (int) (temp ^ (temp >>> 32));
 		return result;
 	}
+	
+	public int hashCodeTolerance(double tolerance)
+	{
+		int mag = MathHelper.round(1/tolerance);
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + world;
+		long temp;
+		temp = MathHelper.floor(x * mag);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		temp = MathHelper.floor(y * mag);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		temp = MathHelper.floor(z * mag);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		return result;
+	}
 
 	@Override
 	public boolean equals(Object obj)
