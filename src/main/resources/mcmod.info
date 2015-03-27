@@ -1,14 +1,13 @@
 [
 {
-  "modid": "examplemod",
-  "name": "Example Mod",
-  "description": "Example placeholder mod.",
+  "modid": "darkcore",
+  "name": "Dark Core",
+  "description": "Provides core functionality to darkcraft mods",
   "version": "${version}",
   "mcversion": "${mcversion}",
-  "url": "",
-  "updateUrl": "",
-  "authorList": ["ExampleDude"],
-  "credits": "The Forge and FML guys, for making this example",
+  "url": "http://darkcraft.io",
+  "authorList": ["DarkholmeTenk"],
+  "credits": "DarkholmeTenk",
   "logoFile": "",
   "screenshots": [],
   "dependencies": []

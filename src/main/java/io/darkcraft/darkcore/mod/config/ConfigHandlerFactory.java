@@ -28,7 +28,7 @@ public class ConfigHandlerFactory
 		File f = new File(configDirectory,modID);
 		if((!f.exists()) || (!f.isDirectory()))
 			f.mkdir();
-		ConfigHandler ch = new ConfigHandler(f);
+		ConfigHandler ch = new ConfigHandler(f,modID);
 		chMap.put(modID, ch);
 		return ch;
 	}

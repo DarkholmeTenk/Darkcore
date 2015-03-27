@@ -11,24 +11,29 @@ public class ConfigItem
 	{
 		id = identifier;
 		type = t;
+		if(t.equals(CType.DOUBLE) && defaultVal instanceof Integer)
+			defaultVal = Double.valueOf((Integer)defaultVal);
 		val = defaultVal;
 		String comStr = null;
 		if(comments != null && comments.length >0)
 		{
-			comStr = parseComments(comments);
+			comStr = parseComments(defaultVal,comments);
 		}
 		com = comStr;
 	}
 	
-	private String parseComments(String... comments)
+	private String parseComments(Object defaultVal,String... comments)
 	{
 		String finalStr = "";
 		boolean started = false;
+		boolean defaultIncluded = false;
 		for(String s : comments)
 		{
 			String[] d = s.split("\n");
 			for(String m : d)
 			{
+				if(m.toLowerCase().contains("default:"))
+					defaultIncluded = true;
 				if(m.startsWith("#"))
 					finalStr += (started ? "\n" : "") + m;
 				else
@@ -36,6 +41,8 @@ public class ConfigItem
 				started = true;
 			}
 		}
+		if(!defaultIncluded)
+			finalStr += (started ? "\n" : "") + "#Default: " + defaultVal.toString();
 		return finalStr;
 	}
 	

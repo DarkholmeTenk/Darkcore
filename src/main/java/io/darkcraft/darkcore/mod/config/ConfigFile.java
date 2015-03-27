@@ -127,4 +127,24 @@ public class ConfigFile
 				ps.close();
 		}
 	}
+	
+	public String getString(String name, String defaultVal, String... comments)
+	{
+		return getConfigItem(new ConfigItem(name, CType.STRING, defaultVal, comments)).getString();
+	}
+	
+	public boolean getBoolean(String name, boolean defaultVal, String... comments)
+	{
+		return getConfigItem(new ConfigItem(name, CType.BOOLEAN, defaultVal, comments)).getBoolean();
+	}
+	
+	public int getInt(String name, int defaultVal, String... comments)
+	{
+		return getConfigItem(new ConfigItem(name, CType.INT, defaultVal, comments)).getInt();
+	}
+
+	public double getDouble(String name, double defaultVal, String... comments)
+	{
+		return getConfigItem(new ConfigItem(name, CType.DOUBLE, defaultVal, comments)).getDouble();
+	}
 }
