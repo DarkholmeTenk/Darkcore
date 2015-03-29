@@ -1,11 +1,13 @@
 package io.darkcraft.darkcore.mod.abstracts;
 
+import io.darkcraft.darkcore.mod.datastore.SimpleDoubleCoordStore;
+import io.darkcraft.darkcore.mod.helpers.ServerHelper;
+import io.darkcraft.darkcore.mod.helpers.WorldHelper;
 import io.darkcraft.darkcore.mod.interfaces.IActivatable;
 import io.darkcraft.darkcore.mod.interfaces.IBlockUpdateDetector;
 import io.darkcraft.darkcore.mod.interfaces.IMultiBlockPart;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -62,6 +64,9 @@ public abstract class AbstractBlockContainer extends AbstractBlock implements IT
 	@Override
 	public boolean onBlockActivated(World w, int x, int y, int z, EntityPlayer pl, int s, float i, float j, float k)
 	{
+		if(this instanceof IActivatable)
+			if(((IActivatable)this).activate(pl, s))
+				return true;
 		TileEntity te = w.getTileEntity(x, y, z);
 		if (te instanceof IActivatable)
 			return ((IActivatable) te).activate(pl, s);
@@ -71,16 +76,8 @@ public abstract class AbstractBlockContainer extends AbstractBlock implements IT
 	@Override
 	protected void dropBlockAsItem(World w, int x, int y, int z, ItemStack is)
 	{
-		if (!w.isRemote && w.getGameRules().getGameRuleBooleanValue("doTileDrops") && !w.restoringBlockSnapshots) // do
-																													// not
-																													// drop
-																													// items
-																													// while
-																													// restoring
-																													// blockstates,
-																													// prevents
-																													// item
-																													// dupe
+		//do not drop items while restoring blockstates, prevents item dupe
+		if (ServerHelper.isServer() && w.getGameRules().getGameRuleBooleanValue("doTileDrops") && !w.restoringBlockSnapshots)
 		{
 			if (dropWithData)
 			{
@@ -105,9 +102,7 @@ public abstract class AbstractBlockContainer extends AbstractBlock implements IT
 			double d0 = w.rand.nextFloat() * f + (1.0F - f) * 0.5D;
 			double d1 = w.rand.nextFloat() * f + (1.0F - f) * 0.5D;
 			double d2 = w.rand.nextFloat() * f + (1.0F - f) * 0.5D;
-			EntityItem entityitem = new EntityItem(w, x + d0, y + d1, z + d2, is);
-			entityitem.delayBeforeCanPickup = 0;
-			w.spawnEntityInWorld(entityitem);
+			WorldHelper.dropItemStack(is, new SimpleDoubleCoordStore(w,x+d0,y+d1,z+d2));
 		}
 	}
 

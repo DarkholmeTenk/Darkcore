@@ -1,9 +1,11 @@
 package io.darkcraft.darkcore.mod.datastore;
 
 import io.darkcraft.darkcore.mod.helpers.WorldHelper;
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -52,6 +54,11 @@ public class SimpleCoordStore
 		this(pos.world,(int)Math.floor(pos.x),(int)Math.floor(pos.y),(int)Math.floor(pos.z));
 	}
 	
+	public SimpleCoordStore(World w, MovingObjectPosition hitPos)
+	{
+		this(w, hitPos.blockX,hitPos.blockY,hitPos.blockZ);
+	}
+
 	public SimpleDoubleCoordStore getCenter()
 	{
 		return new SimpleDoubleCoordStore(world,x+0.5,y+0.5,z+0.5);
@@ -137,5 +144,29 @@ public class SimpleCoordStore
 	public ChunkCoordIntPair toChunkCoords()
 	{
 		return new ChunkCoordIntPair(x>>4,z>>4);
+	}
+
+	public TileEntity getTileEntity()
+	{
+		World w = getWorldObj();
+		if(w != null)
+			return w.getTileEntity(x, y, z);
+		return null;
+	}
+	
+	public Block getBlock()
+	{
+		World w = getWorldObj();
+		if(w != null)
+			return w.getBlock(x, y, z);
+		return null;
+	}
+	
+	public int getMetadata()
+	{
+		World w = getWorldObj();
+		if(w != null)
+			return w.getBlockMetadata(x, y, z);
+		return 0;
 	}
 }
