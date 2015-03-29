@@ -64,8 +64,8 @@ public abstract class AbstractBlockContainer extends AbstractBlock implements IT
 	{
 		TileEntity te = w.getTileEntity(x, y, z);
 		if (te instanceof IActivatable)
-			((IActivatable) te).activate(pl, s);
-		return true;
+			return ((IActivatable) te).activate(pl, s);
+		return false;
 	}
 
 	@Override
