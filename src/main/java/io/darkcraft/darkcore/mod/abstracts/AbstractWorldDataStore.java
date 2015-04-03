@@ -18,25 +18,31 @@ public abstract class AbstractWorldDataStore extends WorldSavedData
 	
 	public void load()
 	{
-		try
+		synchronized(this)
 		{
-			MapStorage data = getData();
-			WorldSavedData wsd = data.loadData(getClass(), getName());
-			NBTTagCompound nbt = new NBTTagCompound();
-			wsd.writeToNBT(nbt);
-			readFromNBT(nbt);
+			try
+			{
+				MapStorage data = getData();
+				WorldSavedData wsd = data.loadData(getClass(), getName());
+				NBTTagCompound nbt = new NBTTagCompound();
+				wsd.writeToNBT(nbt);
+				readFromNBT(nbt);
+			}
+			catch(NullPointerException e){}
 		}
-		catch(NullPointerException e){}
 	}
 	
 	public void save()
 	{
-		try
+		synchronized(this)
 		{
-			MapStorage data = getData();
-			data.setData(getName(), this);
+			try
+			{
+				MapStorage data = getData();
+				data.setData(getName(), this);
+			}
+			catch(NullPointerException e){}
 		}
-		catch(NullPointerException e){}
 	}
 	
 	private MapStorage getData()

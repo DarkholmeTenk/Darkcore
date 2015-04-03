@@ -158,7 +158,8 @@ public class SimpleCoordStore
 	{
 		World w = getWorldObj();
 		if(w != null)
-			return w.getBlock(x, y, z);
+			if(!w.isAirBlock(x, y, z))
+				return w.getBlock(x, y, z);
 		return null;
 	}
 	

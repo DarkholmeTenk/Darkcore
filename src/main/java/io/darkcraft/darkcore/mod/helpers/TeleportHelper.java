@@ -21,6 +21,8 @@ public class TeleportHelper
 		int oldDimension = WorldHelper.getWorldID(ent);
 		WorldServer dest = WorldHelper.getWorldServer(newDimension);
 		WorldServer source = WorldHelper.getWorldServer(oldDimension);
+		if(dest == null || source == null)
+			return;
 		if(ent instanceof EntityPlayerMP)
 		{
 			EntityPlayerMP pl = (EntityPlayerMP)ent;

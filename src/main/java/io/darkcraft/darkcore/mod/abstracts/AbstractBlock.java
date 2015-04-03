@@ -4,6 +4,7 @@ import io.darkcraft.darkcore.mod.DarkcoreMod;
 import io.darkcraft.darkcore.mod.helpers.MathHelper;
 import io.darkcraft.darkcore.mod.multiblock.BlockState;
 
+import java.io.FileNotFoundException;
 import java.util.List;
 
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -19,6 +20,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 
 public abstract class AbstractBlock extends Block
 {
@@ -253,9 +255,7 @@ public abstract class AbstractBlock extends Block
 			}
 		}
 		else
-		{
 			iconBuffer = register.registerIcon(sm + ":" + getUnlocalizedNameForIcon());
-		}
 	}
 
 	@Override
@@ -337,6 +337,12 @@ public abstract class AbstractBlock extends Block
 		{
 			return iconBuffer;
 		}
+	}
+	
+	@Override
+	public void onPostBlockPlaced(World w, int x, int y, int z, int m)
+	{
+		w.scheduleBlockUpdate(x, y, z, this, 1);
 	}
 
 	@Override

@@ -80,13 +80,14 @@ public abstract class AbstractItem extends Item
 	public void registerIcons(IIconRegister ir)
 	{
 		System.out.println("[TAI]Registering icon " + unlocalizedFragment);
-		iconBuffer = ir.registerIcon(modName+":" + unlocalizedFragment);
 		if (subNames != null)
 		{
 			subIcons = new IIcon[subNames.length];
 			for (int i = 0; i < subNames.length; i++)
 				subIcons[i] = ir.registerIcon(modName+":" + unlocalizedFragment + "." + subNames[i]);
 		}
+		else
+			iconBuffer = ir.registerIcon(modName+":" + unlocalizedFragment);
 	}
 
 	@SideOnly(Side.CLIENT)
