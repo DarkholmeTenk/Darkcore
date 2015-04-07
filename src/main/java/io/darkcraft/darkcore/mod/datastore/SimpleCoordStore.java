@@ -12,11 +12,11 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 public class SimpleCoordStore
 {
-	public final int world;
-	public final int x;
-	public final int y;
-	public final int z;
-	
+	public final int	world;
+	public final int	x;
+	public final int	y;
+	public final int	z;
+
 	public SimpleCoordStore(TileEntity te)
 	{
 		world = WorldHelper.getWorldID(te);
@@ -24,7 +24,7 @@ public class SimpleCoordStore
 		y = te.yCoord;
 		z = te.zCoord;
 	}
-	
+
 	public SimpleCoordStore(int win, int xin, int yin, int zin)
 	{
 		world = win;
@@ -32,7 +32,7 @@ public class SimpleCoordStore
 		y = yin;
 		z = zin;
 	}
-	
+
 	public SimpleCoordStore(World w, int xin, int yin, int zin)
 	{
 		world = WorldHelper.getWorldID(w);
@@ -40,7 +40,7 @@ public class SimpleCoordStore
 		y = yin;
 		z = zin;
 	}
-	
+
 	public SimpleCoordStore(EntityPlayer player)
 	{
 		world = WorldHelper.getWorldID(player);
@@ -48,46 +48,46 @@ public class SimpleCoordStore
 		y = (int) Math.floor(player.posY);
 		z = (int) Math.floor(player.posZ);
 	}
-	
+
 	public SimpleCoordStore(SimpleDoubleCoordStore pos)
 	{
-		this(pos.world,(int)Math.floor(pos.x),(int)Math.floor(pos.y),(int)Math.floor(pos.z));
+		this(pos.world, (int) Math.floor(pos.x), (int) Math.floor(pos.y), (int) Math.floor(pos.z));
 	}
-	
+
 	public SimpleCoordStore(World w, MovingObjectPosition hitPos)
 	{
-		this(w, hitPos.blockX,hitPos.blockY,hitPos.blockZ);
+		this(w, hitPos.blockX, hitPos.blockY, hitPos.blockZ);
 	}
 
 	public SimpleDoubleCoordStore getCenter()
 	{
-		return new SimpleDoubleCoordStore(world,x+0.5,y+0.5,z+0.5);
+		return new SimpleDoubleCoordStore(world, x + 0.5, y + 0.5, z + 0.5);
 	}
-	
+
 	public SimpleCoordStore getNearby(ForgeDirection dir)
 	{
 		int oX = dir.offsetX;
 		int oY = dir.offsetY;
 		int oZ = dir.offsetZ;
-		return new SimpleCoordStore(world,x+oX,y+oY,z+oZ);
+		return new SimpleCoordStore(world, x + oX, y + oY, z + oZ);
 	}
 
 	public World getWorldObj()
 	{
 		return WorldHelper.getWorld(world);
 	}
-	
+
 	@Override
 	public String toString()
 	{
-		return "World "+world + ":" + x+ ","+ y+ ","+ z;
+		return "World " + world + ":" + x + "," + y + "," + z;
 	}
-	
+
 	public String toSimpleString()
 	{
 		return x + "," + y + "," + z;
 	}
-	
+
 	@Override
 	public int hashCode()
 	{
@@ -121,7 +121,7 @@ public class SimpleCoordStore
 		writeToNBT(nbt);
 		return nbt;
 	}
-	
+
 	public void writeToNBT(NBTTagCompound nbt)
 	{
 		nbt.setInteger("w", world);
@@ -129,45 +129,83 @@ public class SimpleCoordStore
 		nbt.setInteger("y", y);
 		nbt.setInteger("z", z);
 	}
-	
+
+	public void writeToNBT(NBTTagCompound nbt, String name)
+	{
+		NBTTagCompound temp = writeToNBT();
+		nbt.setTag(name, temp);
+	}
+
 	public static SimpleCoordStore readFromNBT(NBTTagCompound nbt)
 	{
-		if(!(nbt.hasKey("w") && nbt.hasKey("x") && nbt.hasKey("y") && nbt.hasKey("z")))
+		if (!(nbt.hasKey("w") && nbt.hasKey("x") && nbt.hasKey("y") && nbt.hasKey("z")))
 			return null;
 		int w = nbt.getInteger("w");
 		int x = nbt.getInteger("x");
 		int y = nbt.getInteger("y");
 		int z = nbt.getInteger("z");
-		return new SimpleCoordStore(w,x,y,z);
+		return new SimpleCoordStore(w, x, y, z);
+	}
+
+	public static SimpleCoordStore readFromNBT(NBTTagCompound nbt, String name)
+	{
+		if (nbt.hasKey(name))
+		{
+			NBTTagCompound newNBT = nbt.getCompoundTag(name);
+			return readFromNBT(newNBT);
+		}
+		return null;
 	}
 
 	public ChunkCoordIntPair toChunkCoords()
 	{
-		return new ChunkCoordIntPair(x>>4,z>>4);
+		return new ChunkCoordIntPair(x >> 4, z >> 4);
 	}
 
 	public TileEntity getTileEntity()
 	{
 		World w = getWorldObj();
-		if(w != null)
+		if (w != null)
 			return w.getTileEntity(x, y, z);
 		return null;
 	}
-	
+
 	public Block getBlock()
 	{
 		World w = getWorldObj();
-		if(w != null)
-			if(!w.isAirBlock(x, y, z))
+		if (w != null)
+			if (!w.isAirBlock(x, y, z))
 				return w.getBlock(x, y, z);
 		return null;
 	}
-	
+
 	public int getMetadata()
 	{
 		World w = getWorldObj();
-		if(w != null)
+		if (w != null)
 			return w.getBlockMetadata(x, y, z);
 		return 0;
+	}
+
+	public SimpleDoubleCoordStore travelTo(SimpleCoordStore dest, double amountTravelled, boolean newWorld)
+	{
+		int newWorldID = newWorld ? dest.world : world;
+		double nx = x + ((dest.x - x) * amountTravelled);
+		double ny = y + ((dest.y - y) * amountTravelled);
+		double nz = z + ((dest.z - z) * amountTravelled);
+		return new SimpleDoubleCoordStore(newWorldID, nx, ny, nz);
+	}
+
+	public double distance(SimpleCoordStore destLocation)
+	{
+		if (destLocation == null)
+			return 0;
+		int xr = (x - destLocation.x);
+		xr *= xr;
+		int yr = (y - destLocation.y);
+		yr *= yr;
+		int zr = (z - destLocation.z);
+		zr *= zr;
+		return Math.sqrt(xr + yr + zr);
 	}
 }
