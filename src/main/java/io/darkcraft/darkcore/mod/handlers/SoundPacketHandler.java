@@ -3,6 +3,7 @@ package io.darkcraft.darkcore.mod.handlers;
 import io.darkcraft.darkcore.mod.helpers.ServerHelper;
 import io.darkcraft.darkcore.mod.helpers.WorldHelper;
 import io.darkcraft.darkcore.mod.interfaces.IDataPacketHandler;
+import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
@@ -16,9 +17,7 @@ public class SoundPacketHandler implements IDataPacketHandler
 		{
 			String sound = data.getString("sound");
 			int dim = data.getInteger("world");
-			int x = data.getInteger("x");
-			int y = data.getInteger("y");
-			int z = data.getInteger("z");
+			
 			float vol = data.getFloat("vol");
 			float speed = 1;
 			if(data.hasKey("spe"))
@@ -26,8 +25,17 @@ public class SoundPacketHandler implements IDataPacketHandler
 			World w = WorldHelper.getWorld(dim);
 			if(w != null)
 			{
-				System.out.println("[TSP]Attempting to play sound packet: " + sound +"," + vol+","+speed);
-				w.playSound(x, y, z, sound, vol, speed, true);
+				if(data.hasKey("x"))
+				{
+					int x = data.getInteger("x");
+					int y = data.getInteger("y");
+					int z = data.getInteger("z");
+					w.playSound(x, y, z, sound, vol, speed, true);
+				}
+				else
+				{
+					Minecraft.getMinecraft().thePlayer.playSound(sound, vol, speed);
+				}
 			}
 		}
 	}

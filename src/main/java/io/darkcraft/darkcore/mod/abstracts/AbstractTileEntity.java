@@ -75,7 +75,7 @@ public abstract class AbstractTileEntity extends TileEntity
 	@Override
 	public Packet getDescriptionPacket()
 	{
-		System.out.println("[ATE]Compiling description packet @ " + xCoord + "," + yCoord + "," + zCoord);
+		//System.out.println("[ATE]Compiling description packet @ " + xCoord + "," + yCoord + "," + zCoord);
 		NBTTagCompound tag = new NBTTagCompound();
 		writeTransmittable(tag);
 		writeTransmittableOnly(tag);
@@ -172,7 +172,7 @@ public abstract class AbstractTileEntity extends TileEntity
 	@Override
 	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity packet)
 	{
-		System.out.println("[ATE]Receiving description packet");
+		//System.out.println("[ATE]Receiving description packet");
 		NBTTagCompound nbt = packet.func_148857_g();
 		readTransmittable(nbt);
 		readTransmittableOnly(nbt);
