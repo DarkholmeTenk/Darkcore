@@ -1,7 +1,5 @@
 package io.darkcraft.darkcore.mod;
 
-import java.util.HashMap;
-
 import io.darkcraft.darkcore.mod.config.ConfigHandler;
 import io.darkcraft.darkcore.mod.config.ConfigHandlerFactory;
 import io.darkcraft.darkcore.mod.handlers.ChunkLoadingHandler;
@@ -10,6 +8,9 @@ import io.darkcraft.darkcore.mod.handlers.SoundPacketHandler;
 import io.darkcraft.darkcore.mod.interfaces.IConfigHandlerMod;
 import io.darkcraft.darkcore.mod.network.PacketHandler;
 import io.darkcraft.darkcore.mod.proxy.CommonProxy;
+
+import java.util.HashMap;
+
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.MinecraftForge;
@@ -17,6 +18,7 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.SidedProxy;
+import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerAboutToStartEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
@@ -46,9 +48,14 @@ public class DarkcoreMod implements IConfigHandlerMod
 		ConfigHandlerFactory.setConfigDir(ev.getModConfigurationDirectory());
 		configHandler = ConfigHandlerFactory.getConfigHandler(this);
 		networkChannel = NetworkRegistry.INSTANCE.newEventDrivenChannel("darkcore");
-		networkChannel.register(packetHandler);
 		packetHandler.registerHandler(0, soundPacketHandler);
 
+	}
+
+	@EventHandler
+	public void init(FMLInitializationEvent ev)
+	{
+		networkChannel.register(packetHandler);
 	}
 
 	@EventHandler
@@ -82,12 +89,12 @@ public class DarkcoreMod implements IConfigHandlerMod
 	{
 		return "darkcore";
 	}
-	
+
 	public static void registerCreativeTab(String modID, CreativeTabs tab)
 	{
 		creativeTabMap.put(modID, tab);
 	}
-	
+
 	public static CreativeTabs getCreativeTab(String modID)
 	{
 		if(creativeTabMap.containsKey(modID))
