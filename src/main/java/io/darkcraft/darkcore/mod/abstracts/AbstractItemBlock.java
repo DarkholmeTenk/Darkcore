@@ -1,16 +1,19 @@
 package io.darkcraft.darkcore.mod.abstracts;
 
+import io.darkcraft.darkcore.mod.interfaces.IColorableBlock;
+
 import java.util.List;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public abstract class AbstractItemBlock extends ItemBlock
 {
@@ -20,7 +23,10 @@ public abstract class AbstractItemBlock extends ItemBlock
 	{
 		super(par1);
 		bID = par1;
-		setHasSubtypes(true);
+		if(!(getBlock() instanceof IColorableBlock))
+			setHasSubtypes(true);
+		else
+			setHasSubtypes(false);
 	}
 
 	@Override
@@ -79,5 +85,21 @@ public abstract class AbstractItemBlock extends ItemBlock
 		super.addInformation(is, player, infoList, par4);
 		addInfo(is, player, infoList);
 	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+    public int getColorFromItemStack(ItemStack is, int s)
+    {
+		if(is == null)
+			return 16777215;
+		int m = is.getItemDamage();
+		Block b = getBlock();
+		if(b instanceof IColorableBlock)
+		{
+			if((m >= 0) && (m < ItemDye.field_150922_c.length))
+				return ItemDye.field_150922_c[m];
+		}
+        return 16777215;
+    }
 
 }

@@ -3,8 +3,6 @@
   "modid": "darkcore",
   "name": "Dark Core",
   "description": "Provides core functionality to darkcraft mods",
-  "version": "${version}",
-  "mcversion": "${mcversion}",
   "url": "http://darkcraft.io",
   "authorList": ["DarkholmeTenk"],
   "credits": "DarkholmeTenk",

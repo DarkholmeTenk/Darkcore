@@ -1,5 +1,7 @@
 package io.darkcraft.darkcore.mod;
 
+import io.darkcraft.darkcore.mod.abstracts.AbstractBlock;
+import io.darkcraft.darkcore.mod.abstracts.AbstractTileEntity;
 import io.darkcraft.darkcore.mod.config.ConfigHandler;
 import io.darkcraft.darkcore.mod.config.ConfigHandlerFactory;
 import io.darkcraft.darkcore.mod.handlers.ChunkLoadingHandler;
@@ -25,7 +27,7 @@ import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.network.FMLEventChannel;
 import cpw.mods.fml.common.network.NetworkRegistry;
 
-@Mod(modid = "darkcore", version = "0.15")
+@Mod(modid = "darkcore", version = "0.2")
 public class DarkcoreMod implements IConfigHandlerMod
 {
 	@SidedProxy(clientSide = "io.darkcraft.darkcore.mod.proxy.ClientProxy",
@@ -41,6 +43,12 @@ public class DarkcoreMod implements IConfigHandlerMod
 	public static CommandHandler					comHandler			= new CommandHandler();
 	private static HashMap<String, CreativeTabs>	creativeTabMap		= new HashMap();
 
+	public static void refreshConfigs()
+	{
+		AbstractTileEntity.refreshConfigs();
+		AbstractBlock.refreshConfigs();
+	}
+
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent ev)
 	{
@@ -55,6 +63,7 @@ public class DarkcoreMod implements IConfigHandlerMod
 	@EventHandler
 	public void init(FMLInitializationEvent ev)
 	{
+		refreshConfigs();
 		networkChannel.register(packetHandler);
 	}
 

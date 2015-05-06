@@ -11,8 +11,6 @@ import io.darkcraft.darkcore.mod.interfaces.IMultiBlockCore;
 
 import java.util.Random;
 
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.relauncher.Side;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFire;
 import net.minecraft.nbt.NBTTagCompound;
@@ -24,6 +22,8 @@ import net.minecraft.server.management.ServerConfigurationManager;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.Side;
 
 public abstract class AbstractTileEntity extends TileEntity
 {
@@ -43,7 +43,7 @@ public abstract class AbstractTileEntity extends TileEntity
 		refreshConfigs();
 	}
 
-	private static void refreshConfigs()
+	public static void refreshConfigs()
 	{
 		ConfigFile cf = DarkcoreMod.configHandler.registerConfigNeeder("network");
 		updateInterval = cf.getConfigItem(
@@ -64,7 +64,7 @@ public abstract class AbstractTileEntity extends TileEntity
 		if (b == null)
 			return w.isAirBlock(x, y, z);
 		Boolean valid = w.isAirBlock(x, y, z) || b.isFoliage(w, x, y, z) || b.isReplaceable(w, x, y, z)
-				|| b instanceof BlockFire;
+				|| (b instanceof BlockFire);
 		if (valid)
 			return valid;
 		if (b.getCollisionBoundingBoxFromPool(w, x, y, z) == null)
@@ -96,14 +96,14 @@ public abstract class AbstractTileEntity extends TileEntity
 
 	private boolean canSendUpdate()
 	{
-		return lastUpdateTT + updateInterval <= tt && updateCounter < updateCounterMax;
+		return ((lastUpdateTT + updateInterval) <= tt) && (updateCounter < updateCounterMax);
 	}
 
 	public void sendUpdate()
 	{
 		if (!ServerHelper.isServer())
 			return;
-		if (worldObj.playerEntities == null || worldObj.playerEntities.size() == 0)
+		if ((worldObj.playerEntities == null) || (worldObj.playerEntities.size() == 0))
 			return;
 		if (canSendUpdate())
 		{
@@ -132,13 +132,13 @@ public abstract class AbstractTileEntity extends TileEntity
 			coords = new SimpleCoordStore(this);
 		tt++;
 
-		if (tt % 11 == 0 && updateCounter > 0)
+		if (((tt % 11) == 0) && (updateCounter > 0))
 			updateCounter--;
 
 		if (updateQueued && canSendUpdate())
 			sendUpdate();
 
-		if (ServerHelper.isServer() && tt % multiBlockInterval == 0 && this instanceof IMultiBlockCore)
+		if (ServerHelper.isServer() && ((tt % multiBlockInterval) == 0) && (this instanceof IMultiBlockCore))
 		{
 			if (((IMultiBlockCore) this).keepRechecking())
 				((IMultiBlockCore) this).recheckValidity();
@@ -147,7 +147,7 @@ public abstract class AbstractTileEntity extends TileEntity
 		if (!init)
 		{
 			init = true;
-			if (ServerHelper.isServer() && this instanceof IChunkLoader)
+			if (ServerHelper.isServer() && (this instanceof IChunkLoader))
 				DarkcoreMod.chunkLoadingHandler.loadMe((IChunkLoader) this);
 			init();
 		}

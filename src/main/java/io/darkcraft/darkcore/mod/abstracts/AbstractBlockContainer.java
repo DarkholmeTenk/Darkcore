@@ -21,19 +21,19 @@ public abstract class AbstractBlockContainer extends AbstractBlock implements IT
 	public AbstractBlockContainer(String sm)
 	{
 		super(sm);
-		this.isBlockContainer = true;
+		isBlockContainer = true;
 	}
 
 	public AbstractBlockContainer(boolean render, String sm)
 	{
 		super(render, sm);
-		this.isBlockContainer = true;
+		isBlockContainer = true;
 	}
 
 	public AbstractBlockContainer(boolean visible, boolean _dropWithData, String sm)
 	{
 		super(visible, sm);
-		this.isBlockContainer = true;
+		isBlockContainer = true;
 		dropWithData = _dropWithData;
 	}
 
@@ -64,6 +64,8 @@ public abstract class AbstractBlockContainer extends AbstractBlock implements IT
 	@Override
 	public boolean onBlockActivated(World w, int x, int y, int z, EntityPlayer pl, int s, float i, float j, float k)
 	{
+		if(super.onBlockActivated(w, x, y, z, pl, s, i, j, k))
+			return true;
 		if(this instanceof IActivatable)
 			if(((IActivatable)this).activate(pl, s))
 				return true;
@@ -99,9 +101,9 @@ public abstract class AbstractBlockContainer extends AbstractBlock implements IT
 				return;
 			}
 			float f = 0.7F;
-			double d0 = w.rand.nextFloat() * f + (1.0F - f) * 0.5D;
-			double d1 = w.rand.nextFloat() * f + (1.0F - f) * 0.5D;
-			double d2 = w.rand.nextFloat() * f + (1.0F - f) * 0.5D;
+			double d0 = (w.rand.nextFloat() * f) + ((1.0F - f) * 0.5D);
+			double d1 = (w.rand.nextFloat() * f) + ((1.0F - f) * 0.5D);
+			double d2 = (w.rand.nextFloat() * f) + ((1.0F - f) * 0.5D);
 			WorldHelper.dropItemStack(is, new SimpleDoubleCoordStore(w,x+d0,y+d1,z+d2));
 		}
 	}
@@ -110,7 +112,7 @@ public abstract class AbstractBlockContainer extends AbstractBlock implements IT
 	public void onNeighborBlockChange(World w, int x, int y, int z, Block neighbourBlockID)
 	{
 		TileEntity te = w.getTileEntity(x, y, z);
-		if (te != null && te instanceof IBlockUpdateDetector)
+		if ((te != null) && (te instanceof IBlockUpdateDetector))
 		{
 			((IBlockUpdateDetector) te).blockUpdated(neighbourBlockID);
 		}

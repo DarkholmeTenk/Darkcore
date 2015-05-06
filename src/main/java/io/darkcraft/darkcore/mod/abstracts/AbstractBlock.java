@@ -1,50 +1,63 @@
 package io.darkcraft.darkcore.mod.abstracts;
 
 import io.darkcraft.darkcore.mod.DarkcoreMod;
+import io.darkcraft.darkcore.mod.config.ConfigFile;
 import io.darkcraft.darkcore.mod.helpers.MathHelper;
+import io.darkcraft.darkcore.mod.interfaces.IColorableBlock;
 import io.darkcraft.darkcore.mod.multiblock.BlockState;
 
-import java.io.FileNotFoundException;
 import java.util.List;
 
-import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
+import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EnumCreatureType;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public abstract class AbstractBlock extends Block
 {
-	private IIcon			iconBuffer			= null;
-	private String			unlocalizedFragment	= "";
-	private String[]		subNames			= null;
-	private IIcon[]			subIcons			= null;
-	protected static IIcon	blankIcon			= null;
-	private boolean			renderIcon;
-	private String			sm;
+	private IIcon				iconBuffer			= null;
+	private String				unlocalizedFragment	= "";
+	private String[]			subNames			= null;
+	private IIcon[]				subIcons			= null;
+	protected static IIcon		blankIcon			= null;
+	private boolean				renderIcon;
+	private String				sm;
+
+	private static ConfigFile	config				= null;
+	private static boolean		coloredUsesDye		= false;
+
+	public static void refreshConfigs()
+	{
+		if (config == null) config = DarkcoreMod.configHandler.registerConfigNeeder("AbstractBlock");
+		coloredUsesDye = config.getBoolean("Colored blocks use up dye", false, "If true, when dying a colored block, the dye will be used up.", "If false, the dye will not be used up");
+	}
 
 	public AbstractBlock(Material blockMaterial, String sourcemod)
 	{
 		super(blockMaterial);
 		sm = sourcemod;
 		CreativeTabs tab = DarkcoreMod.getCreativeTab(sourcemod);
-		if(tab != null)
-			setCreativeTab(tab);
+		if (tab != null) setCreativeTab(tab);
 		setResistance(6000000.0F);
 		setHardness(-1.0f);
 		initData();
 		renderIcon = true;
-		if (subNames == null)
-			setIconArray(1);
+		if (this instanceof IColorableBlock)
+			setSubNames(ItemDye.field_150923_a);
+		else if (subNames == null) setIconArray(1);
 	}
 
 	public AbstractBlock(boolean render, String sm)
@@ -61,17 +74,19 @@ public abstract class AbstractBlock extends Block
 	public AbstractBlock register()
 	{
 		Class<? extends AbstractItemBlock> aib = getIB();
-		if(aib != null)
+		if (aib != null)
 			GameRegistry.registerBlock(this, aib, getUnlocalizedName());
 		else
 			GameRegistry.registerBlock(this, getUnlocalizedName());
-		if (this instanceof AbstractBlockContainer)
-			GameRegistry.registerTileEntity(((AbstractBlockContainer) this).getTEClass(), this.getUnlocalizedName());
-		
+		if (this instanceof AbstractBlockContainer) GameRegistry.registerTileEntity(((AbstractBlockContainer) this).getTEClass(), this.getUnlocalizedName());
+
 		return this;
 	}
-	
-	public Class<? extends AbstractItemBlock> getIB(){return null;}
+
+	public Class<? extends AbstractItemBlock> getIB()
+	{
+		return null;
+	}
 
 	public BlockState getBlockState()
 	{
@@ -90,10 +105,9 @@ public abstract class AbstractBlock extends Block
 
 	public void setSubNames(String... subnames)
 	{
-		if (subnames.length == 0)
-			subNames = null;
+		if (subnames.length == 0) subNames = null;
 		subNames = subnames;
-		setIconArray(subNames.length);
+		if (!(this instanceof IColorableBlock)) setIconArray(subNames.length);
 	}
 
 	private void setIconArray(int length)
@@ -119,32 +133,27 @@ public abstract class AbstractBlock extends Block
 	public int getIconSuffixes()
 	{
 		String[] suffixes = getIconSuffix();
-		if (suffixes == null)
-			return 1;
+		if (suffixes == null) return 1;
 		return suffixes.length;
 	}
 
 	@Override
 	public int damageDropped(int damage)
 	{
-		if (subNames != null)
-			return MathHelper.clamp(damage, 0, subNames.length - 1);
+		if (subNames != null) return MathHelper.clamp(damage, 0, subNames.length - 1);
 		return 0;
 	}
 
 	public int getNumSubNames()
 	{
-		if (subNames == null)
-			return 0;
+		if (subNames == null) return 0;
 		return subNames.length;
 	}
 
 	public String getSubName(int num)
 	{
-		if (subNames == null)
-			return null;
-		if (num >= 0 && num < subNames.length)
-			return subNames[num];
+		if (subNames == null) return null;
+		if ((num >= 0) && (num < subNames.length)) return subNames[num];
 		return "Malformed";
 	}
 
@@ -169,10 +178,16 @@ public abstract class AbstractBlock extends Block
 	@Override
 	public void getSubBlocks(Item itemID, CreativeTabs tab, List itemList)
 	{
-		int numItems = Math.max(1, getNumSubNames());
-		for (int i = 0; i < numItems; i++)
+		int numItems;
+		if (this instanceof IColorableBlock)
+			itemList.add(new ItemStack(itemID, 1, 15));
+		else
 		{
-			itemList.add(new ItemStack(itemID, 1, i));
+			numItems = Math.max(1, getNumSubNames());
+			for (int i = 0; i < numItems; i++)
+			{
+				itemList.add(new ItemStack(itemID, 1, i));
+			}
 		}
 	}
 
@@ -209,11 +224,9 @@ public abstract class AbstractBlock extends Block
 	@Override
 	public void registerBlockIcons(IIconRegister register)
 	{
-		if (blankIcon == null)
-			blankIcon = register.registerIcon(sm + ":blank");
-		if (!renderIcon)
-			return;
-		if (subIcons != null)
+		if (blankIcon == null) blankIcon = register.registerIcon(sm + ":blank");
+		if (!renderIcon) return;
+		if ((subIcons != null) && !(this instanceof IColorableBlock))
 		{
 			int suffixCount = getIconSuffixes();
 			if (subNames != null)
@@ -223,8 +236,7 @@ public abstract class AbstractBlock extends Block
 					String[] suffixes = getIconSuffix(i);
 					if (suffixes == null)
 					{
-						subIcons[i * suffixCount] = register.registerIcon(sm + ":" + getUnlocalizedNameForIcon() + "."
-								+ subNames[i]);
+						subIcons[i * suffixCount] = register.registerIcon(sm + ":" + getUnlocalizedNameForIcon() + "." + subNames[i]);
 					}
 					else
 					{
@@ -267,8 +279,7 @@ public abstract class AbstractBlock extends Block
 	@Override
 	public boolean shouldSideBeRendered(IBlockAccess w, int x, int y, int z, int s)
 	{
-		if (!renderIcon)
-			return false;
+		if (!renderIcon) return false;
 		int mX = x;
 		int mY = y;
 		int mZ = z;
@@ -305,16 +316,14 @@ public abstract class AbstractBlock extends Block
 	@Override
 	public IIcon getIcon(int side, int metadata)
 	{
-		if (!renderIcon)
-			return blankIcon;
+		if (!renderIcon) return blankIcon;
 		int suffixCount = getIconSuffixes();
-		if (subIcons != null)
+		if ((subIcons != null) && !(this instanceof IColorableBlock))
 		{
 			String[] suffixes = getIconSuffix(metadata);
 			if (suffixes == null)
 			{
-				if (metadata >= 0 && metadata < subIcons.length)
-					return subIcons[metadata * suffixCount];
+				if ((metadata >= 0) && (metadata < subIcons.length)) return subIcons[metadata * suffixCount];
 				return subIcons[0];
 			}
 			else
@@ -323,12 +332,11 @@ public abstract class AbstractBlock extends Block
 				int metaAdd = 0;
 				for (int j = 0; j < suffixes.length; j++)
 				{
-					if (suffixes[j].contains("top") && side == 1)
+					if (suffixes[j].contains("top") && (side == 1))
 						return subIcons[metaBase + j];
-					else if (suffixes[j].contains("bottom") && side == 0)
+					else if (suffixes[j].contains("bottom") && (side == 0))
 						metaAdd = j;
-					else if (suffixes[j].contains("side") && side > 1)
-						metaAdd = j;
+					else if (suffixes[j].contains("side") && (side > 1)) metaAdd = j;
 				}
 				return subIcons[metaBase + metaAdd];
 			}
@@ -338,7 +346,7 @@ public abstract class AbstractBlock extends Block
 			return iconBuffer;
 		}
 	}
-	
+
 	@Override
 	public void onPostBlockPlaced(World w, int x, int y, int z, int m)
 	{
@@ -349,6 +357,43 @@ public abstract class AbstractBlock extends Block
 	public int getMobilityFlag()
 	{
 		return 2;
+	}
+
+	@Override
+	public int colorMultiplier(IBlockAccess w, int x, int y, int z)
+	{
+		if (!(this instanceof IColorableBlock)) return super.colorMultiplier(w, x, y, z);
+		int m = w.getBlockMetadata(x, y, z);
+		return ItemDye.field_150922_c[m];
+	}
+
+	@Override
+	public MapColor getMapColor(int p_149728_1_)
+	{
+		if (!(this instanceof IColorableBlock)) return super.getMapColor(p_149728_1_);
+		return MapColor.getMapColorForBlockColored(p_149728_1_);
+	}
+
+	@Override
+	public boolean onBlockActivated(World w, int x, int y, int z, EntityPlayer pl, int s, float i, float j, float k)
+	{
+		if (pl == null) return false;
+		if (this instanceof IColorableBlock)
+		{
+			ItemStack is = pl.getHeldItem();
+			if (is == null) return false;
+			Item item = is.getItem();
+			if(item instanceof ItemDye)
+			{
+				int md = is.getItemDamage();
+				if(md == w.getBlockMetadata(x, y, z)) return false;
+				w.setBlockMetadataWithNotify(x, y, z, md, 3);
+				if(coloredUsesDye && !pl.capabilities.isCreativeMode)
+					is.stackSize--;
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public abstract void initData();
