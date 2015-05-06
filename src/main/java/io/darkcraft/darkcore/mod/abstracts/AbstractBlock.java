@@ -35,6 +35,7 @@ public abstract class AbstractBlock extends Block
 	protected static IIcon		blankIcon			= null;
 	private boolean				renderIcon;
 	private String				sm;
+	public static int[]			colorArray			= new int[] {1973019, 11743532, 3887386, 10583369, 2437522, 8073150, 2651799, 11250603, 4408131, 14188952, 4312372, 14602026, 6719955, 12801229, 15435844, 15790320};
 
 	private static ConfigFile	config				= null;
 	private static boolean		coloredUsesDye		= false;
@@ -194,7 +195,7 @@ public abstract class AbstractBlock extends Block
 	public String getUnlocalizedName(int damage)
 	{
 		int numSubnames = getNumSubNames();
-		if (numSubnames == 0)
+		if ((numSubnames == 0) || (this instanceof IColorableBlock))
 			return "tile." + sm + "." + unlocalizedFragment;
 		else
 		{
@@ -364,7 +365,7 @@ public abstract class AbstractBlock extends Block
 	{
 		if (!(this instanceof IColorableBlock)) return super.colorMultiplier(w, x, y, z);
 		int m = w.getBlockMetadata(x, y, z);
-		return ItemDye.field_150922_c[m];
+		return colorArray[m];
 	}
 
 	@Override
