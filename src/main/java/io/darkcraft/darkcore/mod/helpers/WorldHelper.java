@@ -88,7 +88,7 @@ public class WorldHelper
 		if(w == null)
 			return;
 		EntityItem ie = new EntityItem(w, sdcs.x, sdcs.y, sdcs.z, is);
-		ie.delayBeforeCanPickup = 0;
+		ie.delayBeforeCanPickup = 2;
 		w.spawnEntityInWorld(ie);
 	}
 
