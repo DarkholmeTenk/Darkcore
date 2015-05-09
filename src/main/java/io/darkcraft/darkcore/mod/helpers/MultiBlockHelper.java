@@ -17,18 +17,14 @@ public class MultiBlockHelper
 			ForgeDirection.SOUTH,ForgeDirection.WEST};
 	public static boolean isMultiblockValid(TileEntity core, IMultiBlockStructure structure)
 	{
-		//if(!(core instanceof IMultiBlockCore))
-		//	return false;
-		//System.out.println("[MBH]Checking if multiblock is valid!");
 		boolean valid = false;
 		for(ForgeDirection dir : rotDirs)
 		{
-			//System.out.println("Checking dir " + dir.toString());
 			valid = valid || isMultiblockValid(dir,core,structure);
 		}
 		return valid;
 	}
-	
+
 	private static boolean isMultiblockValid(ForgeDirection dir, TileEntity core, IMultiBlockStructure structure)
 	{
 		World w = core.getWorldObj();
@@ -56,13 +52,13 @@ public class MultiBlockHelper
 					BlockState cell = cells[zI];
 					if(cell != null)
 					{
-						zToCheck = z + xO != 0? xO*(structure.getCoreZ() - zI) : zO*(structure.getCoreX() - xI);
-						xToCheck = x + xO != 0? xO*(structure.getCoreX() - xI) : zO*(structure.getCoreZ() - zI);
+						zToCheck = (z + xO) != 0? xO*(structure.getCoreZ() - zI) : zO*(structure.getCoreX() - xI);
+						xToCheck = (x + xO) != 0? xO*(structure.getCoreX() - xI) : zO*(structure.getCoreZ() - zI);
 						if(!cell.equals(w, xToCheck, yToCheck, zToCheck))
 						{
 							return false;
 						}
-						
+
 					}
 				}
 			}
@@ -83,21 +79,20 @@ public class MultiBlockHelper
 					BlockState cell = cells[zI];
 					if(cell != null)
 					{
-						zToCheck = z + xO != 0? xO*(structure.getCoreZ() - zI) : zO*(structure.getCoreX() - xI);
-						xToCheck = x + xO != 0? xO*(structure.getCoreX() - xI) : zO*(structure.getCoreZ() - zI);
-						//System.out.println("Block at "+xToCheck +","+yToCheck+","+zToCheck);
+						zToCheck = (z + xO) != 0? xO*(structure.getCoreZ() - zI) : zO*(structure.getCoreX() - xI);
+						xToCheck = (x + xO) != 0? xO*(structure.getCoreX() - xI) : zO*(structure.getCoreZ() - zI);
 						TileEntity te = w.getTileEntity(xToCheck, yToCheck, zToCheck);
 						if(te instanceof IMultiBlockPart)
 							((IMultiBlockPart)te).setMultiBlockCore((IMultiBlockCore)core);
-						
+
 					}
 				}
 			}
 		}
-		
+
 		return true;
 	}
-	
+
 	public static void generateStructure(IMultiBlockStructure structure, World w,SimpleCoordStore pos, ForgeDirection dir)
 	{
 		int x = pos.x;
@@ -138,20 +133,20 @@ public class MultiBlockHelper
 			}
 		}
 	}
-	
+
 	public static void generateAtFloor(IMultiBlockStructure structure, World w,SimpleCoordStore pos, ForgeDirection dir)
 	{
 		boolean found = false;
 		BlockState[][] floor = structure.getStructureDefinition()[structure.getCoreY()];
-		for(int y = pos.y; y>1 && !found;y--)
+		for(int y = pos.y; (y>1) && !found;y--)
 		{
 			boolean xfound = true;
-			for(int x = 0; x < floor.length && xfound; x++)
+			for(int x = 0; (x < floor.length) && xfound; x++)
 			{
 				BlockState[] row = floor[x];
 				if(row == null)
 					continue;
-				for(int z = 0; z < row.length && xfound; z++)
+				for(int z = 0; (z < row.length) && xfound; z++)
 				{
 					BlockState cell = row[z];
 					if(cell == null)
@@ -173,9 +168,9 @@ public class MultiBlockHelper
 				generateStructure(structure,w,new SimpleCoordStore(w,pos.x,y,pos.z),dir);
 				found = true;
 			}
-		}		
+		}
 	}
-	
+
 	public static boolean doesCoreExist(IMultiBlockCore core)
 	{
 		SimpleCoordStore scs = core.getCoords();

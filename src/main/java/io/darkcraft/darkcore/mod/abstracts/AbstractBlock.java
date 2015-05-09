@@ -245,7 +245,8 @@ public abstract class AbstractBlock extends Block
 						for (int j = 0; j < suffixes.length; j++)
 						{
 							String iconToReg = sm + ":" + getUnlocalizedNameForIcon() + "." + subNames[i] + "." + suffixes[j];
-							System.out.println("[AB]Registering " + iconToReg + " in slot " + ((i * suffixCount) + j));
+							if(DarkcoreMod.debugText)
+								System.out.println("[AB]Registering " + iconToReg + " in slot " + ((i * suffixCount) + j));
 							subIcons[(i * suffixCount) + j] = register.registerIcon(iconToReg);
 						}
 					}

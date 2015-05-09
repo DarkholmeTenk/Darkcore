@@ -79,7 +79,8 @@ public abstract class AbstractItem extends Item
 	@Override
 	public void registerIcons(IIconRegister ir)
 	{
-		System.out.println("[TAI]Registering icon " + unlocalizedFragment);
+		if(DarkcoreMod.debugText)
+			System.out.println("[TAI]Registering icon " + unlocalizedFragment);
 		if (subNames != null)
 		{
 			subIcons = new IIcon[subNames.length];

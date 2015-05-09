@@ -75,7 +75,6 @@ public abstract class AbstractTileEntity extends TileEntity
 	@Override
 	public Packet getDescriptionPacket()
 	{
-		//System.out.println("[ATE]Compiling description packet @ " + xCoord + "," + yCoord + "," + zCoord);
 		NBTTagCompound tag = new NBTTagCompound();
 		writeTransmittable(tag);
 		writeTransmittableOnly(tag);
@@ -107,7 +106,8 @@ public abstract class AbstractTileEntity extends TileEntity
 			return;
 		if (canSendUpdate())
 		{
-			System.out.println("[ATE]Sending update " + getClass().getSimpleName());
+			if(DarkcoreMod.debugText)
+				System.out.println("[ATE]Sending update " + getClass().getSimpleName());
 			updateQueued = false;
 			updateCounter++;
 			lastUpdateTT = tt;
@@ -115,7 +115,8 @@ public abstract class AbstractTileEntity extends TileEntity
 		}
 		else
 		{
-			System.out.println("[ATE]Update sending blocked to prevent spam " + getClass().getSimpleName());
+			if(DarkcoreMod.debugText)
+				System.out.println("[ATE]Update sending blocked to prevent spam " + getClass().getSimpleName());
 			updateQueued = true;
 		}
 	}
@@ -157,7 +158,8 @@ public abstract class AbstractTileEntity extends TileEntity
 	{
 		if (FMLCommonHandler.instance().getEffectiveSide().equals(Side.SERVER))
 		{
-			System.out.println("[ATE]Called sendDataPacket");
+			if(DarkcoreMod.debugText)
+				System.out.println("[ATE]Called sendDataPacket");
 			Packet p = getDescriptionPacket();
 			MinecraftServer serv = MinecraftServer.getServer();
 			if (serv == null)
@@ -172,7 +174,6 @@ public abstract class AbstractTileEntity extends TileEntity
 	@Override
 	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity packet)
 	{
-		//System.out.println("[ATE]Receiving description packet");
 		NBTTagCompound nbt = packet.func_148857_g();
 		readTransmittable(nbt);
 		readTransmittableOnly(nbt);

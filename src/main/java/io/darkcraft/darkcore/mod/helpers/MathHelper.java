@@ -14,27 +14,27 @@ public class MathHelper
 	{
 		return Math.min(max, Math.max(min,value));
 	}
-	
+
 	public static double clamp(double value, double min, double max)
 	{
 		return Math.min(max, Math.max(min,value));
 	}
-	
+
 	public static int floor(double in)
 	{
 		return (int)Math.floor(in);
 	}
-	
+
 	public static int ceil(double in)
 	{
 		return (int)Math.ceil(in);
 	}
-	
+
 	public static int round(double in)
 	{
 		return (int)Math.round(in);
 	}
-	
+
 	public static int cycle(int val, int min, int max)
 	{
 		if (val < min)
@@ -67,7 +67,7 @@ public class MathHelper
 		}
 		return def;
 	}
-	
+
 	public static HashSet<SimpleDoubleCoordStore> removeDuplicateLocations(Set<SimpleDoubleCoordStore> inputSet, double tolerance)
 	{
 		HashMap<Integer,SimpleDoubleCoordStore> magicStore = new HashMap<Integer,SimpleDoubleCoordStore>();
@@ -75,13 +75,9 @@ public class MathHelper
 		{
 			int hash = input.hashCodeTolerance(tolerance);
 			magicStore.put(hash, input);
-			/*System.out.println("Hash:" + hash +":"+input.toSimpleString());
-			if(magicStore.put(hash, input) != null)
-				System.out.println("Location pruned");*/
 		}
 		HashSet<SimpleDoubleCoordStore> coords = new HashSet<SimpleDoubleCoordStore>();
 		coords.addAll(magicStore.values());
-		//System.out.println("Locations reduced from " + inputSet.size() + " to " + coords.size());
 		return coords;
 	}
 }

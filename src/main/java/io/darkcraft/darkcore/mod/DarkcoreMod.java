@@ -2,6 +2,7 @@ package io.darkcraft.darkcore.mod;
 
 import io.darkcraft.darkcore.mod.abstracts.AbstractBlock;
 import io.darkcraft.darkcore.mod.abstracts.AbstractTileEntity;
+import io.darkcraft.darkcore.mod.config.ConfigFile;
 import io.darkcraft.darkcore.mod.config.ConfigHandler;
 import io.darkcraft.darkcore.mod.config.ConfigHandlerFactory;
 import io.darkcraft.darkcore.mod.handlers.ChunkLoadingHandler;
@@ -42,11 +43,16 @@ public class DarkcoreMod implements IConfigHandlerMod
 	public static SoundPacketHandler				soundPacketHandler	= new SoundPacketHandler();
 	public static CommandHandler					comHandler			= new CommandHandler();
 	private static HashMap<String, CreativeTabs>	creativeTabMap		= new HashMap();
+	public static ConfigFile						config				= null;
+	public static boolean							debugText			= true;
 
 	public static void refreshConfigs()
 	{
+		if(config == null)
+			config = configHandler.registerConfigNeeder("DarkCore");
 		AbstractTileEntity.refreshConfigs();
 		AbstractBlock.refreshConfigs();
+		debugText = config.getBoolean("debug text", false, "Print debug text");
 	}
 
 	@EventHandler
