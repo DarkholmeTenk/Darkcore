@@ -25,7 +25,7 @@ public class WorldHelper
 		else
 			return getWorldServer(id);
 	}
-	
+
 	public static WorldServer getWorldServer(int id)
 	{
 		MinecraftServer s = MinecraftServer.getServer();
@@ -43,7 +43,7 @@ public class WorldHelper
 	{
 		return getWorldID(te.getWorldObj());
 	}
-	
+
 	public static int getWorldID(Entity ent)
 	{
 		return getWorldID(ent.worldObj);
@@ -63,26 +63,26 @@ public class WorldHelper
 		}
 		return "Unknown";
 	}
-	
+
 	public static boolean sameItem(ItemStack a, ItemStack b)
 	{
-		if (a == null ^ b == null)
+		if ((a == null) ^ (b == null))
 			return false;
 		if (a.getItem() != null)
-			return a.getItem().equals(b.getItem()) && a.getItemDamage() == b.getItemDamage();
+			return a.getItem().equals(b.getItem()) && (a.getItemDamage() == b.getItemDamage());
 		return false;
 	}
-	
+
 	public static void giveItemStack(EntityPlayer pl, ItemStack is)
 	{
 		EntityItem ie = new EntityItem(pl.worldObj, pl.posX, pl.posY, pl.posZ, is);
 		ie.delayBeforeCanPickup = 0;
 		pl.worldObj.spawnEntityInWorld(ie);
 	}
-	
+
 	public static void dropItemStack(ItemStack is, SimpleDoubleCoordStore sdcs)
 	{
-		if(is == null || sdcs == null)
+		if((is == null) || (sdcs == null))
 			return;
 		World w = sdcs.getWorldObj();
 		if(w == null)
@@ -91,12 +91,12 @@ public class WorldHelper
 		ie.delayBeforeCanPickup = 0;
 		w.spawnEntityInWorld(ie);
 	}
-	
+
 	public static ItemStack transferItemStack(ItemStack is, IInventory dest)
 	{
 		int size = dest.getSizeInventory();
 		ItemStack remaining = is.copy();
-		for (int i = 0; i < size && remaining.stackSize > 0; i++)
+		for (int i = 0; (i < size) && (remaining.stackSize > 0); i++)
 		{
 			if (dest.isItemValidForSlot(i, remaining))
 			{

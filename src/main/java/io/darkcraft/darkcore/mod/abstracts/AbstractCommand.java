@@ -17,6 +17,7 @@ public abstract class AbstractCommand implements ICommand
 		return 0;
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public List getCommandAliases()
 	{
@@ -51,6 +52,7 @@ public abstract class AbstractCommand implements ICommand
 		return comSen.canCommandSenderUseCommand(2, getCommandName());
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public List addTabCompletionOptions(ICommandSender icommandsender, String[] astring)
 	{

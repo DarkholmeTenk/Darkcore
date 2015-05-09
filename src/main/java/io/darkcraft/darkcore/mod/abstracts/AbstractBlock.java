@@ -176,6 +176,7 @@ public abstract class AbstractBlock extends Block
 		return unlocalizedFragment;
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public void getSubBlocks(Item itemID, CreativeTabs tab, List itemList)
 	{

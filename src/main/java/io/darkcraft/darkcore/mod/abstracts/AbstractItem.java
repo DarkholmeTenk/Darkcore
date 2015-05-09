@@ -42,7 +42,7 @@ public abstract class AbstractItem extends Item
 	public void setSubNames(String... _subNames)
 	{
 		subNames = _subNames;
-		if (subNames != null && subNames.length > 1)
+		if ((subNames != null) && (subNames.length > 1))
 			setHasSubtypes(true);
 	}
 
@@ -68,7 +68,7 @@ public abstract class AbstractItem extends Item
 		else
 		{
 			int damage = is.getItemDamage();
-			if (damage >= 0 && damage < subNames.length)
+			if ((damage >= 0) && (damage < subNames.length))
 				return getUnlocalizedName() + "." + subNames[damage];
 			else
 				return getUnlocalizedName() + ".Malformed";
@@ -96,11 +96,12 @@ public abstract class AbstractItem extends Item
 	{
 		if (subNames == null)
 			return iconBuffer;
-		else if (damage >= 0 && damage < subNames.length)
+		else if ((damage >= 0) && (damage < subNames.length))
 			return subIcons[damage];
 		return iconBuffer;
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public void getSubItems(Item par1, CreativeTabs par2CreativeTabs, List list)
 	{
@@ -113,10 +114,12 @@ public abstract class AbstractItem extends Item
 		}
 	}
 
+	@SuppressWarnings("rawtypes")
 	public void addInfo(ItemStack is, EntityPlayer player, List infoList)
 	{
 	}
 
+	@SuppressWarnings("rawtypes")
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void addInformation(ItemStack is, EntityPlayer player, List infoList, boolean par4)

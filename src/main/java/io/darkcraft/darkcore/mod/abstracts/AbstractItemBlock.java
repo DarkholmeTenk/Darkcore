@@ -74,10 +74,12 @@ public abstract class AbstractItemBlock extends ItemBlock
 		return false;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public void addInfo(ItemStack is, EntityPlayer player, List infoList)
 	{
 	}
 
+	@SuppressWarnings("rawtypes")
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void addInformation(ItemStack is, EntityPlayer player, List infoList, boolean par4)
