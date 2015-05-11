@@ -63,8 +63,8 @@ public abstract class AbstractItemBlock extends ItemBlock
 					tag.removeTag("y");
 					tag.removeTag("z");
 					tag.removeTag("id");
-					tag.setBoolean("placed", true);
 				}
+				tag.setBoolean("placed", true);
 				TileEntity te = world.getTileEntity(x, y, z);
 				if (te != null)
 					te.readFromNBT(tag);

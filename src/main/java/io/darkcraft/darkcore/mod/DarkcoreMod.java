@@ -28,7 +28,7 @@ import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.network.FMLEventChannel;
 import cpw.mods.fml.common.network.NetworkRegistry;
 
-@Mod(modid = "darkcore", version = "0.2")
+@Mod(modid = "darkcore", version = "0.21")
 public class DarkcoreMod implements IConfigHandlerMod
 {
 	@SidedProxy(clientSide = "io.darkcraft.darkcore.mod.proxy.ClientProxy",
