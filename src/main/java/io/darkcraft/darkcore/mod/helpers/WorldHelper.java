@@ -21,7 +21,7 @@ public class WorldHelper
 	 */
 	public static World getWorld(int id)
 	{
-		if (!ServerHelper.isServer())
+		if (ServerHelper.isClient())
 			return DarkcoreMod.proxy.getWorld(id);
 		else
 			return getWorldServer(id);

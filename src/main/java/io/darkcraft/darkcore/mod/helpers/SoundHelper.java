@@ -43,7 +43,7 @@ public class SoundHelper
 
 	public static void playSound(int dim, int x, int y, int z, String sound, float vol, float speed)
 	{
-		if (!ServerHelper.isServer()) return;
+		if (ServerHelper.isClient()) return;
 		NBTTagCompound data = new NBTTagCompound();
 		data.setInteger("x", x);
 		data.setInteger("y", y);
@@ -53,7 +53,7 @@ public class SoundHelper
 
 	public static void playSound(int dim, String sound, float vol, float speed)
 	{
-		if (!ServerHelper.isServer()) return;
+		if (ServerHelper.isClient()) return;
 		NBTTagCompound data = new NBTTagCompound();
 		playSound(data, dim, sound, vol, speed);
 	}

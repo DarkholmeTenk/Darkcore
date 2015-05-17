@@ -15,7 +15,7 @@ public class TeleportHelper
 {
 	public static void transferEntityToDimension(Entity ent, int newDimension, double newX, double newY, double newZ)
 	{
-		if (!ServerHelper.isServer()) return;
+		if (ServerHelper.isClient()) return;
 		ServerConfigurationManager conf = ServerHelper.getConfigManager();
 		int oldDimension = WorldHelper.getWorldID(ent);
 		WorldServer dest = WorldHelper.getWorldServer(newDimension);

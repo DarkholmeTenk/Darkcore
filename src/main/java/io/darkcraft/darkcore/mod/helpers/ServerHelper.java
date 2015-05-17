@@ -24,6 +24,11 @@ public class ServerHelper
 		return !FMLCommonHandler.instance().getEffectiveSide().equals(Side.CLIENT);
 	}
 
+	public static boolean isClient()
+	{
+		return FMLCommonHandler.instance().getEffectiveSide().equals(Side.CLIENT);
+	}
+
 	public static NBTTagCompound readNBT(InputStream in)
 	{
 		try

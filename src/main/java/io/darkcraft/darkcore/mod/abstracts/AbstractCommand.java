@@ -10,6 +10,7 @@ import net.minecraft.util.ChatComponentText;
 
 public abstract class AbstractCommand implements ICommand
 {
+	private static List<String> emptyList = new ArrayList<String>();
 
 	@Override
 	public int compareTo(Object arg0)
@@ -24,7 +25,7 @@ public abstract class AbstractCommand implements ICommand
 		List<String> aliases = new ArrayList<String>();
 		addAliases(aliases);
 		if (aliases.size() != 0) return aliases;
-		return null;
+		return emptyList;
 	}
 
 	public abstract void addAliases(List<String> list);

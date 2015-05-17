@@ -88,7 +88,7 @@ public abstract class AbstractTileEntity extends TileEntity
 
 	public void sendUpdate()
 	{
-		if (!ServerHelper.isServer()) return;
+		if (ServerHelper.isClient()) return;
 		if ((worldObj.playerEntities == null) || (worldObj.playerEntities.size() == 0)) return;
 		if (canSendUpdate())
 		{
