@@ -23,8 +23,7 @@ public abstract class AbstractCommand implements ICommand
 	{
 		List<String> aliases = new ArrayList<String>();
 		addAliases(aliases);
-		if (aliases.size() != 0)
-			return aliases;
+		if (aliases.size() != 0) return aliases;
 		return null;
 	}
 

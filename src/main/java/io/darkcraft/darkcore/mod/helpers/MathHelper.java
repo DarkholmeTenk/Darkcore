@@ -8,39 +8,38 @@ import java.util.Set;
 
 public class MathHelper
 {
-	/**Clamps an integer value so that min <= value <= max
+	/**
+	 * Clamps an integer value so that min <= value <= max
 	 */
 	public static int clamp(int value, int min, int max)
 	{
-		return Math.min(max, Math.max(min,value));
+		return Math.min(max, Math.max(min, value));
 	}
 
 	public static double clamp(double value, double min, double max)
 	{
-		return Math.min(max, Math.max(min,value));
+		return Math.min(max, Math.max(min, value));
 	}
 
 	public static int floor(double in)
 	{
-		return (int)Math.floor(in);
+		return (int) Math.floor(in);
 	}
 
 	public static int ceil(double in)
 	{
-		return (int)Math.ceil(in);
+		return (int) Math.ceil(in);
 	}
 
 	public static int round(double in)
 	{
-		return (int)Math.round(in);
+		return (int) Math.round(in);
 	}
 
 	public static int cycle(int val, int min, int max)
 	{
-		if (val < min)
-			return max;
-		if (val > max)
-			return min;
+		if (val < min) return max;
+		if (val > max) return min;
 		return val;
 	}
 
@@ -70,8 +69,8 @@ public class MathHelper
 
 	public static HashSet<SimpleDoubleCoordStore> removeDuplicateLocations(Set<SimpleDoubleCoordStore> inputSet, double tolerance)
 	{
-		HashMap<Integer,SimpleDoubleCoordStore> magicStore = new HashMap<Integer,SimpleDoubleCoordStore>();
-		for(SimpleDoubleCoordStore input : inputSet)
+		HashMap<Integer, SimpleDoubleCoordStore> magicStore = new HashMap<Integer, SimpleDoubleCoordStore>();
+		for (SimpleDoubleCoordStore input : inputSet)
 		{
 			int hash = input.hashCodeTolerance(tolerance);
 			magicStore.put(hash, input);

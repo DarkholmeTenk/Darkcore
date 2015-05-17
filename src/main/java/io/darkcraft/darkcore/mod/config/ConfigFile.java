@@ -10,13 +10,13 @@ import java.util.HashSet;
 
 public class ConfigFile
 {
-	private volatile HashSet<ConfigItem> configItems = new HashSet<ConfigItem>();
-	private final File configFile;
-	
+	private volatile HashSet<ConfigItem>	configItems	= new HashSet<ConfigItem>();
+	private final File						configFile;
+
 	protected ConfigFile(File f)
 	{
 		configFile = f;
-		if(!f.exists())
+		if (!f.exists())
 		{
 			try
 			{
@@ -32,28 +32,27 @@ public class ConfigFile
 			readFromFile();
 		}
 	}
-	
+
 	public synchronized ConfigItem getConfigItem(ConfigItem ci)
 	{
-		for(ConfigItem c : configItems)
+		for (ConfigItem c : configItems)
 		{
-			if(c.equals(ci))
-				return c;
+			if (c.equals(ci)) return c;
 		}
 		configItems.add(ci);
 		writeToFile();
 		return ci;
 	}
-	
+
 	private void processInput(String totalInput)
 	{
 		String[] items = totalInput.split("\n\n");
-		for(String item : items)
+		for (String item : items)
 		{
 			String[] lines = item.split("\n");
-			String lastLine = lines[lines.length-1];
-			String[] data = lastLine.split(":",3);
-			if(data.length != 3)
+			String lastLine = lines[lines.length - 1];
+			String[] data = lastLine.split(":", 3);
+			if (data.length != 3)
 			{
 				System.err.println("Invalid data " + item);
 				continue;
@@ -61,16 +60,16 @@ public class ConfigFile
 			CType c = CType.fromPrintable(data[1]);
 			Object d = c.toData(data[2]);
 			String[] comments = null;
-			if(lines.length > 1)
+			if (lines.length > 1)
 			{
-				comments = new String[lines.length-1];
-				for(int i = 0; i < lines.length -1; i++)
+				comments = new String[lines.length - 1];
+				for (int i = 0; i < lines.length - 1; i++)
 					comments[i] = lines[i];
 			}
-			configItems.add(new ConfigItem(data[0],c,d,comments));
+			configItems.add(new ConfigItem(data[0], c, d, comments));
 		}
 	}
-	
+
 	private void readFromFile()
 	{
 		BufferedReader br = null;
@@ -79,19 +78,19 @@ public class ConfigFile
 			br = new BufferedReader(new FileReader(configFile));
 			StringBuilder complete = new StringBuilder();
 			String line;
-			while((line = br.readLine()) != null)
+			while ((line = br.readLine()) != null)
 			{
 				complete.append(line).append("\n");
 			}
 			processInput(complete.toString());
 		}
-		catch(IOException ioE)
+		catch (IOException ioE)
 		{
 			ioE.printStackTrace();
 		}
 		finally
 		{
-			if(br != null)
+			if (br != null)
 			{
 				try
 				{
@@ -104,40 +103,39 @@ public class ConfigFile
 			}
 		}
 	}
-	
+
 	private void writeToFile()
 	{
 		PrintStream ps = null;
 		try
 		{
 			ps = new PrintStream(new FileOutputStream(configFile));
-			for(ConfigItem ci: configItems)
+			for (ConfigItem ci : configItems)
 			{
 				ps.print(ci.printable());
 			}
 			ps.close();
 		}
-		catch(IOException ioE)
+		catch (IOException ioE)
 		{
 			ioE.printStackTrace();
 		}
 		finally
 		{
-			if(ps != null)
-				ps.close();
+			if (ps != null) ps.close();
 		}
 	}
-	
+
 	public String getString(String name, String defaultVal, String... comments)
 	{
 		return getConfigItem(new ConfigItem(name, CType.STRING, defaultVal, comments)).getString();
 	}
-	
+
 	public boolean getBoolean(String name, boolean defaultVal, String... comments)
 	{
 		return getConfigItem(new ConfigItem(name, CType.BOOLEAN, defaultVal, comments)).getBoolean();
 	}
-	
+
 	public int getInt(String name, int defaultVal, String... comments)
 	{
 		return getConfigItem(new ConfigItem(name, CType.INT, defaultVal, comments)).getInt();

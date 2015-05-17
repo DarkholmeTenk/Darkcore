@@ -6,8 +6,8 @@ import net.minecraft.world.ChunkCoordIntPair;
 public interface IChunkLoader
 {
 	public boolean shouldChunkload();
-	
+
 	public SimpleCoordStore coords();
-	
+
 	public ChunkCoordIntPair[] loadable();
 }

@@ -10,8 +10,7 @@ public class ClientProxy extends CommonProxy
 	public World getWorld(int id)
 	{
 		World w = Minecraft.getMinecraft().theWorld;
-		if(w != null && WorldHelper.getWorldID(w) == id)
-			return w;
+		if (w != null && WorldHelper.getWorldID(w) == id) return w;
 		return null;
 	}
 }

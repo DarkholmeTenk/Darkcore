@@ -14,13 +14,14 @@ import net.minecraft.world.WorldServer;
 
 public class WorldHelper
 {
-	/**Attempts to get the world specified by id. If this is run on the client, it will either return
-	 * the client side world or null.
+	/**
+	 * Attempts to get the world specified by id. If this is run on the client, it will either return the client side world or null.
+	 * 
 	 * @return either the world or null
 	 */
 	public static World getWorld(int id)
 	{
-		if(!ServerHelper.isServer())
+		if (!ServerHelper.isServer())
 			return DarkcoreMod.proxy.getWorld(id);
 		else
 			return getWorldServer(id);
@@ -29,8 +30,7 @@ public class WorldHelper
 	public static WorldServer getWorldServer(int id)
 	{
 		MinecraftServer s = MinecraftServer.getServer();
-		if(s != null)
-			return s.worldServerForDimension(id);
+		if (s != null) return s.worldServerForDimension(id);
 		return null;
 	}
 
@@ -57,19 +57,14 @@ public class WorldHelper
 
 	public static String getDimensionName(World w)
 	{
-		if (w != null)
-		{
-			return w.provider.getDimensionName();
-		}
+		if (w != null) { return w.provider.getDimensionName(); }
 		return "Unknown";
 	}
 
 	public static boolean sameItem(ItemStack a, ItemStack b)
 	{
-		if ((a == null) ^ (b == null))
-			return false;
-		if (a.getItem() != null)
-			return a.getItem().equals(b.getItem()) && (a.getItemDamage() == b.getItemDamage());
+		if ((a == null) ^ (b == null)) return false;
+		if (a.getItem() != null) return a.getItem().equals(b.getItem()) && (a.getItemDamage() == b.getItemDamage());
 		return false;
 	}
 
@@ -82,11 +77,9 @@ public class WorldHelper
 
 	public static void dropItemStack(ItemStack is, SimpleDoubleCoordStore sdcs)
 	{
-		if((is == null) || (sdcs == null))
-			return;
+		if ((is == null) || (sdcs == null)) return;
 		World w = sdcs.getWorldObj();
-		if(w == null)
-			return;
+		if (w == null) return;
 		EntityItem ie = new EntityItem(w, sdcs.x, sdcs.y, sdcs.z, is);
 		ie.delayBeforeCanPickup = 2;
 		w.spawnEntityInWorld(ie);
@@ -114,8 +107,7 @@ public class WorldHelper
 				}
 			}
 		}
-		if (remaining.stackSize > 0)
-			return remaining;
+		if (remaining.stackSize > 0) return remaining;
 		return null;
 	}
 }

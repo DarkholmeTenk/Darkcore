@@ -25,106 +25,98 @@ import net.minecraftforge.common.ForgeChunkManager.Ticket;
 
 public class ChunkLoadingHandler implements LoadingCallback
 {
-	HashMap<SimpleCoordStore,Ticket> monitorableChunkLoaders = new HashMap<SimpleCoordStore,Ticket>();
-	private int tickCount=0;
-	private boolean forceCheck = false;
-	private boolean ticked = false;
+	HashMap<SimpleCoordStore, Ticket>	monitorableChunkLoaders	= new HashMap<SimpleCoordStore, Ticket>();
+	private int							tickCount				= 0;
+	private boolean						forceCheck				= false;
+	private boolean						ticked					= false;
 
 	@Override
 	public void ticketsLoaded(List<Ticket> tickets, World world)
 	{
-		for(Ticket t : tickets)
+		for (Ticket t : tickets)
 		{
-			if(t.getModData().hasKey("coords"))
+			if (t.getModData().hasKey("coords"))
 			{
 				SimpleCoordStore pos = SimpleCoordStore.readFromNBT(t.getModData().getCompoundTag("coords"));
-				if(monitorableChunkLoaders.containsKey(pos))
+				if (monitorableChunkLoaders.containsKey(pos))
 				{
 					Ticket x = monitorableChunkLoaders.get(pos);
-					if(x != null)
-						ForgeChunkManager.releaseTicket(x);
+					if (x != null) ForgeChunkManager.releaseTicket(x);
 				}
 				monitorableChunkLoaders.put(pos, null);
 			}
 			ForgeChunkManager.releaseTicket(t);
 		}
 	}
-	
+
 	public void loadMe(IChunkLoader chunkLoader)
 	{
-		if(!monitorableChunkLoaders.containsKey(chunkLoader.coords()))
-			monitorableChunkLoaders.put(chunkLoader.coords(), null);
+		if (!monitorableChunkLoaders.containsKey(chunkLoader.coords())) monitorableChunkLoaders.put(chunkLoader.coords(), null);
 	}
-	
+
 	private void loadLoadables(Ticket t, IChunkLoader te)
 	{
-		if(t == null || te == null)
-			return;
-		if(t.world == null)
-			return;
+		if (t == null || te == null) return;
+		if (t.world == null) return;
 		ImmutableSet<ChunkCoordIntPair> alreadyLoaded = t.getChunkList();
 		ChunkCoordIntPair[] loadable = te.loadable();
-		if(loadable != null)
+		if (loadable != null)
 		{
-			for(ChunkCoordIntPair load : loadable)
+			for (ChunkCoordIntPair load : loadable)
 			{
-				if(alreadyLoaded == null || !alreadyLoaded.contains(load))
+				if (alreadyLoaded == null || !alreadyLoaded.contains(load))
 				{
 					try
 					{
 						ForgeChunkManager.forceChunk(t, load);
 					}
-					catch(Exception e)
+					catch (Exception e)
 					{
 						e.printStackTrace();
 					}
 				}
 			}
 			NBTTagCompound nbt = t.getModData();
-			if(nbt != null)
+			if (nbt != null)
 			{
 				SimpleCoordStore coords = te.coords();
-				if(coords != null)
-					nbt.setTag("coords", te.coords().writeToNBT());
+				if (coords != null) nbt.setTag("coords", te.coords().writeToNBT());
 			}
 		}
 	}
-	
-	private Ticket getTicket(IChunkLoader te,World world)
+
+	private Ticket getTicket(IChunkLoader te, World world)
 	{
 		Ticket t = ForgeChunkManager.requestTicket(DarkcoreMod.i, world, ForgeChunkManager.Type.NORMAL);
 		return t;
 	}
-	
+
 	private void validateChunkLoaders()
 	{
-		if(!ticked)
-			return;
+		if (!ticked) return;
 		HashSet<SimpleCoordStore> keys = new HashSet<SimpleCoordStore>();
 		keys.addAll(monitorableChunkLoaders.keySet());
 		Iterator<SimpleCoordStore> keyIter = keys.iterator();
-		while(keyIter.hasNext())
+		while (keyIter.hasNext())
 		{
 			SimpleCoordStore pos = keyIter.next();
 			World w = pos.getWorldObj();
 			TileEntity te = w.getTileEntity(pos.x, pos.y, pos.z);
-			if(te instanceof IChunkLoader)
+			if (te instanceof IChunkLoader)
 			{
 				Ticket t = monitorableChunkLoaders.get(pos);
-				if(t != null && !((IChunkLoader)te).shouldChunkload())
+				if (t != null && !((IChunkLoader) te).shouldChunkload())
 				{
 					ForgeChunkManager.releaseTicket(t);
 					monitorableChunkLoaders.put(pos, null);
 				}
-				else if(t == null && ((IChunkLoader)te).shouldChunkload())
-					monitorableChunkLoaders.put(pos, getTicket(((IChunkLoader)te),w));
-				else if(t != null && ((IChunkLoader)te).shouldChunkload())
-					loadLoadables(t, (IChunkLoader)te);
+				else if (t == null && ((IChunkLoader) te).shouldChunkload())
+					monitorableChunkLoaders.put(pos, getTicket(((IChunkLoader) te), w));
+				else if (t != null && ((IChunkLoader) te).shouldChunkload()) loadLoadables(t, (IChunkLoader) te);
 			}
 			else
 			{
-				if(monitorableChunkLoaders.containsKey(pos))
-					ForgeChunkManager.releaseTicket(monitorableChunkLoaders.get(pos));
+				if (monitorableChunkLoaders.containsKey(pos)) ForgeChunkManager.releaseTicket(monitorableChunkLoaders.get(pos));
 				monitorableChunkLoaders.remove(pos);
 			}
 		}
@@ -133,16 +125,15 @@ public class ChunkLoadingHandler implements LoadingCallback
 	@SubscribeEvent
 	public void handleTick(ServerTickEvent event)
 	{
-		//TardisOutput.print("TCLM", "Server tick");
-		if(event.side.equals(Side.SERVER) && event.phase.equals(TickEvent.Phase.END))
-			tickEnd();
+		// TardisOutput.print("TCLM", "Server tick");
+		if (event.side.equals(Side.SERVER) && event.phase.equals(TickEvent.Phase.END)) tickEnd();
 	}
-	
+
 	private void tickEnd()
 	{
-		if(((tickCount++%10) == 1) || forceCheck)
+		if (((tickCount++ % 10) == 1) || forceCheck)
 		{
-			//TardisOutput.print("TCLM", "Handling chunks");
+			// TardisOutput.print("TCLM", "Handling chunks");
 			forceCheck = false;
 			validateChunkLoaders();
 		}

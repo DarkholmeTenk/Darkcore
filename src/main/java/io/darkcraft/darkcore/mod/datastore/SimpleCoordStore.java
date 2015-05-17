@@ -103,15 +103,11 @@ public class SimpleCoordStore
 	@Override
 	public boolean equals(Object obj)
 	{
-		if (this == obj)
-			return true;
-		if (!(obj instanceof SimpleCoordStore))
-			return false;
+		if (this == obj) return true;
+		if (!(obj instanceof SimpleCoordStore)) return false;
 		SimpleCoordStore other = (SimpleCoordStore) obj;
-		if (world != other.world)
-			return false;
-		if (x != other.x || y != other.y || z != other.z)
-			return false;
+		if (world != other.world) return false;
+		if (x != other.x || y != other.y || z != other.z) return false;
 		return true;
 	}
 
@@ -138,8 +134,7 @@ public class SimpleCoordStore
 
 	public static SimpleCoordStore readFromNBT(NBTTagCompound nbt)
 	{
-		if (!(nbt.hasKey("w") && nbt.hasKey("x") && nbt.hasKey("y") && nbt.hasKey("z")))
-			return null;
+		if (!(nbt.hasKey("w") && nbt.hasKey("x") && nbt.hasKey("y") && nbt.hasKey("z"))) return null;
 		int w = nbt.getInteger("w");
 		int x = nbt.getInteger("x");
 		int y = nbt.getInteger("y");
@@ -165,25 +160,21 @@ public class SimpleCoordStore
 	public TileEntity getTileEntity()
 	{
 		World w = getWorldObj();
-		if (w != null)
-			return w.getTileEntity(x, y, z);
+		if (w != null) return w.getTileEntity(x, y, z);
 		return null;
 	}
 
 	public Block getBlock()
 	{
 		World w = getWorldObj();
-		if (w != null)
-			if (!w.isAirBlock(x, y, z))
-				return w.getBlock(x, y, z);
+		if (w != null) if (!w.isAirBlock(x, y, z)) return w.getBlock(x, y, z);
 		return null;
 	}
 
 	public int getMetadata()
 	{
 		World w = getWorldObj();
-		if (w != null)
-			return w.getBlockMetadata(x, y, z);
+		if (w != null) return w.getBlockMetadata(x, y, z);
 		return 0;
 	}
 
@@ -198,8 +189,7 @@ public class SimpleCoordStore
 
 	public double distance(SimpleCoordStore destLocation)
 	{
-		if (destLocation == null)
-			return 0;
+		if (destLocation == null) return 0;
 		int xr = (x - destLocation.x);
 		xr *= xr;
 		int yr = (y - destLocation.y);

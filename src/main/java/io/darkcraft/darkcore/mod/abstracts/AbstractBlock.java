@@ -35,7 +35,7 @@ public abstract class AbstractBlock extends Block
 	protected static IIcon		blankIcon			= null;
 	private boolean				renderIcon;
 	private String				sm;
-	public static int[]			colorArray			= new int[] {1973019, 11743532, 3887386, 10583369, 2437522, 8073150, 2651799, 11250603, 4408131, 14188952, 4312372, 14602026, 6719955, 12801229, 15435844, 15790320};
+	public static int[]			colorArray			= new int[] { 1973019, 11743532, 3887386, 10583369, 2437522, 8073150, 2651799, 11250603, 4408131, 14188952, 4312372, 14602026, 6719955, 12801229, 15435844, 15790320 };
 
 	private static ConfigFile	config				= null;
 	private static boolean		coloredUsesDye		= false;
@@ -245,8 +245,7 @@ public abstract class AbstractBlock extends Block
 						for (int j = 0; j < suffixes.length; j++)
 						{
 							String iconToReg = sm + ":" + getUnlocalizedNameForIcon() + "." + subNames[i] + "." + suffixes[j];
-							if(DarkcoreMod.debugText)
-								System.out.println("[AB]Registering " + iconToReg + " in slot " + ((i * suffixCount) + j));
+							if (DarkcoreMod.debugText) System.out.println("[AB]Registering " + iconToReg + " in slot " + ((i * suffixCount) + j));
 							subIcons[(i * suffixCount) + j] = register.registerIcon(iconToReg);
 						}
 					}
@@ -386,13 +385,12 @@ public abstract class AbstractBlock extends Block
 			ItemStack is = pl.getHeldItem();
 			if (is == null) return false;
 			Item item = is.getItem();
-			if(item instanceof ItemDye)
+			if (item instanceof ItemDye)
 			{
 				int md = is.getItemDamage();
-				if(md == w.getBlockMetadata(x, y, z)) return false;
+				if (md == w.getBlockMetadata(x, y, z)) return false;
 				w.setBlockMetadataWithNotify(x, y, z, md, 3);
-				if(coloredUsesDye && !pl.capabilities.isCreativeMode)
-					is.stackSize--;
+				if (coloredUsesDye && !pl.capabilities.isCreativeMode) is.stackSize--;
 				return true;
 			}
 		}

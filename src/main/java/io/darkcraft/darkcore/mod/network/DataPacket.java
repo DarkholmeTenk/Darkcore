@@ -36,10 +36,10 @@ public class DataPacket extends FMLProxyPacket
 			e.printStackTrace();
 		}
 	}
-	
+
 	public DataPacket(NBTTagCompound nbt, byte discriminator)
 	{
-		this(Unpooled.buffer(),nbt,discriminator);
+		this(Unpooled.buffer(), nbt, discriminator);
 	}
 
 	public DataPacket(ByteBuf payload)

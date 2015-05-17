@@ -27,8 +27,7 @@ public abstract class AbstractItem extends Item
 	{
 		modName = mod;
 		CreativeTabs tab = DarkcoreMod.getCreativeTab(mod);
-		if(tab != null)
-			setCreativeTab(tab);
+		if (tab != null) setCreativeTab(tab);
 	}
 
 	public AbstractItem register()
@@ -42,8 +41,7 @@ public abstract class AbstractItem extends Item
 	public void setSubNames(String... _subNames)
 	{
 		subNames = _subNames;
-		if ((subNames != null) && (subNames.length > 1))
-			setHasSubtypes(true);
+		if ((subNames != null) && (subNames.length > 1)) setHasSubtypes(true);
 	}
 
 	@Override
@@ -79,16 +77,15 @@ public abstract class AbstractItem extends Item
 	@Override
 	public void registerIcons(IIconRegister ir)
 	{
-		if(DarkcoreMod.debugText)
-			System.out.println("[TAI]Registering icon " + unlocalizedFragment);
+		if (DarkcoreMod.debugText) System.out.println("[TAI]Registering icon " + unlocalizedFragment);
 		if (subNames != null)
 		{
 			subIcons = new IIcon[subNames.length];
 			for (int i = 0; i < subNames.length; i++)
-				subIcons[i] = ir.registerIcon(modName+":" + unlocalizedFragment + "." + subNames[i]);
+				subIcons[i] = ir.registerIcon(modName + ":" + unlocalizedFragment + "." + subNames[i]);
 		}
 		else
-			iconBuffer = ir.registerIcon(modName+":" + unlocalizedFragment);
+			iconBuffer = ir.registerIcon(modName + ":" + unlocalizedFragment);
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -97,8 +94,7 @@ public abstract class AbstractItem extends Item
 	{
 		if (subNames == null)
 			return iconBuffer;
-		else if ((damage >= 0) && (damage < subNames.length))
-			return subIcons[damage];
+		else if ((damage >= 0) && (damage < subNames.length)) return subIcons[damage];
 		return iconBuffer;
 	}
 

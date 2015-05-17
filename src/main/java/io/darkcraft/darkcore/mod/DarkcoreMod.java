@@ -31,8 +31,7 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 @Mod(modid = "darkcore", version = "0.21")
 public class DarkcoreMod implements IConfigHandlerMod
 {
-	@SidedProxy(clientSide = "io.darkcraft.darkcore.mod.proxy.ClientProxy",
-			serverSide = "io.darkcraft.darkcore.mod.proxy.CommonProxy")
+	@SidedProxy(clientSide = "io.darkcraft.darkcore.mod.proxy.ClientProxy", serverSide = "io.darkcraft.darkcore.mod.proxy.CommonProxy")
 	public static CommonProxy						proxy;
 	public static DarkcoreMod						i;
 
@@ -48,8 +47,7 @@ public class DarkcoreMod implements IConfigHandlerMod
 
 	public static void refreshConfigs()
 	{
-		if(config == null)
-			config = configHandler.registerConfigNeeder("DarkCore");
+		if (config == null) config = configHandler.registerConfigNeeder("DarkCore");
 		AbstractTileEntity.refreshConfigs();
 		AbstractBlock.refreshConfigs();
 		debugText = config.getBoolean("debug text", false, "Print debug text");
@@ -112,8 +110,7 @@ public class DarkcoreMod implements IConfigHandlerMod
 
 	public static CreativeTabs getCreativeTab(String modID)
 	{
-		if(creativeTabMap.containsKey(modID))
-			return creativeTabMap.get(modID);
+		if (creativeTabMap.containsKey(modID)) return creativeTabMap.get(modID);
 		return null;
 	}
 }

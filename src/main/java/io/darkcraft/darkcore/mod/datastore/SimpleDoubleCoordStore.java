@@ -11,11 +11,11 @@ import net.minecraft.world.World;
 
 public class SimpleDoubleCoordStore
 {
-	public final int world;
-	public final double x;
-	public final double y;
-	public final double z;
-	
+	public final int	world;
+	public final double	x;
+	public final double	y;
+	public final double	z;
+
 	public SimpleDoubleCoordStore(TileEntity te)
 	{
 		world = WorldHelper.getWorldID(te);
@@ -23,7 +23,7 @@ public class SimpleDoubleCoordStore
 		y = te.yCoord;
 		z = te.zCoord;
 	}
-	
+
 	public SimpleDoubleCoordStore(int win, double xin, double yin, double zin)
 	{
 		world = win;
@@ -31,7 +31,7 @@ public class SimpleDoubleCoordStore
 		y = yin;
 		z = zin;
 	}
-	
+
 	public SimpleDoubleCoordStore(World w, double xin, double yin, double zin)
 	{
 		world = WorldHelper.getWorldID(w);
@@ -39,7 +39,7 @@ public class SimpleDoubleCoordStore
 		y = yin;
 		z = zin;
 	}
-	
+
 	public SimpleDoubleCoordStore(int w, Entity ent)
 	{
 		world = w;
@@ -47,7 +47,7 @@ public class SimpleDoubleCoordStore
 		y = ent.posY;
 		z = ent.posZ;
 	}
-	
+
 	public SimpleDoubleCoordStore(EntityLivingBase ent)
 	{
 		world = WorldHelper.getWorldID(ent);
@@ -55,25 +55,26 @@ public class SimpleDoubleCoordStore
 		y = ent.posY;
 		z = ent.posZ;
 	}
-	
-	/**Returns the distance between this and other simple double coord store
+
+	/**
+	 * Returns the distance between this and other simple double coord store
+	 * 
 	 * @param other
 	 * @return -1 if not in same world or abs(distance between the two)
 	 */
 	public double distance(SimpleDoubleCoordStore other)
 	{
-		if(other == null || world != other.world)
-			return -1;
+		if (other == null || world != other.world) return -1;
 		double total = 0;
-		double temp = (other.x-x);
+		double temp = (other.x - x);
 		total += (temp * temp);
-		temp = (other.y-y);
+		temp = (other.y - y);
 		total += (temp * temp);
-		temp = (other.z-z);
+		temp = (other.z - z);
 		total += (temp * temp);
 		return Math.sqrt(total);
 	}
-	
+
 	public double distance(EntityLivingBase e)
 	{
 		return distance(new SimpleDoubleCoordStore(e));
@@ -83,52 +84,54 @@ public class SimpleDoubleCoordStore
 	{
 		return WorldHelper.getWorld(world);
 	}
-	
+
 	public SimpleCoordStore floor()
 	{
 		int _x = MathHelper.floor(x);
 		int _y = MathHelper.floor(y);
 		int _z = MathHelper.floor(z);
-		return new SimpleCoordStore(world,_x,_y,_z);
+		return new SimpleCoordStore(world, _x, _y, _z);
 	}
-	
+
 	public SimpleCoordStore round()
 	{
 		int _x = MathHelper.round(x);
 		int _y = MathHelper.round(y);
 		int _z = MathHelper.round(z);
-		return new SimpleCoordStore(world,_x,_y,_z);
+		return new SimpleCoordStore(world, _x, _y, _z);
 	}
-	
+
 	public SimpleCoordStore ceil()
 	{
 		int _x = MathHelper.ceil(x);
 		int _y = MathHelper.ceil(y);
 		int _z = MathHelper.ceil(z);
-		return new SimpleCoordStore(world,_x,_y,_z);
+		return new SimpleCoordStore(world, _x, _y, _z);
 	}
-	
-	/**returns an AABB centred around this coord store
-	 * with lengths 2r in each direction.
-	 * @param r the 'radius' of the AABB
+
+	/**
+	 * returns an AABB centred around this coord store with lengths 2r in each direction.
+	 * 
+	 * @param r
+	 *            the 'radius' of the AABB
 	 * @return
 	 */
 	public AxisAlignedBB getAABB(double r)
 	{
-		return AxisAlignedBB.getBoundingBox(x-r, y-r, z-r, x+r, y+r, z+r);
+		return AxisAlignedBB.getBoundingBox(x - r, y - r, z - r, x + r, y + r, z + r);
 	}
-	
+
 	@Override
 	public String toString()
 	{
-		return "World "+world + ":" + x+ ","+ y+ ","+ z;
+		return "World " + world + ":" + x + "," + y + "," + z;
 	}
-	
+
 	public String toSimpleString()
 	{
 		return x + "," + y + "," + z;
 	}
-	
+
 	@Override
 	public int hashCode()
 	{
@@ -144,10 +147,10 @@ public class SimpleDoubleCoordStore
 		result = prime * result + (int) (temp ^ (temp >>> 32));
 		return result;
 	}
-	
+
 	public int hashCodeTolerance(double tolerance)
 	{
-		int mag = MathHelper.round(1/tolerance);
+		int mag = MathHelper.round(1 / tolerance);
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + world;
@@ -164,17 +167,12 @@ public class SimpleDoubleCoordStore
 	@Override
 	public boolean equals(Object obj)
 	{
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (!(obj instanceof SimpleDoubleCoordStore))
-			return false;
+		if (this == obj) return true;
+		if (obj == null) return false;
+		if (!(obj instanceof SimpleDoubleCoordStore)) return false;
 		SimpleDoubleCoordStore other = (SimpleDoubleCoordStore) obj;
-		if (world != other.world)
-			return false;
-		if (x != other.x || y != other.y || z != other.z)
-			return false;
+		if (world != other.world) return false;
+		if (x != other.x || y != other.y || z != other.z) return false;
 		return true;
 	}
 
@@ -184,7 +182,7 @@ public class SimpleDoubleCoordStore
 		writeToNBT(nbt);
 		return nbt;
 	}
-	
+
 	public void writeToNBT(NBTTagCompound nbt)
 	{
 		nbt.setInteger("w", world);
@@ -192,15 +190,14 @@ public class SimpleDoubleCoordStore
 		nbt.setDouble("y", y);
 		nbt.setDouble("z", z);
 	}
-	
+
 	public static SimpleDoubleCoordStore readFromNBT(NBTTagCompound nbt)
 	{
-		if(!(nbt.hasKey("w") && nbt.hasKey("x") && nbt.hasKey("y") && nbt.hasKey("z")))
-			return null;
+		if (!(nbt.hasKey("w") && nbt.hasKey("x") && nbt.hasKey("y") && nbt.hasKey("z"))) return null;
 		int w = nbt.getInteger("w");
 		double x = nbt.getDouble("x");
 		double y = nbt.getDouble("y");
 		double z = nbt.getDouble("z");
-		return new SimpleDoubleCoordStore(w,x,y,z);
+		return new SimpleDoubleCoordStore(w, x, y, z);
 	}
 }

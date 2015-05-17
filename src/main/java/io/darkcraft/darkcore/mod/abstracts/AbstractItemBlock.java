@@ -23,7 +23,7 @@ public abstract class AbstractItemBlock extends ItemBlock
 	{
 		super(par1);
 		bID = par1;
-		if(!(getBlock() instanceof IColorableBlock))
+		if (!(getBlock() instanceof IColorableBlock))
 			setHasSubtypes(true);
 		else
 			setHasSubtypes(false);
@@ -41,16 +41,12 @@ public abstract class AbstractItemBlock extends ItemBlock
 	public String getUnlocalizedName(ItemStack itemStack)
 	{
 		AbstractBlock block = getBlock();
-		if (block != null)
-		{
-			return block.getUnlocalizedName(itemStack.getItemDamage());
-		}
+		if (block != null) { return block.getUnlocalizedName(itemStack.getItemDamage()); }
 		return bID.getUnlocalizedName();
 	}
 
 	@Override
-	public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX,
-			float hitY, float hitZ, int metadata)
+	public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ, int metadata)
 	{
 		if (super.placeBlockAt(stack, player, world, x, y, z, side, hitX, hitY, hitZ, metadata))
 		{
@@ -66,8 +62,7 @@ public abstract class AbstractItemBlock extends ItemBlock
 				}
 				tag.setBoolean("placed", true);
 				TileEntity te = world.getTileEntity(x, y, z);
-				if (te != null)
-					te.readFromNBT(tag);
+				if (te != null) te.readFromNBT(tag);
 			}
 			return true;
 		}
@@ -90,18 +85,16 @@ public abstract class AbstractItemBlock extends ItemBlock
 
 	@Override
 	@SideOnly(Side.CLIENT)
-    public int getColorFromItemStack(ItemStack is, int s)
-    {
-		if(is == null)
-			return 16777215;
+	public int getColorFromItemStack(ItemStack is, int s)
+	{
+		if (is == null) return 16777215;
 		int m = is.getItemDamage();
 		Block b = getBlock();
-		if(b instanceof IColorableBlock)
+		if (b instanceof IColorableBlock)
 		{
-			if((m >= 0) && (m < ItemDye.field_150922_c.length))
-				return ItemDye.field_150922_c[m];
+			if ((m >= 0) && (m < ItemDye.field_150922_c.length)) return ItemDye.field_150922_c[m];
 		}
-        return 16777215;
-    }
+		return 16777215;
+	}
 
 }

@@ -23,7 +23,7 @@ public class ServerHelper
 	{
 		return !FMLCommonHandler.instance().getEffectiveSide().equals(Side.CLIENT);
 	}
-	
+
 	public static NBTTagCompound readNBT(InputStream in)
 	{
 		try
@@ -31,13 +31,13 @@ public class ServerHelper
 			NBTTagCompound nbt = CompressedStreamTools.readCompressed(in);
 			return nbt;
 		}
-		catch(ZipException e)
+		catch (ZipException e)
 		{
 			try
 			{
-				if(in instanceof DataInputStream)
+				if (in instanceof DataInputStream)
 				{
-					NBTTagCompound nbt = CompressedStreamTools.read((DataInputStream)in);
+					NBTTagCompound nbt = CompressedStreamTools.read((DataInputStream) in);
 					return nbt;
 				}
 				return null;
@@ -47,37 +47,37 @@ public class ServerHelper
 				e1.printStackTrace();
 			}
 		}
-		catch(IOException e)
+		catch (IOException e)
 		{
-			System.err.println("[SH]Error writing NBT: "+ e.getMessage());
+			System.err.println("[SH]Error writing NBT: " + e.getMessage());
 			e.printStackTrace();
 		}
 		return null;
 	}
-	
+
 	public static void writeNBT(NBTTagCompound nbt, OutputStream out)
 	{
 		try
 		{
 			CompressedStreamTools.writeCompressed(nbt, out);
 		}
-		catch(IOException e)
+		catch (IOException e)
 		{
-			System.err.println("[SH]Error writing NBT: "+ e.getMessage());
+			System.err.println("[SH]Error writing NBT: " + e.getMessage());
 			e.printStackTrace();
 		}
 	}
-	
+
 	public static MinecraftServer getServer()
 	{
 		return MinecraftServer.getServer();
 	}
-	
+
 	public static ServerConfigurationManager getConfigManager()
 	{
 		return MinecraftServer.getServer().getConfigurationManager();
 	}
-	
+
 	public static EntityPlayerMP getPlayer(String username)
 	{
 		List playerEnts = getConfigManager().playerEntityList;
@@ -85,18 +85,17 @@ public class ServerHelper
 		{
 			if (o instanceof EntityPlayerMP)
 			{
-				if (((EntityPlayerMP) o).getCommandSenderName().equalsIgnoreCase(username))
-					return (EntityPlayerMP) o;
+				if (((EntityPlayerMP) o).getCommandSenderName().equalsIgnoreCase(username)) return (EntityPlayerMP) o;
 			}
 		}
 		return null;
 	}
-	
+
 	public static String getUsername(EntityPlayer player)
 	{
 		return player.getCommandSenderName();
 	}
-	
+
 	public static void sendString(EntityPlayer pl, String source, String s)
 	{
 		sendString(pl, new ChatComponentText("[" + source + "] " + s));
@@ -106,7 +105,7 @@ public class ServerHelper
 	{
 		pl.addChatMessage(message);
 	}
-	
+
 	public static void sendString(EntityPlayer pl, String string)
 	{
 		sendString(pl, new ChatComponentText(string));

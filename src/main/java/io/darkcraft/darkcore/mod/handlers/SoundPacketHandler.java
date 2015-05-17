@@ -11,21 +11,19 @@ public class SoundPacketHandler implements IDataPacketHandler
 {
 	public void handleData(NBTTagCompound data)
 	{
-		if(ServerHelper.isServer())
-			return;
-		if(data != null && data.hasKey("sound"))
+		if (ServerHelper.isServer()) return;
+		if (data != null && data.hasKey("sound"))
 		{
 			String sound = data.getString("sound");
 			int dim = data.getInteger("world");
-			
+
 			float vol = data.getFloat("vol");
 			float speed = 1;
-			if(data.hasKey("spe"))
-				speed = data.getFloat("spe");
+			if (data.hasKey("spe")) speed = data.getFloat("spe");
 			World w = WorldHelper.getWorld(dim);
-			if(w != null)
+			if (w != null)
 			{
-				if(data.hasKey("x"))
+				if (data.hasKey("x"))
 				{
 					int x = data.getInteger("x");
 					int y = data.getInteger("y");

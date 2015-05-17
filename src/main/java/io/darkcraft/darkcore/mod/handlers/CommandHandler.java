@@ -6,21 +6,19 @@ import java.util.ArrayList;
 
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 
-
 public class CommandHandler
 {
-	private ArrayList<AbstractCommand> coms = new ArrayList<AbstractCommand>();
-	private boolean registered = false;
-	
+	private ArrayList<AbstractCommand>	coms		= new ArrayList<AbstractCommand>();
+	private boolean						registered	= false;
+
 	public void addCommand(AbstractCommand c)
 	{
-		if(!registered)
-			coms.add(c);
+		if (!registered) coms.add(c);
 	}
-	
+
 	public void registerCommands(FMLServerStartingEvent event)
 	{
-		for(AbstractCommand a : coms)
+		for (AbstractCommand a : coms)
 			event.registerServerCommand(a);
 		registered = true;
 	}

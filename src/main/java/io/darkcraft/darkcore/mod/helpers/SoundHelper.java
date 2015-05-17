@@ -13,7 +13,7 @@ public class SoundHelper
 	{
 		playSound(ent.worldObj, MathHelper.floor(ent.posX), MathHelper.floor(ent.posY), MathHelper.floor(ent.posZ), sound, vol, pitch);
 	}
-	
+
 	public static void playSound(TileEntity te, String sound, float vol)
 	{
 		playSound(WorldHelper.getWorldID(te.getWorldObj()), te.xCoord, te.yCoord, te.zCoord, sound, vol);
@@ -43,38 +43,32 @@ public class SoundHelper
 
 	public static void playSound(int dim, int x, int y, int z, String sound, float vol, float speed)
 	{
-		if (!ServerHelper.isServer())
-			return;
+		if (!ServerHelper.isServer()) return;
 		NBTTagCompound data = new NBTTagCompound();
 		data.setInteger("x", x);
 		data.setInteger("y", y);
 		data.setInteger("z", z);
-		playSound(data,dim,sound,vol,speed);
+		playSound(data, dim, sound, vol, speed);
 	}
-	
+
 	public static void playSound(int dim, String sound, float vol, float speed)
 	{
-		if (!ServerHelper.isServer())
-			return;
+		if (!ServerHelper.isServer()) return;
 		NBTTagCompound data = new NBTTagCompound();
-		playSound(data,dim,sound,vol,speed);
+		playSound(data, dim, sound, vol, speed);
 	}
-	
+
 	private static void playSound(NBTTagCompound data, int dim, String sound, float vol, float speed)
 	{
 		World w = WorldHelper.getWorld(dim);
 		// No point playing a sound to a world with no entities in
-		if (w != null)
-			if (w.playerEntities != null && w.playerEntities.size() == 0)
-				return;
-		if (!sound.contains(":"))
-			return;
+		if (w != null) if (w.playerEntities != null && w.playerEntities.size() == 0) return;
+		if (!sound.contains(":")) return;
 		data.setString("sound", sound);
 		data.setInteger("world", dim);
 		data.setFloat("vol", vol);
-		if (speed != 1)
-			data.setFloat("spe", speed);
-		DataPacket packet = new DataPacket(data, (byte)0);
+		if (speed != 1) data.setFloat("spe", speed);
+		DataPacket packet = new DataPacket(data, (byte) 0);
 		DarkcoreMod.networkChannel.sendToDimension(packet, dim);
 	}
 }

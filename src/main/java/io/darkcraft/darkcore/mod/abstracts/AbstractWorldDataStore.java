@@ -8,17 +8,17 @@ import net.minecraft.world.storage.MapStorage;
 
 public abstract class AbstractWorldDataStore extends WorldSavedData
 {
-	private final String name;
+	private final String	name;
 
 	public AbstractWorldDataStore(String _name)
 	{
 		super(_name);
 		name = _name;
 	}
-	
+
 	public void load()
 	{
-		synchronized(this)
+		synchronized (this)
 		{
 			try
 			{
@@ -28,36 +28,39 @@ public abstract class AbstractWorldDataStore extends WorldSavedData
 				wsd.writeToNBT(nbt);
 				readFromNBT(nbt);
 			}
-			catch(NullPointerException e){}
+			catch (NullPointerException e)
+			{
+			}
 		}
 	}
-	
+
 	public void save()
 	{
-		synchronized(this)
+		synchronized (this)
 		{
 			try
 			{
 				MapStorage data = getData();
 				data.setData(getName(), this);
 			}
-			catch(NullPointerException e){}
+			catch (NullPointerException e)
+			{
+			}
 		}
 	}
-	
+
 	private MapStorage getData()
 	{
 		WorldServer world = WorldHelper.getWorldServer(getDimension());
-		if(world != null)
-			return world.perWorldStorage;
+		if (world != null) return world.perWorldStorage;
 		return null;
 	}
-	
+
 	public String getName()
 	{
 		return name;
 	}
-	
+
 	public abstract int getDimension();
 
 	@Override

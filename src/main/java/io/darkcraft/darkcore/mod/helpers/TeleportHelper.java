@@ -15,60 +15,54 @@ public class TeleportHelper
 {
 	public static void transferEntityToDimension(Entity ent, int newDimension, double newX, double newY, double newZ)
 	{
-		if(!ServerHelper.isServer())
-			return;
+		if (!ServerHelper.isServer()) return;
 		ServerConfigurationManager conf = ServerHelper.getConfigManager();
 		int oldDimension = WorldHelper.getWorldID(ent);
 		WorldServer dest = WorldHelper.getWorldServer(newDimension);
 		WorldServer source = WorldHelper.getWorldServer(oldDimension);
-		if(dest == null || source == null)
-			return;
-		if(ent instanceof EntityPlayerMP)
+		if (dest == null || source == null) return;
+		if (ent instanceof EntityPlayerMP)
 		{
-			EntityPlayerMP pl = (EntityPlayerMP)ent;
+			EntityPlayerMP pl = (EntityPlayerMP) ent;
 			conf.transferPlayerToDimension(pl, newDimension, DarkcoreTeleporter.i);
-			if(source.provider instanceof WorldProviderEnd)
-				ent = ServerHelper.getConfigManager().respawnPlayer(pl, newDimension, true);
+			if (source.provider instanceof WorldProviderEnd) ent = ServerHelper.getConfigManager().respawnPlayer(pl, newDimension, true);
 			pl.playerNetServerHandler.sendPacket(new S1FPacketSetExperience(pl.experience, pl.experienceTotal, pl.experienceLevel));
 			Entity entity = EntityList.createEntityByName(EntityList.getEntityString(ent), dest);
-			if(entity != null)
+			if (entity != null)
 			{
 				entity.copyDataFrom(ent, true);
 				dest.spawnEntityInWorld(entity);
 				ent.isDead = true;
-	            source.resetUpdateEntityTick();
-	            dest.resetUpdateEntityTick();
+				source.resetUpdateEntityTick();
+				dest.resetUpdateEntityTick();
 			}
 		}
 		else
 		{
 			ServerHelper.getConfigManager().transferEntityToWorld(ent, newDimension, source, dest);
-			//ent.travelToDimension(newDimension);
-			//conf.transferEntityToWorld(ent, newDimension, source, dest, TardisMod.teleporter);
+			// ent.travelToDimension(newDimension);
+			// conf.transferEntityToWorld(ent, newDimension, source, dest, TardisMod.teleporter);
 		}
 	}
 
 	public static void teleportEntity(Entity ent, int worldID, double x, double y, double z)
 	{
-		teleportEntity(ent,worldID,x,y,z,0);
+		teleportEntity(ent, worldID, x, y, z, 0);
 	}
 
 	public static void teleportEntity(Entity ent, int worldID, double x, double y, double z, double rot)
 	{
-		System.out.println("[TTH]Teleport request: " + worldID +" > " + x+","+y+","+z);
+		System.out.println("[TTH]Teleport request: " + worldID + " > " + x + "," + y + "," + z);
 		MinecraftServer serv = MinecraftServer.getServer();
-		if(ServerHelper.isServer() && serv != null && ent instanceof EntityLivingBase)
+		if (ServerHelper.isServer() && serv != null && ent instanceof EntityLivingBase)
 		{
-			/*WorldServer nW = WorldHelper.getWorldServer(worldID);
-			if(nW.provider instanceof TardisWorldProvider && ServerHelper.isServer())
+			/*
+			 * WorldServer nW = WorldHelper.getWorldServer(worldID); if(nW.provider instanceof TardisWorldProvider && ServerHelper.isServer()) { Packet dP = TardisDimensionRegistry.getPacket(); Helper.getConfMan().sendToAllNear(ent.posX, ent.posY, ent.posZ, 100, Helper.getWorldID(ent), dP); }
+			 */
+
+			if (WorldHelper.getWorldID(ent.worldObj) != worldID)
 			{
-				Packet dP = TardisDimensionRegistry.getPacket();
-				Helper.getConfMan().sendToAllNear(ent.posX, ent.posY, ent.posZ, 100, Helper.getWorldID(ent), dP);
-			}*/
-			
-			if(WorldHelper.getWorldID(ent.worldObj) != worldID)
-			{
-				transferEntityToDimension(ent,worldID,x,y,z);
+				transferEntityToDimension(ent, worldID, x, y, z);
 			}
 			((EntityLivingBase) ent).fallDistance = 0;
 			((EntityLivingBase) ent).motionX = 0;
@@ -82,6 +76,6 @@ public class TeleportHelper
 
 	public static void teleportEntity(Entity ent, int worldID)
 	{
-		teleportEntity(ent,worldID,ent.posX,ent.posY,ent.posZ);
+		teleportEntity(ent, worldID, ent.posX, ent.posY, ent.posZ);
 	}
 }

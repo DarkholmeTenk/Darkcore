@@ -47,8 +47,7 @@ public abstract class AbstractBlockContainer extends AbstractBlock implements IT
 	public void breakBlock(World w, int x, int y, int z, Block par5, int par6)
 	{
 		TileEntity te = w.getTileEntity(x, y, z);
-		if (te instanceof IMultiBlockPart)
-			((IMultiBlockPart) te).recheckCore();
+		if (te instanceof IMultiBlockPart) ((IMultiBlockPart) te).recheckCore();
 		super.breakBlock(w, x, y, z, par5, par6);
 		w.removeTileEntity(x, y, z);
 	}
@@ -64,21 +63,17 @@ public abstract class AbstractBlockContainer extends AbstractBlock implements IT
 	@Override
 	public boolean onBlockActivated(World w, int x, int y, int z, EntityPlayer pl, int s, float i, float j, float k)
 	{
-		if(super.onBlockActivated(w, x, y, z, pl, s, i, j, k))
-			return true;
-		if(this instanceof IActivatable)
-			if(((IActivatable)this).activate(pl, s))
-				return true;
+		if (super.onBlockActivated(w, x, y, z, pl, s, i, j, k)) return true;
+		if (this instanceof IActivatable) if (((IActivatable) this).activate(pl, s)) return true;
 		TileEntity te = w.getTileEntity(x, y, z);
-		if (te instanceof IActivatable)
-			return ((IActivatable) te).activate(pl, s);
+		if (te instanceof IActivatable) return ((IActivatable) te).activate(pl, s);
 		return false;
 	}
 
 	@Override
 	protected void dropBlockAsItem(World w, int x, int y, int z, ItemStack is)
 	{
-		//do not drop items while restoring blockstates, prevents item dupe
+		// do not drop items while restoring blockstates, prevents item dupe
 		if (ServerHelper.isServer() && w.getGameRules().getGameRuleBooleanValue("doTileDrops") && !w.restoringBlockSnapshots)
 		{
 			if (dropWithData)
@@ -104,7 +99,7 @@ public abstract class AbstractBlockContainer extends AbstractBlock implements IT
 			double d0 = (w.rand.nextFloat() * f) + ((1.0F - f) * 0.5D);
 			double d1 = (w.rand.nextFloat() * f) + ((1.0F - f) * 0.5D);
 			double d2 = (w.rand.nextFloat() * f) + ((1.0F - f) * 0.5D);
-			WorldHelper.dropItemStack(is, new SimpleDoubleCoordStore(w,x+d0,y+d1,z+d2));
+			WorldHelper.dropItemStack(is, new SimpleDoubleCoordStore(w, x + d0, y + d1, z + d2));
 		}
 	}
 
