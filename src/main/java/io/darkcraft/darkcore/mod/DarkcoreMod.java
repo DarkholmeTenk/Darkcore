@@ -8,6 +8,7 @@ import io.darkcraft.darkcore.mod.config.ConfigHandlerFactory;
 import io.darkcraft.darkcore.mod.handlers.ChunkLoadingHandler;
 import io.darkcraft.darkcore.mod.handlers.CommandHandler;
 import io.darkcraft.darkcore.mod.handlers.SoundPacketHandler;
+import io.darkcraft.darkcore.mod.helpers.ServerHelper;
 import io.darkcraft.darkcore.mod.interfaces.IConfigHandlerMod;
 import io.darkcraft.darkcore.mod.network.PacketHandler;
 import io.darkcraft.darkcore.mod.proxy.CommonProxy;
@@ -15,6 +16,7 @@ import io.darkcraft.darkcore.mod.proxy.CommonProxy;
 import java.util.HashMap;
 
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.MinecraftForge;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -25,10 +27,12 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerAboutToStartEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 import cpw.mods.fml.common.network.FMLEventChannel;
 import cpw.mods.fml.common.network.NetworkRegistry;
 
-@Mod(modid = "darkcore", version = "0.21")
+@Mod(modid = "darkcore", version = "0.22")
 public class DarkcoreMod implements IConfigHandlerMod
 {
 	@SidedProxy(clientSide = "io.darkcraft.darkcore.mod.proxy.ClientProxy", serverSide = "io.darkcraft.darkcore.mod.proxy.CommonProxy")
@@ -44,6 +48,8 @@ public class DarkcoreMod implements IConfigHandlerMod
 	private static HashMap<String, CreativeTabs>	creativeTabMap		= new HashMap();
 	public static ConfigFile						config				= null;
 	public static boolean							debugText			= true;
+	public static boolean							repostMessage		= true;
+	private static String[]							repostMessages		= { "DarkCore: If you have downloaded this mod from anywhere using an ad-wall or other method of gaining money from this mod then that site is breaking this mod's license.", "Please download from official sources", "You can disable this message in the DarkCore config file" ,""};
 
 	public static void refreshConfigs()
 	{
@@ -51,6 +57,8 @@ public class DarkcoreMod implements IConfigHandlerMod
 		AbstractTileEntity.refreshConfigs();
 		AbstractBlock.refreshConfigs();
 		debugText = config.getBoolean("debug text", false, "Print debug text");
+		repostMessage = config.getBoolean("Display repost message", true, "Set to false if you have seen the repost message", "and are aware the correct download location", "is http://minecraft.curseforge.com/mc-mods/230170-tardis-mod",
+				"and the forum post is http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/2420176-tardis-mod");
 	}
 
 	@EventHandler
@@ -69,6 +77,7 @@ public class DarkcoreMod implements IConfigHandlerMod
 	{
 		refreshConfigs();
 		networkChannel.register(packetHandler);
+		FMLCommonHandler.instance().bus().register(this);
 	}
 
 	@EventHandler
@@ -112,5 +121,14 @@ public class DarkcoreMod implements IConfigHandlerMod
 	{
 		if (creativeTabMap.containsKey(modID)) return creativeTabMap.get(modID);
 		return null;
+	}
+
+	@SubscribeEvent
+	public void repostWarning(PlayerLoggedInEvent event)
+	{
+		System.out.println("RW");
+		EntityPlayer pl = event.player;
+		if (repostMessage) for (String s : repostMessages)
+			ServerHelper.sendString(pl, s);
 	}
 }
