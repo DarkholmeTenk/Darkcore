@@ -22,6 +22,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -39,11 +40,15 @@ public abstract class AbstractBlock extends Block
 
 	private static ConfigFile	config				= null;
 	private static boolean		coloredUsesDye		= false;
+	private static int			maxColorSpread		= 16;
+	private static boolean		colorSpreadDiagonal	= false;
 
 	public static void refreshConfigs()
 	{
 		if (config == null) config = DarkcoreMod.configHandler.registerConfigNeeder("AbstractBlock");
 		coloredUsesDye = config.getBoolean("Colored blocks use up dye", false, "If true, when dying a colored block, the dye will be used up.", "If false, the dye will not be used up");
+		maxColorSpread = config.getInt("Max color spread", 16, "How many blocks away from the block you sneak right click should colors spread");
+		colorSpreadDiagonal = config.getBoolean("Color spread diagonal", false, "Can colors spread diagonally");
 	}
 
 	public AbstractBlock(Material blockMaterial, String sourcemod)
@@ -376,6 +381,46 @@ public abstract class AbstractBlock extends Block
 		return MapColor.getMapColorForBlockColored(p_149728_1_);
 	}
 
+	private boolean colorBlock(World w, int x, int y, int z, EntityPlayer pl, ItemStack is, int color, int depth)
+	{
+		if(depth >= maxColorSpread) return false;
+		int oldMeta = w.getBlockMetadata(x, y, z);
+		if (oldMeta == color) return false;
+		w.setBlockMetadataWithNotify(x, y, z, color, 3);
+		if (pl.onGround || pl.isOnLadder()) return true;
+		if (colorSpreadDiagonal)
+		{
+			topLevel: for (int xo = -1; xo <= 1; xo++)
+			{
+				for (int yo = -1; yo <= 1; yo++)
+				{
+					for (int zo = -1; zo <= 1; zo++)
+					{
+						if ((xo == 0) && (yo == 0) && (zo == 0)) continue;
+						if (is.stackSize == 0) break topLevel;
+						if ((w.getBlock(x + xo, y + yo, z + zo) != this) || (w.getBlockMetadata(x + xo, y + yo, z + zo) != oldMeta)) continue;
+						if (coloredUsesDye && !pl.capabilities.isCreativeMode) is.stackSize--;
+						colorBlock(w, x + xo, y + yo, z + zo, pl, is, color, depth+1);
+					}
+				}
+			}
+		}
+		else
+		{
+			for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS)
+			{
+				int xo = dir.offsetX;
+				int yo = dir.offsetY;
+				int zo = dir.offsetZ;
+				if (is.stackSize == 0) break;
+				if ((w.getBlock(x + xo, y + yo, z + zo) != this) || (w.getBlockMetadata(x + xo, y + yo, z + zo) != oldMeta)) continue;
+				if (coloredUsesDye && !pl.capabilities.isCreativeMode) is.stackSize--;
+				colorBlock(w, x + xo, y + yo, z + zo, pl, is, color, depth+1);
+			}
+		}
+		return true;
+	}
+
 	@Override
 	public boolean onBlockActivated(World w, int x, int y, int z, EntityPlayer pl, int s, float i, float j, float k)
 	{
@@ -388,10 +433,7 @@ public abstract class AbstractBlock extends Block
 			if (item instanceof ItemDye)
 			{
 				int md = is.getItemDamage();
-				if (md == w.getBlockMetadata(x, y, z)) return false;
-				w.setBlockMetadataWithNotify(x, y, z, md, 3);
-				if (coloredUsesDye && !pl.capabilities.isCreativeMode) is.stackSize--;
-				return true;
+				return colorBlock(w, x, y, z, pl, is, md, 0);
 			}
 		}
 		return false;
