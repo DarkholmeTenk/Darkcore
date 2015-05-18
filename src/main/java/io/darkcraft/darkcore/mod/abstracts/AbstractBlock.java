@@ -381,7 +381,7 @@ public abstract class AbstractBlock extends Block
 		return MapColor.getMapColorForBlockColored(p_149728_1_);
 	}
 
-	private boolean colorBlock(World w, int x, int y, int z, EntityPlayer pl, ItemStack is, int color, int depth)
+	protected boolean colorBlock(World w, int x, int y, int z, EntityPlayer pl, ItemStack is, int color, int depth)
 	{
 		if(depth >= maxColorSpread) return false;
 		int oldMeta = w.getBlockMetadata(x, y, z);
