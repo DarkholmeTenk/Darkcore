@@ -93,10 +93,10 @@ public class SimpleCoordStore
 	{
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + world;
-		result = prime * result + x;
-		result = prime * result + y;
-		result = prime * result + z;
+		result = (prime * result) + world;
+		result = (prime * result) + x;
+		result = (prime * result) + y;
+		result = (prime * result) + z;
 		return result;
 	}
 
@@ -107,7 +107,7 @@ public class SimpleCoordStore
 		if (!(obj instanceof SimpleCoordStore)) return false;
 		SimpleCoordStore other = (SimpleCoordStore) obj;
 		if (world != other.world) return false;
-		if (x != other.x || y != other.y || z != other.z) return false;
+		if ((x != other.x) || (y != other.y) || (z != other.z)) return false;
 		return true;
 	}
 
@@ -190,11 +190,11 @@ public class SimpleCoordStore
 	public double distance(SimpleCoordStore destLocation)
 	{
 		if (destLocation == null) return 0;
-		int xr = (x - destLocation.x);
+		long xr = (x - destLocation.x);
 		xr *= xr;
-		int yr = (y - destLocation.y);
+		long yr = (y - destLocation.y);
 		yr *= yr;
-		int zr = (z - destLocation.z);
+		long zr = (z - destLocation.z);
 		zr *= zr;
 		return Math.sqrt(xr + yr + zr);
 	}
