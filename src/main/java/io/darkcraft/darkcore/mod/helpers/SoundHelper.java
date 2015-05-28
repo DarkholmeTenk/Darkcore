@@ -43,7 +43,6 @@ public class SoundHelper
 
 	public static void playSound(int dim, int x, int y, int z, String sound, float vol, float speed)
 	{
-		if (ServerHelper.isClient()) return;
 		NBTTagCompound data = new NBTTagCompound();
 		data.setInteger("x", x);
 		data.setInteger("y", y);
@@ -53,7 +52,6 @@ public class SoundHelper
 
 	public static void playSound(int dim, String sound, float vol, float speed)
 	{
-		if (ServerHelper.isClient()) return;
 		NBTTagCompound data = new NBTTagCompound();
 		playSound(data, dim, sound, vol, speed);
 	}
@@ -62,13 +60,20 @@ public class SoundHelper
 	{
 		World w = WorldHelper.getWorld(dim);
 		// No point playing a sound to a world with no entities in
-		if (w != null) if (w.playerEntities != null && w.playerEntities.size() == 0) return;
+		if (w != null) if ((w.playerEntities != null) && (w.playerEntities.size() == 0)) return;
 		if (!sound.contains(":")) return;
 		data.setString("sound", sound);
 		data.setInteger("world", dim);
 		data.setFloat("vol", vol);
 		if (speed != 1) data.setFloat("spe", speed);
-		DataPacket packet = new DataPacket(data, (byte) 0);
-		DarkcoreMod.networkChannel.sendToDimension(packet, dim);
+		if(ServerHelper.isServer())
+		{
+			DataPacket packet = new DataPacket(data, (byte) 0);
+			DarkcoreMod.networkChannel.sendToDimension(packet, dim);
+		}
+		else
+		{
+			DarkcoreMod.soundPacketHandler.handleData(data);
+		}
 	}
 }
