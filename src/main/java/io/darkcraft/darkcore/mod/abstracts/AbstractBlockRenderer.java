@@ -1,18 +1,23 @@
 package io.darkcraft.darkcore.mod.abstracts;
 
-import org.lwjgl.opengl.GL11;
-
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
+import org.lwjgl.opengl.GL11;
+
 public abstract class AbstractBlockRenderer extends TileEntitySpecialRenderer
 {
+	protected static FontRenderer							fr;
+
 	@Override
 	public void renderTileEntityAt(TileEntity tileEntity, double d0, double d1, double d2, float f)
 	{
+		if(fr == null)
+			fr = func_147498_b();
 		GL11.glPushMatrix();
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
