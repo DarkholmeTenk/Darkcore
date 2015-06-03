@@ -16,7 +16,7 @@ public class WorldHelper
 {
 	/**
 	 * Attempts to get the world specified by id. If this is run on the client, it will either return the client side world or null.
-	 * 
+	 *
 	 * @return either the world or null
 	 */
 	public static World getWorld(int id)
@@ -29,8 +29,15 @@ public class WorldHelper
 
 	public static WorldServer getWorldServer(int id)
 	{
-		MinecraftServer s = MinecraftServer.getServer();
-		if (s != null) return s.worldServerForDimension(id);
+		try
+		{
+			MinecraftServer s = MinecraftServer.getServer();
+			if (s != null) return s.worldServerForDimension(id);
+		}
+		catch(RuntimeException e)
+		{
+			e.printStackTrace();
+		}
 		return null;
 	}
 

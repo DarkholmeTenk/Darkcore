@@ -2,8 +2,8 @@ package io.darkcraft.darkcore.mod.abstracts;
 
 import io.darkcraft.darkcore.mod.helpers.WorldHelper;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
 import net.minecraft.world.WorldSavedData;
-import net.minecraft.world.WorldServer;
 import net.minecraft.world.storage.MapStorage;
 
 public abstract class AbstractWorldDataStore extends WorldSavedData
@@ -28,7 +28,7 @@ public abstract class AbstractWorldDataStore extends WorldSavedData
 				wsd.writeToNBT(nbt);
 				readFromNBT(nbt);
 			}
-			catch (NullPointerException e)
+			catch (Exception e)
 			{
 			}
 		}
@@ -51,7 +51,7 @@ public abstract class AbstractWorldDataStore extends WorldSavedData
 
 	private MapStorage getData()
 	{
-		WorldServer world = WorldHelper.getWorldServer(getDimension());
+		World world = WorldHelper.getWorld(getDimension());
 		if (world != null) return world.perWorldStorage;
 		return null;
 	}
