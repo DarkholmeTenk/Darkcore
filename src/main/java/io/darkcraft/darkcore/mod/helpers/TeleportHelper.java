@@ -20,7 +20,9 @@ public class TeleportHelper
 		int oldDimension = WorldHelper.getWorldID(ent);
 		WorldServer dest = WorldHelper.getWorldServer(newDimension);
 		WorldServer source = WorldHelper.getWorldServer(oldDimension);
-		if (dest == null || source == null) return;
+		if ((dest == null) || (source == null)) return;
+		if (ent.isRiding())
+			ent.mountEntity(null);
 		if (ent instanceof EntityPlayerMP)
 		{
 			EntityPlayerMP pl = (EntityPlayerMP) ent;
@@ -54,7 +56,7 @@ public class TeleportHelper
 	{
 		System.out.println("[TTH]Teleport request: " + worldID + " > " + x + "," + y + "," + z);
 		MinecraftServer serv = MinecraftServer.getServer();
-		if (ServerHelper.isServer() && serv != null && ent instanceof EntityLivingBase)
+		if (ServerHelper.isServer() && (serv != null) && (ent instanceof EntityLivingBase))
 		{
 			/*
 			 * WorldServer nW = WorldHelper.getWorldServer(worldID); if(nW.provider instanceof TardisWorldProvider && ServerHelper.isServer()) { Packet dP = TardisDimensionRegistry.getPacket(); Helper.getConfMan().sendToAllNear(ent.posX, ent.posY, ent.posZ, 100, Helper.getWorldID(ent), dP); }
