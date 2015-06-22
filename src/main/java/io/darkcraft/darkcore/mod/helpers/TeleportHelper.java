@@ -4,6 +4,7 @@ import io.darkcraft.darkcore.mod.DarkcoreTeleporter;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.boss.IBossDisplayData;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.play.server.S1FPacketSetExperience;
 import net.minecraft.server.MinecraftServer;
@@ -15,6 +16,8 @@ public class TeleportHelper
 {
 	public static void transferEntityToDimension(Entity ent, int newDimension, double newX, double newY, double newZ)
 	{
+		if(ent instanceof IBossDisplayData)
+			return;
 		if (ServerHelper.isClient()) return;
 		ServerConfigurationManager conf = ServerHelper.getConfigManager();
 		int oldDimension = WorldHelper.getWorldID(ent);
@@ -54,6 +57,8 @@ public class TeleportHelper
 
 	public static void teleportEntity(Entity ent, int worldID, double x, double y, double z, double rot)
 	{
+		if(ent instanceof IBossDisplayData)
+			return;
 		System.out.println("[TTH]Teleport request: " + worldID + " > " + x + "," + y + "," + z);
 		MinecraftServer serv = MinecraftServer.getServer();
 		if (ServerHelper.isServer() && (serv != null) && (ent instanceof EntityLivingBase))
