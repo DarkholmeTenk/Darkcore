@@ -20,6 +20,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
+import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -436,6 +437,17 @@ public abstract class AbstractBlock extends Block
 				return colorBlock(w, x, y, z, pl, is, md, 0);
 			}
 		}
+		return false;
+	}
+
+	@Override
+	public void onBlockExploded(World world, int x, int y, int z, Explosion explosion)
+	{
+	}
+
+	@Override
+	public boolean canDropFromExplosion(Explosion p_149659_1_)
+	{
 		return false;
 	}
 
