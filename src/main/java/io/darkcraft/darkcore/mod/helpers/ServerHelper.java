@@ -108,6 +108,7 @@ public class ServerHelper
 
 	public static void sendString(EntityPlayer pl, ChatComponentText message)
 	{
+		if(pl == null) return;
 		pl.addChatMessage(message);
 	}
 
