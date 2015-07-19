@@ -15,13 +15,13 @@ public class SimpleDoubleCoordStore
 	public final double	x;
 	public final double	y;
 	public final double	z;
+	public final int	iX;
+	public final int	iY;
+	public final int	iZ;
 
 	public SimpleDoubleCoordStore(TileEntity te)
 	{
-		world = WorldHelper.getWorldID(te);
-		x = te.xCoord;
-		y = te.yCoord;
-		z = te.zCoord;
+		this(WorldHelper.getWorldID(te), te.xCoord, te.yCoord, te.zCoord);
 	}
 
 	public SimpleDoubleCoordStore(int win, double xin, double yin, double zin)
@@ -30,47 +30,55 @@ public class SimpleDoubleCoordStore
 		x = xin;
 		y = yin;
 		z = zin;
+
+		iX = (int) Math.floor(xin);
+		iY = (int) Math.floor(yin);
+		iZ = (int) Math.floor(zin);
 	}
 
 	public SimpleDoubleCoordStore(World w, double xin, double yin, double zin)
 	{
-		world = WorldHelper.getWorldID(w);
-		x = xin;
-		y = yin;
-		z = zin;
+		this(WorldHelper.getWorldID(w), xin, yin, zin);
 	}
 
 	public SimpleDoubleCoordStore(int w, Entity ent)
 	{
-		world = w;
-		x = ent.posX;
-		y = ent.posY;
-		z = ent.posZ;
+		this(w, ent.posX, ent.posY, ent.posZ);
 	}
 
 	public SimpleDoubleCoordStore(EntityLivingBase ent)
 	{
-		world = WorldHelper.getWorldID(ent);
-		x = ent.posX;
-		y = ent.posY;
-		z = ent.posZ;
+		this(WorldHelper.getWorldID(ent), ent.posX, ent.posY, ent.posZ);
 	}
 
 	/**
 	 * Returns the distance between this and other simple double coord store
-	 * 
+	 *
 	 * @param other
 	 * @return -1 if not in same world or abs(distance between the two)
 	 */
 	public double distance(SimpleDoubleCoordStore other)
 	{
-		if (other == null || world != other.world) return -1;
+		if ((other == null) || (world != other.world)) return -1;
 		double total = 0;
 		double temp = (other.x - x);
 		total += (temp * temp);
 		temp = (other.y - y);
 		total += (temp * temp);
 		temp = (other.z - z);
+		total += (temp * temp);
+		return Math.sqrt(total);
+	}
+
+	public double distance(SimpleCoordStore other)
+	{
+		if ((other == null) || (world != other.world)) return -1;
+		double total = 0;
+		double temp = ((other.x + 0.5) - x);
+		total += (temp * temp);
+		temp = ((other.y + 0.5) - y);
+		total += (temp * temp);
+		temp = ((other.z + 0.5) - z);
 		total += (temp * temp);
 		return Math.sqrt(total);
 	}
@@ -111,7 +119,7 @@ public class SimpleDoubleCoordStore
 
 	/**
 	 * returns an AABB centred around this coord store with lengths 2r in each direction.
-	 * 
+	 *
 	 * @param r
 	 *            the 'radius' of the AABB
 	 * @return
@@ -137,14 +145,14 @@ public class SimpleDoubleCoordStore
 	{
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + world;
+		result = (prime * result) + world;
 		long temp;
 		temp = Double.doubleToLongBits(x);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
+		result = (prime * result) + (int) (temp ^ (temp >>> 32));
 		temp = Double.doubleToLongBits(y);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
+		result = (prime * result) + (int) (temp ^ (temp >>> 32));
 		temp = Double.doubleToLongBits(z);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
+		result = (prime * result) + (int) (temp ^ (temp >>> 32));
 		return result;
 	}
 
@@ -153,14 +161,14 @@ public class SimpleDoubleCoordStore
 		int mag = MathHelper.round(1 / tolerance);
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + world;
+		result = (prime * result) + world;
 		long temp;
 		temp = MathHelper.floor(x * mag);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
+		result = (prime * result) + (int) (temp ^ (temp >>> 32));
 		temp = MathHelper.floor(y * mag);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
+		result = (prime * result) + (int) (temp ^ (temp >>> 32));
 		temp = MathHelper.floor(z * mag);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
+		result = (prime * result) + (int) (temp ^ (temp >>> 32));
 		return result;
 	}
 
@@ -172,7 +180,7 @@ public class SimpleDoubleCoordStore
 		if (!(obj instanceof SimpleDoubleCoordStore)) return false;
 		SimpleDoubleCoordStore other = (SimpleDoubleCoordStore) obj;
 		if (world != other.world) return false;
-		if (x != other.x || y != other.y || z != other.z) return false;
+		if ((x != other.x) || (y != other.y) || (z != other.z)) return false;
 		return true;
 	}
 
