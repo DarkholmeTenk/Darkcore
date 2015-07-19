@@ -5,6 +5,7 @@ import io.darkcraft.darkcore.mod.config.CType;
 import io.darkcraft.darkcore.mod.config.ConfigFile;
 import io.darkcraft.darkcore.mod.config.ConfigItem;
 import io.darkcraft.darkcore.mod.datastore.SimpleCoordStore;
+import io.darkcraft.darkcore.mod.datastore.SimpleDoubleCoordStore;
 import io.darkcraft.darkcore.mod.helpers.ServerHelper;
 import io.darkcraft.darkcore.mod.interfaces.IChunkLoader;
 import io.darkcraft.darkcore.mod.interfaces.IMultiBlockCore;
@@ -59,6 +60,11 @@ public abstract class AbstractTileEntity extends TileEntity
 		if (valid) return valid;
 		if (b.getCollisionBoundingBoxFromPool(w, x, y, z) == null) return true;
 		return false;
+	}
+
+	protected boolean softBlock(SimpleDoubleCoordStore pos)
+	{
+		return softBlock(pos.getWorldObj(), pos.iX, pos.iY, pos.iZ);
 	}
 
 	@Override
