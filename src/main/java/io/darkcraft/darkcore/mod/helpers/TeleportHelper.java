@@ -1,6 +1,7 @@
 package io.darkcraft.darkcore.mod.helpers;
 
 import io.darkcraft.darkcore.mod.DarkcoreTeleporter;
+import io.darkcraft.darkcore.mod.datastore.SimpleDoubleCoordStore;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
@@ -14,16 +15,16 @@ import net.minecraft.world.WorldServer;
 
 public class TeleportHelper
 {
-	public static void transferEntityToDimension(Entity ent, int newDimension, double newX, double newY, double newZ)
+	public static Entity transferEntityToDimension(Entity ent, int newDimension, double newX, double newY, double newZ)
 	{
 		if(ent instanceof IBossDisplayData)
-			return;
-		if (ServerHelper.isClient()) return;
+			return ent;
+		if (ServerHelper.isClient()) return ent;
 		ServerConfigurationManager conf = ServerHelper.getConfigManager();
 		int oldDimension = WorldHelper.getWorldID(ent);
 		WorldServer dest = WorldHelper.getWorldServer(newDimension);
 		WorldServer source = WorldHelper.getWorldServer(oldDimension);
-		if ((dest == null) || (source == null)) return;
+		if ((dest == null) || (source == null)) return ent;
 		if (ent.isRiding())
 			ent.mountEntity(null);
 		if (ent instanceof EntityPlayerMP)
@@ -40,14 +41,26 @@ public class TeleportHelper
 				ent.isDead = true;
 				source.resetUpdateEntityTick();
 				dest.resetUpdateEntityTick();
+				return entity;
 			}
 		}
 		else
 		{
-			ServerHelper.getConfigManager().transferEntityToWorld(ent, newDimension, source, dest);
+			//conf.transferEntityToWorld(ent, newDimension, source, dest, DarkcoreTeleporter.i);
 			// ent.travelToDimension(newDimension);
 			// conf.transferEntityToWorld(ent, newDimension, source, dest, TardisMod.teleporter);
+			Entity entity = EntityList.createEntityByName(EntityList.getEntityString(ent), dest);
+			if (entity != null)
+			{
+				entity.copyDataFrom(ent, true);
+				dest.spawnEntityInWorld(entity);
+				ent.isDead = true;
+				source.resetUpdateEntityTick();
+				dest.resetUpdateEntityTick();
+				return entity;
+			}
 		}
+		return ent;
 	}
 
 	public static void teleportEntity(Entity ent, int worldID, double x, double y, double z)
@@ -69,7 +82,7 @@ public class TeleportHelper
 
 			if (WorldHelper.getWorldID(ent.worldObj) != worldID)
 			{
-				transferEntityToDimension(ent, worldID, x, y, z);
+				ent = transferEntityToDimension(ent, worldID, x, y, z);
 			}
 			((EntityLivingBase) ent).fallDistance = 0;
 			((EntityLivingBase) ent).motionX = 0;
@@ -79,6 +92,16 @@ public class TeleportHelper
 			((EntityLivingBase) ent).setPositionAndRotation(x, y, z, (float) rot, 0F);
 			((EntityLivingBase) ent).setPositionAndUpdate(x, y, z);
 		}
+	}
+
+	public static void teleportEntity(Entity ent, SimpleDoubleCoordStore pos)
+	{
+		teleportEntity(ent,pos,0);
+	}
+
+	public static void teleportEntity(Entity ent, SimpleDoubleCoordStore pos, double rot)
+	{
+		teleportEntity(ent, pos.world, pos.x, pos.y, pos.z, rot);
 	}
 
 	public static void teleportEntity(Entity ent, int worldID)

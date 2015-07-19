@@ -38,7 +38,7 @@ public class DarkcoreTeleporter extends Teleporter
 	@Override
 	public boolean makePortal(Entity par1Entity)
 	{
-		return true;
+		return false;
 	}
 
 	@Override
