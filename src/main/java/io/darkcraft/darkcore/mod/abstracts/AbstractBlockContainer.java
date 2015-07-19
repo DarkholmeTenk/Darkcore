@@ -1,10 +1,12 @@
 package io.darkcraft.darkcore.mod.abstracts;
 
+import io.darkcraft.darkcore.mod.datastore.SimpleCoordStore;
 import io.darkcraft.darkcore.mod.datastore.SimpleDoubleCoordStore;
 import io.darkcraft.darkcore.mod.helpers.ServerHelper;
 import io.darkcraft.darkcore.mod.helpers.WorldHelper;
 import io.darkcraft.darkcore.mod.interfaces.IActivatable;
 import io.darkcraft.darkcore.mod.interfaces.IBlockUpdateDetector;
+import io.darkcraft.darkcore.mod.interfaces.IExplodable;
 import io.darkcraft.darkcore.mod.interfaces.IMultiBlockPart;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
@@ -12,6 +14,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 
 public abstract class AbstractBlockContainer extends AbstractBlock implements ITileEntityProvider
@@ -115,4 +118,15 @@ public abstract class AbstractBlockContainer extends AbstractBlock implements IT
 
 	public abstract Class<? extends TileEntity> getTEClass();
 
+	@Override
+	public void onBlockExploded(World world, int x, int y, int z, Explosion explosion)
+	{
+		super.onBlockExploded(world, x, y, z, explosion);
+		TileEntity te = world.getTileEntity(x, y, z);
+		if(te instanceof IExplodable)
+		{
+			SimpleCoordStore scs = new SimpleCoordStore(world, x, y, z);
+			((IExplodable)te).explode(scs, explosion);
+		}
+	}
 }

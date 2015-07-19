@@ -2,8 +2,10 @@ package io.darkcraft.darkcore.mod.abstracts;
 
 import io.darkcraft.darkcore.mod.DarkcoreMod;
 import io.darkcraft.darkcore.mod.config.ConfigFile;
+import io.darkcraft.darkcore.mod.datastore.SimpleCoordStore;
 import io.darkcraft.darkcore.mod.helpers.MathHelper;
 import io.darkcraft.darkcore.mod.interfaces.IColorableBlock;
+import io.darkcraft.darkcore.mod.interfaces.IExplodable;
 import io.darkcraft.darkcore.mod.multiblock.BlockState;
 
 import java.util.List;
@@ -443,6 +445,11 @@ public abstract class AbstractBlock extends Block
 	@Override
 	public void onBlockExploded(World world, int x, int y, int z, Explosion explosion)
 	{
+		if(this instanceof IExplodable)
+		{
+			SimpleCoordStore scs = new SimpleCoordStore(world, x, y, z);
+			((IExplodable)this).explode(scs,explosion);
+		}
 	}
 
 	@Override
