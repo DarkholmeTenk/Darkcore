@@ -443,6 +443,12 @@ public abstract class AbstractBlock extends Block
 	}
 
 	@Override
+	public float getExplosionResistance(Entity par1Entity, World world, int x, int y, int z, double explosionX, double explosionY, double explosionZ)
+	{
+		return 0;
+	}
+
+	@Override
 	public void onBlockExploded(World world, int x, int y, int z, Explosion explosion)
 	{
 		if(this instanceof IExplodable)
