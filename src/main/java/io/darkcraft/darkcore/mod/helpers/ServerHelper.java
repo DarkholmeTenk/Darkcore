@@ -7,6 +7,7 @@ import java.io.OutputStream;
 import java.util.List;
 import java.util.zip.ZipException;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.CompressedStreamTools;
@@ -27,6 +28,14 @@ public class ServerHelper
 	public static boolean isClient()
 	{
 		return FMLCommonHandler.instance().getEffectiveSide().equals(Side.CLIENT);
+	}
+
+	public static boolean isIntegratedClient()
+	{
+		if(isServer())
+			return false;
+		Minecraft m = Minecraft.getMinecraft();
+		return m.isIntegratedServerRunning();
 	}
 
 	public static NBTTagCompound readNBT(InputStream in)
