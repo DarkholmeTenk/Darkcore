@@ -1,6 +1,7 @@
 package io.darkcraft.darkcore.mod.helpers;
 
 import io.darkcraft.darkcore.mod.DarkcoreMod;
+import io.darkcraft.darkcore.mod.datastore.SimpleCoordStore;
 import io.darkcraft.darkcore.mod.datastore.SimpleDoubleCoordStore;
 import io.darkcraft.darkcore.mod.network.DataPacket;
 import net.minecraft.entity.Entity;
@@ -81,5 +82,10 @@ public class SoundHelper
 	public static void playSound(SimpleDoubleCoordStore pos, String sound, float vol)
 	{
 		playSound(pos.world, pos.iX, pos.iY, pos.iZ, sound, vol);
+	}
+
+	public static void playSound(SimpleCoordStore pos, String sound, float vol)
+	{
+		playSound(pos.world, pos.x, pos.y, pos.z, sound, vol);
 	}
 }

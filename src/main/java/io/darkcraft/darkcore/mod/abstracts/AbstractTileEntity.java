@@ -23,8 +23,6 @@ import net.minecraft.server.management.ServerConfigurationManager;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.relauncher.Side;
 
 public abstract class AbstractTileEntity extends TileEntity
 {
@@ -111,6 +109,11 @@ public abstract class AbstractTileEntity extends TileEntity
 		}
 	}
 
+	public void queueUpdate()
+	{
+		updateQueued = true;
+	}
+
 	public void init()
 	{
 	}
@@ -141,7 +144,7 @@ public abstract class AbstractTileEntity extends TileEntity
 
 	public void sendDataPacket()
 	{
-		if (FMLCommonHandler.instance().getEffectiveSide().equals(Side.SERVER))
+		if (ServerHelper.isServer())
 		{
 			if (DarkcoreMod.debugText) System.out.println("[ATE]Called sendDataPacket");
 			Packet p = getDescriptionPacket();
