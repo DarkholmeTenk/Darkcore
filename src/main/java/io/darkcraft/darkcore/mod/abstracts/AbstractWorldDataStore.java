@@ -28,9 +28,7 @@ public abstract class AbstractWorldDataStore extends WorldSavedData
 				wsd.writeToNBT(nbt);
 				readFromNBT(nbt);
 			}
-			catch (Exception e)
-			{
-			}
+			catch (Exception e){}
 		}
 	}
 

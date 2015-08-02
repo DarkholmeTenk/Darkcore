@@ -8,6 +8,7 @@ import io.darkcraft.darkcore.mod.config.ConfigHandlerFactory;
 import io.darkcraft.darkcore.mod.handlers.ChunkLoadingHandler;
 import io.darkcraft.darkcore.mod.handlers.CommandHandler;
 import io.darkcraft.darkcore.mod.handlers.SoundPacketHandler;
+import io.darkcraft.darkcore.mod.helpers.PlayerHelper;
 import io.darkcraft.darkcore.mod.helpers.ServerHelper;
 import io.darkcraft.darkcore.mod.interfaces.IConfigHandlerMod;
 import io.darkcraft.darkcore.mod.network.PacketHandler;
@@ -91,6 +92,7 @@ public class DarkcoreMod implements IConfigHandlerMod
 	@EventHandler
 	public void preServerStarting(FMLServerAboutToStartEvent ev)
 	{
+		PlayerHelper.reset();
 		resetChunkLoadingHandler();
 	}
 
@@ -134,6 +136,7 @@ public class DarkcoreMod implements IConfigHandlerMod
 	@SubscribeEvent
 	public void repostWarning(PlayerLoggedInEvent event)
 	{
+		PlayerHelper.i.playerSpawn(event);
 		System.out.println("RW");
 		EntityPlayer pl = event.player;
 		if (repostMessage) for (String s : repostMessages)

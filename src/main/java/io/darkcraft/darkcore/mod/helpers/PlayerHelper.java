@@ -3,20 +3,27 @@ package io.darkcraft.darkcore.mod.helpers;
 import io.darkcraft.darkcore.mod.abstracts.AbstractWorldDataStore;
 
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
 import com.mojang.authlib.GameProfile;
 
+import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
+
 public class PlayerHelper
 {
-	private static UUIDStore store = null;
+	public static PlayerHelper		i			= new PlayerHelper();
+	private static UUIDStore		store		= null;
+	private static Set<ItemStack>	joinStacks	= new HashSet<ItemStack>();
 
 	private static UUIDStore getStore()
 	{
-		if(store == null)
+		if (store == null)
 		{
 			store = new UUIDStore();
 			store.load();
@@ -37,19 +44,21 @@ public class PlayerHelper
 	}
 
 	/**
-	 * @param oldName the name which we think might be the old name of the player
-	 * @param pl the player who we are checking
+	 * @param oldName
+	 *            the name which we think might be the old name of the player
+	 * @param pl
+	 *            the player who we are checking
 	 * @return true if pl is the same person as the person who had the username oldName; false otherwise
 	 */
 	public static boolean isEqual(String oldName, EntityPlayer pl)
 	{
-		if(ServerHelper.getUsername(pl).equals(oldName))
+		if (ServerHelper.getUsername(pl).equals(oldName))
 		{
 			getStore().addUser(pl);
 			return true;
 		}
 		String storedName = getStore().getUsername(pl);
-		if(oldName.equals(storedName))
+		if (oldName.equals(storedName))
 		{
 			getStore().addUser(pl);
 			return true;
@@ -58,7 +67,8 @@ public class PlayerHelper
 	}
 
 	/**
-	 * @param pl the player to check
+	 * @param pl
+	 *            the player to check
 	 * @return true if the players name has changed from the datastore
 	 * @return false if the players name has not changed or was not in the datastore
 	 */
@@ -66,22 +76,41 @@ public class PlayerHelper
 	{
 		String newName = ServerHelper.getUsername(pl);
 		String storedName = getStore().getUsername(pl);
-		if(storedName == null)
+		if (storedName == null)
 		{
 			getStore().addUser(pl);
 			return false;
 		}
-		if(newName.equals(storedName))
-			return false;
+		if (newName.equals(storedName)) return false;
 		return true;
 	}
 
-	private static class UUIDStore extends AbstractWorldDataStore
+	public static void registerJoinItem(ItemStack is)
 	{
-		private HashMap<UUID,String> uuidMap = new HashMap<UUID,String>();
+		joinStacks.add(is);
+	}
+
+	public void playerSpawn(PlayerLoggedInEvent event)
+	{
+		EntityPlayer player = event.player;
+		if(!getStore().uuidMap.containsKey(getUUID(player)))
+			for(ItemStack is : joinStacks)
+				WorldHelper.giveItemStack(player, is.copy());
+		getStore().addUser(player);
+	}
+
+	public static class UUIDStore extends AbstractWorldDataStore
+	{
+		private HashMap<UUID, String>	uuidMap	= new HashMap<UUID, String>();
+
 		public UUIDStore()
 		{
 			super("dc_uuidstore");
+		}
+
+		public UUIDStore(String s)
+		{
+			this();
 		}
 
 		@Override
@@ -97,14 +126,17 @@ public class PlayerHelper
 				UUID uuid = ent.getGameProfile().getId();
 				String name = ServerHelper.getUsername(ent);
 				String prev = null;
-				synchronized(uuidMap)
+				synchronized (uuidMap)
 				{
-					prev = uuidMap.put(uuid, ServerHelper.getUsername(ent));
+					prev = uuidMap.put(uuid, name);
 				}
-				if(!name.equals(prev))
+				if (!name.equals(prev))
+				{
 					markDirty();
+					save();
+				}
 			}
-			catch(Exception e)
+			catch (Exception e)
 			{
 				e.printStackTrace();
 			}
@@ -118,7 +150,7 @@ public class PlayerHelper
 
 		public String getUsername(UUID uuid)
 		{
-			synchronized(uuidMap)
+			synchronized (uuidMap)
 			{
 				return uuidMap.get(uuid);
 			}
@@ -126,12 +158,11 @@ public class PlayerHelper
 
 		public UUID getUUID(String un)
 		{
-			if(un == null) return null;
-			synchronized(uuidMap)
+			if (un == null) return null;
+			synchronized (uuidMap)
 			{
-				for(UUID uuid : uuidMap.keySet())
-					if(un.equals(uuidMap.get(uuid)))
-						return uuid;
+				for (UUID uuid : uuidMap.keySet())
+					if (un.equals(uuidMap.get(uuid))) return uuid;
 			}
 			return null;
 		}
@@ -139,21 +170,21 @@ public class PlayerHelper
 		@Override
 		public void readFromNBT(NBTTagCompound nbt)
 		{
-			synchronized(uuidMap)
+			synchronized (uuidMap)
 			{
 				uuidMap.clear();
 				int i = 0;
-				while(nbt.hasKey("uuid"+i))
+				while (nbt.hasKey("uuid" + i))
 				{
 					try
 					{
-						String key = nbt.getString("uuid"+(i++));
+						String key = nbt.getString("uuid" + (i++));
 						String[] splitKey = key.split("\\|", 2);
 						UUID uuid = UUID.fromString(splitKey[0]);
 						String name = splitKey[1];
 						uuidMap.put(uuid, name);
 					}
-					catch(Exception e)
+					catch (Exception e)
 					{
 						e.printStackTrace();
 					}
@@ -164,15 +195,20 @@ public class PlayerHelper
 		@Override
 		public void writeToNBT(NBTTagCompound nbt)
 		{
-			synchronized(uuidMap)
+			synchronized (uuidMap)
 			{
 				int i = 0;
-				for(UUID uuid : uuidMap.keySet())
+				for (UUID uuid : uuidMap.keySet())
 				{
-					nbt.setString("uuid"+(i++), uuid.toString() + "|" + uuidMap.get(uuid));
+					nbt.setString("uuid" + (i++), uuid.toString() + "|" + uuidMap.get(uuid));
 				}
 			}
 		}
 
+	}
+
+	public static void reset()
+	{
+		store = null;
 	}
 }
