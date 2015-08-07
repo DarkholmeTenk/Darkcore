@@ -198,4 +198,9 @@ public class SimpleCoordStore
 		zr *= zr;
 		return Math.sqrt(xr + yr + zr);
 	}
+
+	public void setMetadata(int meta, int notify)
+	{
+		getWorldObj().setBlockMetadataWithNotify(x, y, z, meta, notify);
+	}
 }

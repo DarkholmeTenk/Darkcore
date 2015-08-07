@@ -8,6 +8,7 @@ import io.darkcraft.darkcore.mod.interfaces.IColorableBlock;
 import io.darkcraft.darkcore.mod.interfaces.IExplodable;
 import io.darkcraft.darkcore.mod.multiblock.BlockState;
 
+import java.util.HashSet;
 import java.util.List;
 
 import net.minecraft.block.Block;
@@ -388,9 +389,8 @@ public abstract class AbstractBlock extends Block
 	{
 		if(depth >= maxColorSpread) return false;
 		int oldMeta = w.getBlockMetadata(x, y, z);
-		if (oldMeta == color) return false;
 		w.setBlockMetadataWithNotify(x, y, z, color, 3);
-		if (pl.onGround || pl.isOnLadder()) return true;
+		if ((oldMeta != color) && (depth == 0)) return true;
 		if (colorSpreadDiagonal)
 		{
 			topLevel: for (int xo = -1; xo <= 1; xo++)
@@ -410,15 +410,30 @@ public abstract class AbstractBlock extends Block
 		}
 		else
 		{
-			for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS)
+			int loopDepth = 0;
+			HashSet<SimpleCoordStore> done = new HashSet<SimpleCoordStore>();
+			HashSet<SimpleCoordStore> toDo = new HashSet<SimpleCoordStore>();
+			toDo.add(new SimpleCoordStore(w,x,y,z));
+			mainLoop:
+			while((loopDepth++ < maxColorSpread) && !toDo.isEmpty())
 			{
-				int xo = dir.offsetX;
-				int yo = dir.offsetY;
-				int zo = dir.offsetZ;
-				if (is.stackSize == 0) break;
-				if ((w.getBlock(x + xo, y + yo, z + zo) != this) || (w.getBlockMetadata(x + xo, y + yo, z + zo) != oldMeta)) continue;
-				if (coloredUsesDye && !pl.capabilities.isCreativeMode) is.stackSize--;
-				colorBlock(w, x + xo, y + yo, z + zo, pl, is, color, depth+1);
+				HashSet<SimpleCoordStore> buffer = new HashSet<SimpleCoordStore>();
+				for(SimpleCoordStore pos : toDo)
+				{
+					done.add(pos);
+					for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS)
+					{
+						SimpleCoordStore next = pos.getNearby(dir);
+						if(done.contains(next)) continue;
+						if((next.getBlock() != this) || (next.getMetadata() == color)) continue;
+						buffer.add(next);
+					}
+					if (coloredUsesDye && !pl.capabilities.isCreativeMode) is.stackSize--;
+					pos.setMetadata(color,3);
+					if(is.stackSize == 0) break mainLoop;
+				}
+				toDo = buffer;
+				buffer = new HashSet<SimpleCoordStore>();
 			}
 		}
 		return true;
