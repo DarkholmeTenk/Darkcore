@@ -5,6 +5,7 @@ import io.darkcraft.darkcore.mod.datastore.SimpleDoubleCoordStore;
 import io.darkcraft.darkcore.mod.helpers.ServerHelper;
 import io.darkcraft.darkcore.mod.helpers.WorldHelper;
 import io.darkcraft.darkcore.mod.interfaces.IActivatable;
+import io.darkcraft.darkcore.mod.interfaces.IActivatablePrecise;
 import io.darkcraft.darkcore.mod.interfaces.IBlockUpdateDetector;
 import io.darkcraft.darkcore.mod.interfaces.IExplodable;
 import io.darkcraft.darkcore.mod.interfaces.IMultiBlockPart;
@@ -69,7 +70,8 @@ public abstract class AbstractBlockContainer extends AbstractBlock implements IT
 		if (super.onBlockActivated(w, x, y, z, pl, s, i, j, k)) return true;
 		if (this instanceof IActivatable) if (((IActivatable) this).activate(pl, s)) return true;
 		TileEntity te = w.getTileEntity(x, y, z);
-		if (te instanceof IActivatable) return ((IActivatable) te).activate(pl, s);
+		if ((te instanceof IActivatable) && ((IActivatable) te).activate(pl, s)) return true;
+		if (te instanceof IActivatablePrecise) return ((IActivatablePrecise)te).activate(pl, s, i, j, k);
 		return false;
 	}
 
