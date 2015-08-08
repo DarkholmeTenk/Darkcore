@@ -442,6 +442,7 @@ public abstract class AbstractBlock extends Block
 	@Override
 	public boolean onBlockActivated(World w, int x, int y, int z, EntityPlayer pl, int s, float i, float j, float k)
 	{
+		if(w.getBlock(x, y, z) != this) return false;
 		if (pl == null) return false;
 		if (this instanceof IColorableBlock)
 		{
