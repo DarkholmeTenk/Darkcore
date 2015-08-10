@@ -4,6 +4,7 @@ import io.darkcraft.darkcore.mod.DarkcoreMod;
 import io.darkcraft.darkcore.mod.interfaces.IDataPacketHandler;
 
 import java.util.HashMap;
+import java.util.Set;
 
 import net.minecraft.nbt.NBTTagCompound;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -46,5 +47,14 @@ public class PacketHandler
 		if (handlers.containsKey(discriminator)) return false;
 		handlers.put(discriminator, handler);
 		return true;
+	}
+
+	public byte getNextFreeDiscriminator()
+	{
+		Set<Integer> taken = handlers.keySet();
+		for(int i = 0; i<256;i++)
+			if(!taken.contains(i))
+				return (byte)i;
+		return -1;
 	}
 }
