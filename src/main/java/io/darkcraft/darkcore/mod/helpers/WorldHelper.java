@@ -2,6 +2,7 @@ package io.darkcraft.darkcore.mod.helpers;
 
 import io.darkcraft.darkcore.mod.DarkcoreMod;
 import io.darkcraft.darkcore.mod.datastore.SimpleDoubleCoordStore;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -54,6 +55,13 @@ public class WorldHelper
 	public static int getWorldID(Entity ent)
 	{
 		return getWorldID(ent.worldObj);
+	}
+
+	public static int getClientWorldID()
+	{
+		if(ServerHelper.isClient())
+			return getWorldID(Minecraft.getMinecraft().theWorld);
+		return 0;
 	}
 
 	public static String getDimensionName(int worldID)
