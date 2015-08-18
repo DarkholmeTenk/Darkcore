@@ -8,6 +8,7 @@ import io.darkcraft.darkcore.mod.config.ConfigHandlerFactory;
 import io.darkcraft.darkcore.mod.handlers.ChunkLoadingHandler;
 import io.darkcraft.darkcore.mod.handlers.CommandHandler;
 import io.darkcraft.darkcore.mod.handlers.SoundPacketHandler;
+import io.darkcraft.darkcore.mod.handlers.WorldDataStoreHandler;
 import io.darkcraft.darkcore.mod.helpers.PlayerHelper;
 import io.darkcraft.darkcore.mod.helpers.ServerHelper;
 import io.darkcraft.darkcore.mod.interfaces.IConfigHandlerMod;
@@ -92,6 +93,7 @@ public class DarkcoreMod implements IConfigHandlerMod
 	@EventHandler
 	public void preServerStarting(FMLServerAboutToStartEvent ev)
 	{
+		WorldDataStoreHandler.clear();
 		PlayerHelper.reset();
 		resetChunkLoadingHandler();
 	}

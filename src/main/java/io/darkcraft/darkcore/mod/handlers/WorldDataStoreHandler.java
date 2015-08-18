@@ -3,6 +3,7 @@ package io.darkcraft.darkcore.mod.handlers;
 import io.darkcraft.darkcore.mod.DarkcoreMod;
 import io.darkcraft.darkcore.mod.abstracts.AbstractWorldDataStore;
 import io.darkcraft.darkcore.mod.datastore.Pair;
+import io.darkcraft.darkcore.mod.helpers.ServerHelper;
 import io.darkcraft.darkcore.mod.interfaces.IDataPacketHandler;
 
 import java.util.HashMap;
@@ -19,6 +20,11 @@ public class WorldDataStoreHandler implements IDataPacketHandler
 
 	@SuppressWarnings("unchecked")
 	private static HashMap<Pair<Integer,String>,AbstractWorldDataStore> map = new HashMap();
+
+	public static void clear()
+	{
+		map.clear();
+	}
 
 	public static boolean register(AbstractWorldDataStore store)
 	{
@@ -42,9 +48,18 @@ public class WorldDataStoreHandler implements IDataPacketHandler
 		{
 			int dim = data.getInteger("AWDSdim");
 			String name = data.getString("AWDSname");
+			System.out.print("RP:"+dim+":"+name);
 			AbstractWorldDataStore awds = get(dim,name);
 			if(awds != null)
-				awds.readFromNBT(data);
+			{
+				System.out.println("#NN");
+				if(ServerHelper.isClient())
+					awds.readFromNBT(data);
+				else
+					awds.sendUpdate();
+			}
+			else
+				System.out.println("#N");
 		}
 	}
 }
