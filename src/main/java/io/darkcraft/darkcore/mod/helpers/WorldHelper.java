@@ -12,6 +12,8 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class WorldHelper
 {
@@ -57,10 +59,16 @@ public class WorldHelper
 		return getWorldID(ent.worldObj);
 	}
 
+	@SideOnly(Side.CLIENT)
+	private static World getCW()
+	{
+		return Minecraft.getMinecraft().theWorld;
+	}
+
 	public static int getClientWorldID()
 	{
 		if(ServerHelper.isClient())
-			return getWorldID(Minecraft.getMinecraft().theWorld);
+			return getWorldID(getCW());
 		return 0;
 	}
 
