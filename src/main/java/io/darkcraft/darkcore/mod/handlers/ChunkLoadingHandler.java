@@ -4,8 +4,8 @@ import io.darkcraft.darkcore.mod.DarkcoreMod;
 import io.darkcraft.darkcore.mod.datastore.SimpleCoordStore;
 import io.darkcraft.darkcore.mod.interfaces.IChunkLoader;
 
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
@@ -95,43 +95,44 @@ public class ChunkLoadingHandler implements LoadingCallback
 	private void validateChunkLoaders()
 	{
 		if (!ticked) return;
-		HashSet<SimpleCoordStore> keys = new HashSet<SimpleCoordStore>();
-		keys.addAll(monitorableChunkLoaders.keySet());
-		Iterator<SimpleCoordStore> keyIter = keys.iterator();
+		Iterator<SimpleCoordStore> keyIter = monitorableChunkLoaders.keySet().iterator();
 		while (keyIter.hasNext())
 		{
 			SimpleCoordStore pos = keyIter.next();
-			World w = pos.getWorldObj();
-			TileEntity te = w.getTileEntity(pos.x, pos.y, pos.z);
-			if (te instanceof IChunkLoader)
+			Ticket t = monitorableChunkLoaders.get(pos);
+			if(t == null)
 			{
-				Ticket t = monitorableChunkLoaders.get(pos);
-				if ((t != null) && !((IChunkLoader) te).shouldChunkload())
+				keyIter.remove();
+				continue;
+			}
+			TileEntity te = pos.getTileEntity();
+			World w = pos.getWorldObj();
+			if ((te != null) && (te instanceof IChunkLoader))
+			{
+				IChunkLoader cl = (IChunkLoader) te;
+				if ((t != null) && !cl.shouldChunkload())
 				{
 					try
 					{
 						ForgeChunkManager.releaseTicket(t);
 					}
 					catch(NullPointerException e){}
-					monitorableChunkLoaders.put(pos, null);
+					keyIter.remove();
+					continue;
 				}
-				else if ((t == null) && ((IChunkLoader) te).shouldChunkload())
-					monitorableChunkLoaders.put(pos, getTicket(((IChunkLoader) te), w));
-				else if ((t != null) && ((IChunkLoader) te).shouldChunkload()) loadLoadables(t, (IChunkLoader) te);
+				else if ((t != null) && ((IChunkLoader) te).shouldChunkload())
+					loadLoadables(t, (IChunkLoader) te);
 			}
 			else
 			{
-				if (monitorableChunkLoaders.containsKey(pos))
-				{
-					Ticket t = monitorableChunkLoaders.get(pos);
-					if(t != null)
-						try
-						{
-							ForgeChunkManager.releaseTicket(t);
-						}
-						catch(NullPointerException e){}
-				}
-				monitorableChunkLoaders.remove(pos);
+				if(t != null)
+					try
+					{
+						ForgeChunkManager.releaseTicket(t);
+					}
+					catch(NullPointerException e){System.err.println(e.getMessage());}
+				keyIter.remove();
+				continue;
 			}
 		}
 	}
@@ -152,6 +153,16 @@ public class ChunkLoadingHandler implements LoadingCallback
 			validateChunkLoaders();
 		}
 		ticked = true;
+	}
+
+	public Collection<SimpleCoordStore> getLoadables()
+	{
+		return monitorableChunkLoaders.keySet();
+	}
+
+	public void clear()
+	{
+		monitorableChunkLoaders.clear();
 	}
 
 }

@@ -65,9 +65,11 @@ public abstract class AbstractCommand implements ICommand
 		return false;
 	}
 
-	public void sendString(ICommandSender comsen, String toSend)
+	public void sendString(ICommandSender comsen, String... toSend)
 	{
-		comsen.addChatMessage(new ChatComponentText(toSend));
+		if(toSend == null) return;
+		for(String s : toSend)
+			comsen.addChatMessage(new ChatComponentText(s));
 	}
 
 }

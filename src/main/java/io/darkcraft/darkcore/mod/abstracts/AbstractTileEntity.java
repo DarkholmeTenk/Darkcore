@@ -37,6 +37,8 @@ public abstract class AbstractTileEntity extends TileEntity
 	public static Random		rand				= new Random();
 	public SimpleCoordStore		coords				= null;
 
+	private boolean				pscl				= false;
+
 	static
 	{
 		refreshConfigs();
@@ -134,10 +136,17 @@ public abstract class AbstractTileEntity extends TileEntity
 			if (((IMultiBlockCore) this).keepRechecking()) ((IMultiBlockCore) this).recheckValidity();
 		}
 
+		if (ServerHelper.isServer() && (this instanceof IChunkLoader))
+		{
+			IChunkLoader icl = (IChunkLoader) this;
+			if(icl.shouldChunkload() && !pscl)
+				DarkcoreMod.chunkLoadingHandler.loadMe(icl);
+			pscl = icl.shouldChunkload();
+		}
+
 		if (!init)
 		{
 			init = true;
-			if (ServerHelper.isServer() && (this instanceof IChunkLoader)) DarkcoreMod.chunkLoadingHandler.loadMe((IChunkLoader) this);
 			init();
 		}
 	}

@@ -11,6 +11,7 @@ import io.darkcraft.darkcore.mod.handlers.SoundPacketHandler;
 import io.darkcraft.darkcore.mod.handlers.WorldDataStoreHandler;
 import io.darkcraft.darkcore.mod.helpers.PlayerHelper;
 import io.darkcraft.darkcore.mod.helpers.ServerHelper;
+import io.darkcraft.darkcore.mod.impl.DebugCommand;
 import io.darkcraft.darkcore.mod.interfaces.IConfigHandlerMod;
 import io.darkcraft.darkcore.mod.network.PacketHandler;
 import io.darkcraft.darkcore.mod.proxy.CommonProxy;
@@ -88,6 +89,7 @@ public class DarkcoreMod implements IConfigHandlerMod
 		refreshConfigs();
 		networkChannel.register(packetHandler);
 		FMLCommonHandler.instance().bus().register(this);
+		comHandler.addCommand(new DebugCommand());
 	}
 
 	@EventHandler
