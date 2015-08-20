@@ -52,7 +52,12 @@ public class ChunkLoadingHandler implements LoadingCallback
 
 	public void loadMe(IChunkLoader chunkLoader)
 	{
-		if (!monitorableChunkLoaders.containsKey(chunkLoader.coords())) monitorableChunkLoaders.put(chunkLoader.coords(), null);
+		SimpleCoordStore scs = chunkLoader.coords();
+		if (!monitorableChunkLoaders.containsKey(scs))
+		{
+			World w = scs.getWorldObj();
+			monitorableChunkLoaders.put(chunkLoader.coords(), getTicket(chunkLoader, w));
+		}
 	}
 
 	private void loadLoadables(Ticket t, IChunkLoader te)
@@ -110,7 +115,7 @@ public class ChunkLoadingHandler implements LoadingCallback
 			if ((te != null) && (te instanceof IChunkLoader))
 			{
 				IChunkLoader cl = (IChunkLoader) te;
-				if ((t != null) && !cl.shouldChunkload())
+				if (!cl.shouldChunkload())
 				{
 					try
 					{
@@ -120,7 +125,7 @@ public class ChunkLoadingHandler implements LoadingCallback
 					keyIter.remove();
 					continue;
 				}
-				else if ((t != null) && ((IChunkLoader) te).shouldChunkload())
+				else
 					loadLoadables(t, (IChunkLoader) te);
 			}
 			else
