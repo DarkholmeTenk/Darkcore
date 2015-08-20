@@ -55,6 +55,7 @@ public class DarkcoreMod implements IConfigHandlerMod
 	public static boolean							repostMessage		= true;
 	private static String[]							repostMessages		= { "DarkCore: If you have downloaded this mod from anywhere using an ad-wall or other method of gaining money from this mod then that site is breaking this mod's license.", "Please download from official sources", "You can disable this message in the DarkCore config file" ,""};
 	public static HashSet<String>					bannedSounds		= new HashSet<String>();
+	public static int								chunkLoadCheckTime	= 200;
 
 	public static void refreshConfigs()
 	{
@@ -65,6 +66,7 @@ public class DarkcoreMod implements IConfigHandlerMod
 		repostMessage = config.getBoolean("Display repost message", true, "Set to false if you have seen the repost message", "and are aware the correct download location", "is http://minecraft.curseforge.com/mc-mods/230170-tardis-mod",
 				"and the forum post is http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/2420176-tardis-mod");
 		String bannedSoundsData = config.getString("Banned sounds", "", "Insert a list of comma separated sounds to be banned","e.g. tardismod:levelup will disable the level up sound for TARDISes");
+		chunkLoadCheckTime = config.getInt("Chunk loading check time", 200, "The number of ticks between chunk loaders being checked and unloaded if necessary");
 		String[] bannedSoundsBlobs = bannedSoundsData.split(",");
 		bannedSounds.clear();
 		for(String s : bannedSoundsBlobs)

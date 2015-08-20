@@ -4,8 +4,8 @@ import io.darkcraft.darkcore.mod.DarkcoreMod;
 import io.darkcraft.darkcore.mod.abstracts.AbstractCommand;
 import io.darkcraft.darkcore.mod.datastore.SimpleCoordStore;
 
-import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 import net.minecraft.command.ICommandSender;
 import net.minecraft.tileentity.TileEntity;
@@ -53,7 +53,8 @@ public class DebugCommand extends AbstractCommand
 			String com = astring[1].toLowerCase();
 			if(com.equals("list"))
 			{
-				Collection<SimpleCoordStore> points = DarkcoreMod.chunkLoadingHandler.getLoadables();
+				Set<SimpleCoordStore> points = DarkcoreMod.chunkLoadingHandler.getLoadables();
+				sendString(sen,"Loaded stuff:");
 				for(SimpleCoordStore scs : points)
 				{
 					TileEntity te = scs.getTileEntity();

@@ -4,10 +4,10 @@ import io.darkcraft.darkcore.mod.DarkcoreMod;
 import io.darkcraft.darkcore.mod.datastore.SimpleCoordStore;
 import io.darkcraft.darkcore.mod.interfaces.IChunkLoader;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -146,7 +146,7 @@ public class ChunkLoadingHandler implements LoadingCallback
 
 	private void tickEnd()
 	{
-		if (((tickCount++ % 10) == 1) || forceCheck)
+		if (((tickCount++ % DarkcoreMod.chunkLoadCheckTime) == 1) || forceCheck)
 		{
 			// TardisOutput.print("TCLM", "Handling chunks");
 			forceCheck = false;
@@ -155,7 +155,7 @@ public class ChunkLoadingHandler implements LoadingCallback
 		ticked = true;
 	}
 
-	public Collection<SimpleCoordStore> getLoadables()
+	public Set<SimpleCoordStore> getLoadables()
 	{
 		return monitorableChunkLoaders.keySet();
 	}
