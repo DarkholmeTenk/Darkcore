@@ -139,9 +139,8 @@ public abstract class AbstractTileEntity extends TileEntity
 		if (ServerHelper.isServer() && (this instanceof IChunkLoader))
 		{
 			IChunkLoader icl = (IChunkLoader) this;
-			if(icl.shouldChunkload() && !pscl)
+			if(icl.shouldChunkload())
 				DarkcoreMod.chunkLoadingHandler.loadMe(icl);
-			pscl = icl.shouldChunkload();
 		}
 
 		if (!init)
