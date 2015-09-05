@@ -42,12 +42,8 @@ public class ChunkLoadingHandler implements LoadingCallback
 			if (t.getModData().hasKey("coords"))
 			{
 				SimpleCoordStore pos = SimpleCoordStore.readFromNBT(t.getModData().getCompoundTag("coords"));
-				if (monitorableChunkLoaders.containsKey(pos))
-				{
-					Ticket x = monitorableChunkLoaders.get(pos);
-					if (x != null) ForgeChunkManager.releaseTicket(x);
-				}
-				waitingToLoad.add(pos);
+				if (!monitorableChunkLoaders.containsKey(pos))
+					waitingToLoad.add(pos);
 			}
 			ForgeChunkManager.releaseTicket(t);
 		}
