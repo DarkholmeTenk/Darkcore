@@ -53,12 +53,17 @@ public class DebugCommand extends AbstractCommand
 			String com = astring[1].toLowerCase();
 			if(com.equals("list"))
 			{
+				String filter = null;
+				if(astring.length == 3)
+					filter = astring[2];
 				Set<SimpleCoordStore> points = DarkcoreMod.chunkLoadingHandler.getLoadables();
 				sendString(sen,"Loaded stuff:");
 				for(SimpleCoordStore scs : points)
 				{
 					TileEntity te = scs.getTileEntity();
-					sendString(sen,scs + " - " + te);
+					String name = te.getClass().getSimpleName();
+					if((filter == null) || name.equals(filter))
+						sendString(sen,scs + " - " + te);
 				}
 			}
 			if(com.equals("clear"))
