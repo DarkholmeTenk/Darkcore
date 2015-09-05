@@ -1,10 +1,12 @@
 package io.darkcraft.darkcore.mod.handlers;
 
 import io.darkcraft.darkcore.mod.DarkcoreMod;
+import io.darkcraft.darkcore.mod.abstracts.AbstractTileEntity;
 import io.darkcraft.darkcore.mod.datastore.SimpleCoordStore;
 import io.darkcraft.darkcore.mod.interfaces.IChunkLoader;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -26,6 +28,7 @@ import cpw.mods.fml.relauncher.Side;
 
 public class ChunkLoadingHandler implements LoadingCallback
 {
+	HashSet<SimpleCoordStore>			waitingToLoad			= new HashSet<SimpleCoordStore>();
 	HashMap<SimpleCoordStore, Ticket>	monitorableChunkLoaders	= new HashMap<SimpleCoordStore, Ticket>();
 	private int							tickCount				= 0;
 	private boolean						forceCheck				= false;
@@ -44,7 +47,7 @@ public class ChunkLoadingHandler implements LoadingCallback
 					Ticket x = monitorableChunkLoaders.get(pos);
 					if (x != null) ForgeChunkManager.releaseTicket(x);
 				}
-				monitorableChunkLoaders.put(pos, null);
+				waitingToLoad.add(pos);
 			}
 			ForgeChunkManager.releaseTicket(t);
 		}
@@ -60,7 +63,7 @@ public class ChunkLoadingHandler implements LoadingCallback
 		}
 	}
 
-	private void loadLoadables(Ticket t, IChunkLoader te)
+	private void loadLoadables(Ticket t, IChunkLoader te, SimpleCoordStore pos)
 	{
 		if ((t == null) || (te == null)) return;
 		if (t.world == null) return;
@@ -82,12 +85,27 @@ public class ChunkLoadingHandler implements LoadingCallback
 					}
 				}
 			}
-			NBTTagCompound nbt = t.getModData();
-			if (nbt != null)
+		}
+		else
+		{
+			ChunkCoordIntPair tePos = pos.toChunkCoords();
+			if ((alreadyLoaded == null) || !alreadyLoaded.contains(tePos))
 			{
-				SimpleCoordStore coords = te.coords();
-				if (coords != null) nbt.setTag("coords", te.coords().writeToNBT());
+				try
+				{
+					ForgeChunkManager.forceChunk(t, tePos);
+				}
+				catch (Exception e)
+				{
+					e.printStackTrace();
+				}
 			}
+		}
+		NBTTagCompound nbt = t.getModData();
+		if (nbt != null)
+		{
+			SimpleCoordStore coords = te.coords();
+			if (coords != null) nbt.setTag("coords", pos.writeToNBT());
 		}
 	}
 
@@ -114,6 +132,12 @@ public class ChunkLoadingHandler implements LoadingCallback
 			World w = pos.getWorldObj();
 			if ((te != null) && (te instanceof IChunkLoader))
 			{
+				if(te instanceof AbstractTileEntity)
+					if(!((AbstractTileEntity)te).init)
+					{
+						loadLoadables(t, (IChunkLoader) te, pos);
+						continue;
+					}
 				IChunkLoader cl = (IChunkLoader) te;
 				if (!cl.shouldChunkload())
 				{
@@ -126,7 +150,7 @@ public class ChunkLoadingHandler implements LoadingCallback
 					continue;
 				}
 				else
-					loadLoadables(t, (IChunkLoader) te);
+					loadLoadables(t, (IChunkLoader) te, pos);
 			}
 			else
 			{
@@ -139,6 +163,19 @@ public class ChunkLoadingHandler implements LoadingCallback
 				keyIter.remove();
 				continue;
 			}
+		}
+		for(Iterator<SimpleCoordStore> iter = waitingToLoad.iterator(); iter.hasNext();)
+		{
+			SimpleCoordStore pos = iter.next();
+			TileEntity te = pos.getTileEntity();
+			if(te instanceof IChunkLoader)
+			{
+				Ticket t = getTicket((IChunkLoader)te, pos.getWorldObj());
+				loadLoadables(t, (IChunkLoader)te, pos);
+				monitorableChunkLoaders.put(pos, t);
+			}
+			else
+				iter.remove();
 		}
 	}
 
