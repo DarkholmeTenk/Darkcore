@@ -64,7 +64,7 @@ public class TeleportHelper
 				entity.posZ = newZ;
 				entity.forceSpawn = true; //Force it to spawn
 				entity.copyDataFrom(ent, true);
-				boolean didSpawn = dest.spawnEntityInWorld(entity)
+				boolean didSpawn = dest.spawnEntityInWorld(entity);
 				if(!didSpawn)
 					System.err.println("Failed to spawn entity");
 				ent.isDead = didSpawn;
