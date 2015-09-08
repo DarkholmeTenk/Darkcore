@@ -36,7 +36,12 @@ public class TeleportHelper
 			Entity entity = EntityList.createEntityByName(EntityList.getEntityString(ent), dest);
 			if (entity != null)
 			{
+				dest.getBlock((int)newX, (int)newY, (int)newZ); //Should force chunk to generate
 				entity.copyDataFrom(ent, true);
+				entity.posX = newX; //Set the entity position so it's in the right chunk
+				entity.posY = newY;
+				entity.posZ = newZ;
+				entity.forceSpawn = true; //Force it to spawn
 				dest.spawnEntityInWorld(entity);
 				ent.isDead = true;
 				source.resetUpdateEntityTick();
