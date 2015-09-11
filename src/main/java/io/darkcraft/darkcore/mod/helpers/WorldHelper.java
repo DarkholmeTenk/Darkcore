@@ -2,6 +2,9 @@ package io.darkcraft.darkcore.mod.helpers;
 
 import io.darkcraft.darkcore.mod.DarkcoreMod;
 import io.darkcraft.darkcore.mod.datastore.SimpleDoubleCoordStore;
+
+import java.util.HashMap;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
@@ -22,6 +25,14 @@ public class WorldHelper
 	 *
 	 * @return either the world or null
 	 */
+
+	private static HashMap<Integer, String> worldNameMap = new HashMap();
+
+	public static void clearWorldNameMap()
+	{
+		worldNameMap.clear();
+	}
+
 	public static World getWorld(int id)
 	{
 		if (ServerHelper.isClient())
@@ -74,13 +85,23 @@ public class WorldHelper
 
 	public static String getDimensionName(int worldID)
 	{
+		if(worldNameMap.containsKey(worldID))
+			return worldNameMap.get(worldID);
 		World w = getWorld(worldID);
 		return getDimensionName(w);
 	}
 
 	public static String getDimensionName(World w)
 	{
-		if (w != null) { return w.provider.getDimensionName(); }
+		int id = getWorldID(w);
+		if(worldNameMap.containsKey(id))
+			return worldNameMap.get(id);
+		if (w != null)
+		{
+			String name = w.provider.getDimensionName();
+			worldNameMap.put(id, name);
+			return name;
+		}
 		return "Unknown";
 	}
 
