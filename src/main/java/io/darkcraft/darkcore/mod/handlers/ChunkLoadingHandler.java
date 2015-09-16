@@ -3,6 +3,8 @@ package io.darkcraft.darkcore.mod.handlers;
 import io.darkcraft.darkcore.mod.DarkcoreMod;
 import io.darkcraft.darkcore.mod.abstracts.AbstractTileEntity;
 import io.darkcraft.darkcore.mod.datastore.SimpleCoordStore;
+import io.darkcraft.darkcore.mod.helpers.ServerHelper;
+import io.darkcraft.darkcore.mod.helpers.WorldHelper;
 import io.darkcraft.darkcore.mod.interfaces.IChunkLoader;
 
 import java.util.HashMap;
@@ -18,6 +20,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.ForgeChunkManager.LoadingCallback;
 import net.minecraftforge.common.ForgeChunkManager.Ticket;
+import net.minecraftforge.event.world.WorldEvent;
 
 import com.google.common.collect.ImmutableSet;
 
@@ -28,6 +31,7 @@ import cpw.mods.fml.relauncher.Side;
 
 public class ChunkLoadingHandler implements LoadingCallback
 {
+	HashSet<Ticket>						tickets					= new HashSet<Ticket>();
 	HashSet<SimpleCoordStore>			waitingToLoad			= new HashSet<SimpleCoordStore>();
 	HashMap<SimpleCoordStore, Ticket>	monitorableChunkLoaders	= new HashMap<SimpleCoordStore, Ticket>();
 	private int							tickCount				= 0;
@@ -45,7 +49,7 @@ public class ChunkLoadingHandler implements LoadingCallback
 				if (!monitorableChunkLoaders.containsKey(pos))
 					waitingToLoad.add(pos);
 			}
-			ForgeChunkManager.releaseTicket(t);
+			release(t,true);
 		}
 	}
 
@@ -108,7 +112,41 @@ public class ChunkLoadingHandler implements LoadingCallback
 	private Ticket getTicket(IChunkLoader te, World world)
 	{
 		Ticket t = ForgeChunkManager.requestTicket(DarkcoreMod.i, world, ForgeChunkManager.Type.NORMAL);
+		tickets.add(t);
 		return t;
+	}
+
+	private Ticket getTicket(SimpleCoordStore pos)
+	{
+		TileEntity te = pos.getTileEntity();
+		if(te instanceof IChunkLoader)
+			return getTicket((IChunkLoader)te,pos.getWorldObj());
+		return null;
+	}
+
+	private void release(Ticket t, boolean clear)
+	{
+		try
+		{
+			ForgeChunkManager.releaseTicket(t);
+			if(clear && tickets.contains(t))
+				tickets.remove(t);
+		}
+		catch(NullPointerException npe){};
+	}
+
+	private void removeBadTickets()
+	{
+		Iterator<Ticket> iter = tickets.iterator();
+		while(iter.hasNext())
+		{
+			Ticket t = iter.next();
+			if(!monitorableChunkLoaders.containsValue(t))
+			{
+				release(t, false);
+				iter.remove();
+			}
+		}
 	}
 
 	private void validateChunkLoaders()
@@ -121,8 +159,18 @@ public class ChunkLoadingHandler implements LoadingCallback
 			Ticket t = monitorableChunkLoaders.get(pos);
 			if(t == null)
 			{
-				keyIter.remove();
-				continue;
+				if(DarkcoreMod.reloadNullTicket)
+				{
+					t = getTicket(pos);
+					if(t != null)
+						monitorableChunkLoaders.put(pos, t);
+				}
+
+				if(t == null)
+				{
+					keyIter.remove();
+					continue;
+				}
 			}
 			TileEntity te = pos.getTileEntity();
 			World w = pos.getWorldObj();
@@ -137,11 +185,7 @@ public class ChunkLoadingHandler implements LoadingCallback
 				IChunkLoader cl = (IChunkLoader) te;
 				if (!cl.shouldChunkload())
 				{
-					try
-					{
-						ForgeChunkManager.releaseTicket(t);
-					}
-					catch(NullPointerException e){}
+					release(t,true);
 					keyIter.remove();
 					continue;
 				}
@@ -151,11 +195,7 @@ public class ChunkLoadingHandler implements LoadingCallback
 			else
 			{
 				if(t != null)
-					try
-					{
-						ForgeChunkManager.releaseTicket(t);
-					}
-					catch(NullPointerException e){System.err.println(e.getMessage());}
+					release(t,true);
 				keyIter.remove();
 				continue;
 			}
@@ -163,6 +203,11 @@ public class ChunkLoadingHandler implements LoadingCallback
 		for(Iterator<SimpleCoordStore> iter = waitingToLoad.iterator(); iter.hasNext();)
 		{
 			SimpleCoordStore pos = iter.next();
+			if(monitorableChunkLoaders.containsKey(pos))
+			{
+				iter.remove();
+				continue;
+			}
 			TileEntity te = pos.getTileEntity();
 			if(te instanceof IChunkLoader)
 			{
@@ -170,9 +215,9 @@ public class ChunkLoadingHandler implements LoadingCallback
 				loadLoadables(t, (IChunkLoader)te, pos);
 				monitorableChunkLoaders.put(pos, t);
 			}
-			else
-				iter.remove();
+			iter.remove();
 		}
+		removeBadTickets();
 	}
 
 	@SubscribeEvent
@@ -191,6 +236,23 @@ public class ChunkLoadingHandler implements LoadingCallback
 			validateChunkLoaders();
 		}
 		ticked = true;
+	}
+
+	@SubscribeEvent
+	public void handleWorldUnload(WorldEvent.Unload unloadEvent)
+	{
+		if(ServerHelper.isClient()) return;
+		World w = unloadEvent.world;
+		int id = WorldHelper.getWorldID(w);
+		for(SimpleCoordStore pos : monitorableChunkLoaders.keySet())
+		{
+			if(pos.world != id) continue;
+			Ticket t = monitorableChunkLoaders.get(pos);
+			if(t == null) continue;
+			release(t,true);
+			monitorableChunkLoaders.put(pos, null);
+		}
+		removeBadTickets();
 	}
 
 	public Set<SimpleCoordStore> getLoadables()
