@@ -1,5 +1,7 @@
 package io.darkcraft.darkcore.mod.config;
 
+import io.darkcraft.darkcore.mod.exception.MalformedConfigException;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -54,8 +56,7 @@ public class ConfigFile
 			String[] data = lastLine.split(":", 3);
 			if (data.length != 3)
 			{
-				System.err.println("Invalid data " + item);
-				continue;
+				throw new MalformedConfigException("Invalid data '" + item + "'");
 			}
 			CType c = CType.fromPrintable(data[1]);
 			Object d = c.toData(data[2]);
@@ -63,7 +64,7 @@ public class ConfigFile
 			if (lines.length > 1)
 			{
 				comments = new String[lines.length - 1];
-				for (int i = 0; i < lines.length - 1; i++)
+				for (int i = 0; i < (lines.length - 1); i++)
 					comments[i] = lines[i];
 			}
 			configItems.add(new ConfigItem(data[0], c, d, comments));

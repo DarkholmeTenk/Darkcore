@@ -1,5 +1,7 @@
 package io.darkcraft.darkcore.mod.config;
 
+import io.darkcraft.darkcore.mod.exception.MalformedConfigException;
+
 public enum CType
 {
 	INT("I"), DOUBLE("D"), STRING("S"), BOOLEAN("B");
@@ -19,8 +21,8 @@ public enum CType
 	public static CType fromPrintable(String pr)
 	{
 		for (CType c : values())
-			if (c.getPrintable().equals(pr)) return c;
-		return null;
+			if (c.getPrintable().equalsIgnoreCase(pr)) return c;
+		throw new MalformedConfigException("Unrecognised data type: '" + pr + "'");
 	}
 
 	public Object toData(String data)
