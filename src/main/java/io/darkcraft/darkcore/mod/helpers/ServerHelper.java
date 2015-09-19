@@ -15,6 +15,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.ServerConfigurationManager;
 import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.EnumChatFormatting;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 
@@ -124,5 +125,18 @@ public class ServerHelper
 	public static void sendString(EntityPlayer pl, String string)
 	{
 		sendString(pl, new ChatComponentText(string));
+	}
+
+	public static void sendString(EntityPlayer pl, String source, String string, EnumChatFormatting color)
+	{
+		sendString(pl, "["+source+"]"+string, color);
+	}
+
+	public static void sendString(EntityPlayer pl, String string, EnumChatFormatting color)
+	{
+		ChatComponentText c = new ChatComponentText("");
+		c.getChatStyle().setColor(color);
+		c.appendText(string);
+		pl.addChatMessage(c);
 	}
 }
