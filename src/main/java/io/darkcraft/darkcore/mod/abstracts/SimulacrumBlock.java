@@ -50,6 +50,18 @@ public class SimulacrumBlock extends AbstractBlock implements IColorableBlock
 	}
 
 	@Override
+	public int getNumSubNames()
+	{
+		return sim.getNumSubNames();
+	}
+
+	@Override
+	public String getSubName(int num)
+	{
+		return sim.getSubName(num);
+	}
+
+	@Override
 	public boolean colorBlock(World w, int x, int y, int z, EntityPlayer pl, ItemStack is, int color, int depth)
 	{
 		return sim.colorBlock(w, x, y, z, pl, is, color, depth);
@@ -58,7 +70,7 @@ public class SimulacrumBlock extends AbstractBlock implements IColorableBlock
 	@Override
 	public int damageDropped(int damage)
 	{
-		return 15;
+		return this instanceof IColorableBlock ? 15 : damage;
 	}
 
 	@Override

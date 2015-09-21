@@ -15,12 +15,12 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class SimulacrumItemBlock extends AbstractItemBlock
 {
 
-	Block	bID;
+	AbstractBlock	bID;
 
 	public SimulacrumItemBlock(Block par1)
 	{
 		super(par1);
-		bID = par1;
+		bID = (AbstractBlock) par1;
 		setHasSubtypes(false);
 	}
 
@@ -35,7 +35,7 @@ public class SimulacrumItemBlock extends AbstractItemBlock
 	{
 		//AbstractBlock block = getBlock();
 		//if (block != null) { return block.getUnlocalizedName(itemStack.getItemDamage()); }
-		return bID.getUnlocalizedName();
+		return bID.getUnlocalizedName(itemStack.getItemDamage());
 	}
 
 	@Override
@@ -76,7 +76,7 @@ public class SimulacrumItemBlock extends AbstractItemBlock
 	@Override
 	protected AbstractBlock getBlock()
 	{
-		return (AbstractBlock) bID;
+		return bID;
 	}
 
 }
