@@ -199,6 +199,11 @@ public class SimpleCoordStore
 		return Math.sqrt(xr + yr + zr);
 	}
 
+	public long diagonalParadoxDistance(SimpleCoordStore destLocation)
+	{
+		return Math.abs((long)x - destLocation.x) + Math.abs((long)y - destLocation.y) + Math.abs((long)z - destLocation.z);
+	}
+
 	public void setMetadata(int meta, int notify)
 	{
 		getWorldObj().setBlockMetadataWithNotify(x, y, z, meta, notify);
