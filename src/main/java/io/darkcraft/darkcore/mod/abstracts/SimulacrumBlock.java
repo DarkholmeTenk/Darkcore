@@ -58,7 +58,7 @@ public class SimulacrumBlock extends AbstractBlock implements IColorableBlock
 	@Override
 	public int damageDropped(int damage)
 	{
-		return 0;
+		return 15;
 	}
 
 	@Override
