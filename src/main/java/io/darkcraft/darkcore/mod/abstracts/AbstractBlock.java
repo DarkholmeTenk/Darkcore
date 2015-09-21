@@ -350,6 +350,10 @@ public abstract class AbstractBlock extends Block
 					else if (suffixes[j].contains("bottom") && (side == 0))
 						metaAdd = j;
 					else if (suffixes[j].contains("side") && (side > 1)) metaAdd = j;
+					else if (suffixes[j].contains("north") && (side == 2)) metaAdd = j;
+					else if (suffixes[j].contains("south") && (side == 3)) metaAdd = j;
+					else if (suffixes[j].contains("west") && (side == 4)) metaAdd = j;
+					else if (suffixes[j].contains("east") && (side == 5)) metaAdd = j;
 				}
 				return subIcons[metaBase + metaAdd];
 			}
