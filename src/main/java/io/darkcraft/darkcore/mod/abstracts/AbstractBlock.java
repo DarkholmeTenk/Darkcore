@@ -5,6 +5,7 @@ import io.darkcraft.darkcore.mod.config.ConfigFile;
 import io.darkcraft.darkcore.mod.datastore.SimpleCoordStore;
 import io.darkcraft.darkcore.mod.helpers.BlockIterator;
 import io.darkcraft.darkcore.mod.helpers.MathHelper;
+import io.darkcraft.darkcore.mod.impl.DefaultItemBlock;
 import io.darkcraft.darkcore.mod.interfaces.IColorableBlock;
 import io.darkcraft.darkcore.mod.interfaces.IExplodable;
 import io.darkcraft.darkcore.mod.multiblock.BlockState;
@@ -94,6 +95,8 @@ public abstract class AbstractBlock extends Block
 
 	public Class<? extends AbstractItemBlock> getIB()
 	{
+		if(((subNames != null) && (subNames.length > 0) ) || (this instanceof AbstractBlockContainer))
+			return DefaultItemBlock.class;
 		return null;
 	}
 
