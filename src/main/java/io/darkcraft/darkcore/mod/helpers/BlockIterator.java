@@ -14,6 +14,7 @@ public class BlockIterator implements Iterator<SimpleCoordStore>
 {
 	public static final IBlockIteratorCondition	sameIncMeta	= new SameIncMetaCondition();
 	public static final IBlockIteratorCondition	sameExcMeta	= new SameExMetaCondition();
+	public static final IBlockIteratorCondition	sameExcMetaNS = new SameExMetaConditionNS();
 
 	private final boolean						diagonals;
 	private final IBlockIteratorCondition		cond;
@@ -42,7 +43,7 @@ public class BlockIterator implements Iterator<SimpleCoordStore>
 	{
 		if (done.contains(n)) return;
 		if (start.diagonalParadoxDistance(n) > maxDist) return;
-		if (cond.isValid(from, n)) queue.add(n);
+		if (cond.isValid(start, from, n)) queue.add(n);
 	}
 
 	private void addNearby(SimpleCoordStore point)
@@ -73,7 +74,7 @@ public class BlockIterator implements Iterator<SimpleCoordStore>
 	private static class SameIncMetaCondition implements IBlockIteratorCondition
 	{
 		@Override
-		public boolean isValid(SimpleCoordStore prevPosition, SimpleCoordStore newPosition)
+		public boolean isValid(SimpleCoordStore start, SimpleCoordStore prevPosition, SimpleCoordStore newPosition)
 		{
 			return prevPosition.getBlock().equals(newPosition.getBlock()) && (prevPosition.getMetadata() == newPosition.getMetadata());
 		}
@@ -83,9 +84,19 @@ public class BlockIterator implements Iterator<SimpleCoordStore>
 	private static class SameExMetaCondition implements IBlockIteratorCondition
 	{
 		@Override
-		public boolean isValid(SimpleCoordStore prevPosition, SimpleCoordStore newPosition)
+		public boolean isValid(SimpleCoordStore start, SimpleCoordStore prevPosition, SimpleCoordStore newPosition)
 		{
 			return prevPosition.getBlock().equals(newPosition.getBlock());
+		}
+
+	}
+
+	private static class SameExMetaConditionNS implements IBlockIteratorCondition
+	{
+		@Override
+		public boolean isValid(SimpleCoordStore start, SimpleCoordStore prevPosition, SimpleCoordStore newPosition)
+		{
+			return prevPosition.getBlock().equals(newPosition.getBlock()) && (newPosition.getMetadata()!=start.getMetadata());
 		}
 
 	}

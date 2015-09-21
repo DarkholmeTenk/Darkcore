@@ -3,12 +3,12 @@ package io.darkcraft.darkcore.mod.abstracts;
 import io.darkcraft.darkcore.mod.DarkcoreMod;
 import io.darkcraft.darkcore.mod.config.ConfigFile;
 import io.darkcraft.darkcore.mod.datastore.SimpleCoordStore;
+import io.darkcraft.darkcore.mod.helpers.BlockIterator;
 import io.darkcraft.darkcore.mod.helpers.MathHelper;
 import io.darkcraft.darkcore.mod.interfaces.IColorableBlock;
 import io.darkcraft.darkcore.mod.interfaces.IExplodable;
 import io.darkcraft.darkcore.mod.multiblock.BlockState;
 
-import java.util.HashSet;
 import java.util.List;
 
 import net.minecraft.block.Block;
@@ -26,7 +26,6 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -391,50 +390,14 @@ public abstract class AbstractBlock extends Block
 		int oldMeta = w.getBlockMetadata(x, y, z);
 		w.setBlockMetadataWithNotify(x, y, z, color, 3);
 		if ((oldMeta != color) && (depth == 0)) return true;
-		if (colorSpreadDiagonal)
+		BlockIterator iter = new BlockIterator(new SimpleCoordStore(w,x,y,z), BlockIterator.sameExcMetaNS, colorSpreadDiagonal, maxColorSpread);
+		iter.next(); //Pull the start one off
+		while(iter.hasNext())
 		{
-			topLevel: for (int xo = -1; xo <= 1; xo++)
-			{
-				for (int yo = -1; yo <= 1; yo++)
-				{
-					for (int zo = -1; zo <= 1; zo++)
-					{
-						if ((xo == 0) && (yo == 0) && (zo == 0)) continue;
-						if (is.stackSize == 0) break topLevel;
-						if ((w.getBlock(x + xo, y + yo, z + zo) != this) || (w.getBlockMetadata(x + xo, y + yo, z + zo) != oldMeta)) continue;
-						if (coloredUsesDye && !pl.capabilities.isCreativeMode) is.stackSize--;
-						colorBlock(w, x + xo, y + yo, z + zo, pl, is, color, depth+1);
-					}
-				}
-			}
-		}
-		else
-		{
-			int loopDepth = 0;
-			HashSet<SimpleCoordStore> done = new HashSet<SimpleCoordStore>();
-			HashSet<SimpleCoordStore> toDo = new HashSet<SimpleCoordStore>();
-			toDo.add(new SimpleCoordStore(w,x,y,z));
-			mainLoop:
-			while((loopDepth++ < maxColorSpread) && !toDo.isEmpty())
-			{
-				HashSet<SimpleCoordStore> buffer = new HashSet<SimpleCoordStore>();
-				for(SimpleCoordStore pos : toDo)
-				{
-					done.add(pos);
-					for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS)
-					{
-						SimpleCoordStore next = pos.getNearby(dir);
-						if(done.contains(next)) continue;
-						if((next.getBlock() != this) || (next.getMetadata() == color)) continue;
-						buffer.add(next);
-					}
-					if (coloredUsesDye && !pl.capabilities.isCreativeMode) is.stackSize--;
-					pos.setMetadata(color,3);
-					if(is.stackSize == 0) break mainLoop;
-				}
-				toDo = buffer;
-				buffer = new HashSet<SimpleCoordStore>();
-			}
+			if (is.stackSize == 0) break;
+			SimpleCoordStore next = iter.next();
+			if (coloredUsesDye && !pl.capabilities.isCreativeMode) is.stackSize--;
+			next.setMetadata(color, 3);
 		}
 		return true;
 	}
