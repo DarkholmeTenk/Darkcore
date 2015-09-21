@@ -21,7 +21,7 @@ public class SimulacrumItemBlock extends AbstractItemBlock
 	{
 		super(par1);
 		bID = (AbstractBlock) par1;
-		setHasSubtypes(false);
+		setHasSubtypes(bID.getNumSubNames() > 1);
 	}
 
 	@Override
@@ -33,8 +33,6 @@ public class SimulacrumItemBlock extends AbstractItemBlock
 	@Override
 	public String getUnlocalizedName(ItemStack itemStack)
 	{
-		//AbstractBlock block = getBlock();
-		//if (block != null) { return block.getUnlocalizedName(itemStack.getItemDamage()); }
 		return bID.getUnlocalizedName(itemStack.getItemDamage());
 	}
 
