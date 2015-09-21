@@ -1,15 +1,17 @@
 package io.darkcraft.darkcore.mod.abstracts;
 
 import io.darkcraft.darkcore.mod.interfaces.IColorableBlock;
+import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class SimulacrumBlock extends AbstractBlock implements IColorableBlock
+public class SimulacrumBlock extends AbstractBlock
 {
 	protected final AbstractBlock sim;
 
@@ -18,6 +20,9 @@ public class SimulacrumBlock extends AbstractBlock implements IColorableBlock
 		super(modName);
 		sim = simulating;
 		setBlockName(sim.getUnlocalizedNameForIcon() + ".Simulacrum");
+		opaque = isOpaqueCube();
+		setLightLevel(sim.getLightValue());
+		setLightOpacity(sim.getLightOpacity());
 	}
 
 	@Override
@@ -77,5 +82,28 @@ public class SimulacrumBlock extends AbstractBlock implements IColorableBlock
 	public Class<? extends AbstractItemBlock> getIB()
 	{
 		return SimulacrumItemBlock.class;
+	}
+
+	@Override
+	public boolean isOpaqueCube()
+	{
+		if(sim != null)
+			return sim.isOpaqueCube();
+		return true;
+	}
+
+	@Override
+	public boolean shouldSideBeRendered(IBlockAccess w, int s, int x, int y, int z, int ox, int oy, int oz)
+	{
+		Block a = w.getBlock(x, y, z);
+		Block b = w.getBlock(ox, oy, oz);
+		if(a == b)
+		{
+			int ma = w.getBlockMetadata(x, y, z);
+			int mb = w.getBlockMetadata(ox, oy, oz);
+			if((ma == mb) && !a.isOpaqueCube())
+				return false;
+		}
+		return super.shouldSideBeRendered(w, s, x, y, z, ox, oy, oz);
 	}
 }
