@@ -208,4 +208,9 @@ public class SimpleCoordStore
 	{
 		getWorldObj().setBlockMetadataWithNotify(x, y, z, meta, notify);
 	}
+
+	public void setBlock(Block b, int metadata, int notify)
+	{
+		getWorldObj().setBlock(x, y, z, b, metadata, notify);
+	}
 }
