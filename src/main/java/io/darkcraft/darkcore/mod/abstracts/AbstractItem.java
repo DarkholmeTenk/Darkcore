@@ -73,10 +73,21 @@ public abstract class AbstractItem extends Item
 		}
 	}
 
+	public String[] getSubNamesForIcons()
+	{
+		return subNames;
+	}
+
+	public String[] getSubNamesForNEI()
+	{
+		return subNames;
+	}
+
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerIcons(IIconRegister ir)
 	{
+		String[] subNames = getSubNamesForIcons();
 		if (DarkcoreMod.debugText) System.out.println("[TAI]Registering icon " + unlocalizedFragment);
 		if (subNames != null)
 		{
@@ -92,6 +103,7 @@ public abstract class AbstractItem extends Item
 	@Override
 	public IIcon getIconFromDamage(int damage)
 	{
+		String[] subNames = getSubNamesForIcons();
 		if (subNames == null)
 			return iconBuffer;
 		else if ((damage >= 0) && (damage < subNames.length)) return subIcons[damage];
@@ -102,6 +114,7 @@ public abstract class AbstractItem extends Item
 	@Override
 	public void getSubItems(Item par1, CreativeTabs par2CreativeTabs, List list)
 	{
+		String[] subNames = getSubNamesForNEI();
 		if (subNames == null)
 			list.add(new ItemStack(par1, 1, 0));
 		else
