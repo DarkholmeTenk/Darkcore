@@ -72,4 +72,35 @@ public abstract class AbstractCommand implements ICommand
 			comsen.addChatMessage(new ChatComponentText(s));
 	}
 
+	public List<String> splitStr(String... toSplit)
+	{
+		ArrayList<String> data = new ArrayList();
+		String builtSoFar = "";
+		boolean building = false;
+		for(String s : toSplit)
+		{
+			if(building == false)
+			{
+				if(!s.startsWith("\""))
+					data.add(s);
+				else
+				{
+					building = true;
+					builtSoFar = s.substring(1);
+				}
+			}
+			else
+			{
+				if(s.endsWith("\""))
+				{
+					building = false;
+					data.add(builtSoFar + " " + s.substring(0, s.length()-1));
+				}
+				else
+					builtSoFar += " " + s;
+			}
+		}
+		return data;
+	}
+
 }

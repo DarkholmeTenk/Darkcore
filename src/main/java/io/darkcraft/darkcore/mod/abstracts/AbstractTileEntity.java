@@ -95,6 +95,11 @@ public abstract class AbstractTileEntity extends TileEntity
 	public void sendUpdate()
 	{
 		if (ServerHelper.isClient()) return;
+		if (worldObj == null)
+		{
+			updateQueued = true;
+			return;
+		}
 		if ((worldObj.playerEntities == null) || (worldObj.playerEntities.size() == 0)) return;
 		if (canSendUpdate())
 		{
@@ -148,6 +153,12 @@ public abstract class AbstractTileEntity extends TileEntity
 			init = true;
 			init();
 		}
+	}
+
+	public SimpleCoordStore coords()
+	{
+		if (coords == null) coords = new SimpleCoordStore(this);
+		return coords;
 	}
 
 	public void sendDataPacket()
