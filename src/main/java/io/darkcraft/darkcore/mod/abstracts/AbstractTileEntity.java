@@ -54,6 +54,8 @@ public abstract class AbstractTileEntity extends TileEntity
 
 	protected boolean softBlock(World w, int x, int y, int z)
 	{
+		if(w == null)
+			return false;
 		Block b = w.getBlock(x, y, z);
 		if (b == null) return w.isAirBlock(x, y, z);
 		Boolean valid = w.isAirBlock(x, y, z) || b.isFoliage(w, x, y, z) || b.isReplaceable(w, x, y, z) || (b instanceof BlockFire);
@@ -64,6 +66,8 @@ public abstract class AbstractTileEntity extends TileEntity
 
 	protected boolean softBlock(SimpleDoubleCoordStore pos)
 	{
+		if(pos == null)
+			return false;
 		return softBlock(pos.getWorldObj(), pos.iX, pos.iY, pos.iZ);
 	}
 
