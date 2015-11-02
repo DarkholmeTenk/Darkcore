@@ -8,12 +8,20 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 
 public class ConfigFile
 {
 	private volatile HashSet<ConfigItem>	configItems	= new HashSet<ConfigItem>();
 	private final File						configFile;
+
+	private Comparator<ConfigItem>comp = new Comparator<ConfigItem>(){
+		@Override
+		public int compare(ConfigItem a, ConfigItem b){return a.getID().compareTo(b.getID());}
+		};
 
 	protected ConfigFile(File f)
 	{
@@ -111,7 +119,9 @@ public class ConfigFile
 		try
 		{
 			ps = new PrintStream(new FileOutputStream(configFile));
-			for (ConfigItem ci : configItems)
+			ArrayList<ConfigItem>sortedItems = new ArrayList<ConfigItem>(configItems);
+			Collections.sort(sortedItems,comp);
+			for (ConfigItem ci : sortedItems)
 			{
 				ps.print(ci.printable());
 			}
