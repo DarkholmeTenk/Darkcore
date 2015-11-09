@@ -79,7 +79,7 @@ public abstract class AbstractCommandNew extends AbstractCommand
 					else
 						continue comLoop;
 				}
-				List<String> aliases = getCommandAliases();
+				List<String> aliases = com.getCommandAliases();
 				for(String alias : aliases)
 					if(possibleSubName.equalsIgnoreCase(alias))
 					{
