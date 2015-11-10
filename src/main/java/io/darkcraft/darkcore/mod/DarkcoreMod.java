@@ -7,6 +7,7 @@ import io.darkcraft.darkcore.mod.config.ConfigHandler;
 import io.darkcraft.darkcore.mod.config.ConfigHandlerFactory;
 import io.darkcraft.darkcore.mod.handlers.ChunkLoadingHandler;
 import io.darkcraft.darkcore.mod.handlers.CommandHandler;
+import io.darkcraft.darkcore.mod.handlers.EntityPacketHandler;
 import io.darkcraft.darkcore.mod.handlers.SoundPacketHandler;
 import io.darkcraft.darkcore.mod.handlers.WorldDataStoreHandler;
 import io.darkcraft.darkcore.mod.helpers.PlayerHelper;
@@ -85,6 +86,7 @@ public class DarkcoreMod implements IConfigHandlerMod
 		configHandler = ConfigHandlerFactory.getConfigHandler(this);
 		networkChannel = NetworkRegistry.INSTANCE.newEventDrivenChannel("darkcore");
 		packetHandler.registerHandler(0, soundPacketHandler);
+		packetHandler.registerHandler(1, new EntityPacketHandler());
 
 	}
 
