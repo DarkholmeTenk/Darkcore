@@ -5,6 +5,8 @@ import io.darkcraft.darkcore.mod.datastore.SimpleDoubleCoordStore;
 
 import java.util.HashMap;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockFire;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
@@ -153,5 +155,24 @@ public class WorldHelper
 		}
 		if (remaining.stackSize > 0) return remaining;
 		return null;
+	}
+
+	public static boolean softBlock(World w, int x, int y, int z)
+	{
+		if(w == null)
+			return false;
+		Block b = w.getBlock(x, y, z);
+		if (b == null) return w.isAirBlock(x, y, z);
+		Boolean valid = w.isAirBlock(x, y, z) || b.isFoliage(w, x, y, z) || b.isReplaceable(w, x, y, z) || (b instanceof BlockFire);
+		if (valid) return valid;
+		if (b.getCollisionBoundingBoxFromPool(w, x, y, z) == null) return true;
+		return false;
+	}
+
+	public static boolean softBlock(SimpleDoubleCoordStore pos)
+	{
+		if(pos == null)
+			return false;
+		return softBlock(pos.getWorldObj(), pos.iX, pos.iY, pos.iZ);
 	}
 }

@@ -7,13 +7,13 @@ import io.darkcraft.darkcore.mod.config.ConfigItem;
 import io.darkcraft.darkcore.mod.datastore.SimpleCoordStore;
 import io.darkcraft.darkcore.mod.datastore.SimpleDoubleCoordStore;
 import io.darkcraft.darkcore.mod.helpers.ServerHelper;
+import io.darkcraft.darkcore.mod.helpers.WorldHelper;
 import io.darkcraft.darkcore.mod.interfaces.IChunkLoader;
 import io.darkcraft.darkcore.mod.interfaces.IMultiBlockCore;
 
 import java.util.Random;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockFire;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
@@ -54,21 +54,12 @@ public abstract class AbstractTileEntity extends TileEntity
 
 	protected boolean softBlock(World w, int x, int y, int z)
 	{
-		if(w == null)
-			return false;
-		Block b = w.getBlock(x, y, z);
-		if (b == null) return w.isAirBlock(x, y, z);
-		Boolean valid = w.isAirBlock(x, y, z) || b.isFoliage(w, x, y, z) || b.isReplaceable(w, x, y, z) || (b instanceof BlockFire);
-		if (valid) return valid;
-		if (b.getCollisionBoundingBoxFromPool(w, x, y, z) == null) return true;
-		return false;
+		return WorldHelper.softBlock(w, x, y, z);
 	}
 
 	protected boolean softBlock(SimpleDoubleCoordStore pos)
 	{
-		if(pos == null)
-			return false;
-		return softBlock(pos.getWorldObj(), pos.iX, pos.iY, pos.iZ);
+		return WorldHelper.softBlock(pos);
 	}
 
 	@Override
