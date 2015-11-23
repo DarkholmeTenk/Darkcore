@@ -54,6 +54,12 @@ public class HashMapSet<K,V>
 		map.clear();
 	}
 
+	public int size(K key)
+	{
+		if(!map.containsKey(key)) return 0;
+		return map.get(key).size();
+	}
+
 	public Iterator<V> iterator(K key)
 	{
 		if(!map.containsKey(key)) return null;
