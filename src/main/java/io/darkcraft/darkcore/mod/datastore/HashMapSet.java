@@ -65,6 +65,7 @@ public class HashMapSet<K,V>
 		Iterator<V> i = new Iterator<V>()
 		{
 			private Iterator<K> keyIter = map.keySet().iterator();
+			private Iterator<V> prevIter;
 			private Iterator<V> valIter;
 
 			private void setNextIter()
@@ -99,9 +100,16 @@ public class HashMapSet<K,V>
 			public V next()
 			{
 				setNextIter();
+				prevIter = valIter;
 				if((valIter != null) && valIter.hasNext())
 					return valIter.next();
 				return null;
+			}
+
+			@Override
+			public void remove()
+			{
+				prevIter.remove();
 			}
 
 		};
