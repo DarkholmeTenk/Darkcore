@@ -31,9 +31,11 @@ public class EntityPacketHandler implements IDataPacketHandler
 	@Override
 	public void handleData(NBTTagCompound data)
 	{
+		if(ServerHelper.isServer()) return;
 		int world = data.getInteger("world");
 		int id = data.getInteger("entid");
 		World w = WorldHelper.getWorld(world);
+		if(w == null) return;
 		Entity ent = w.getEntityByID(id);
 		if((ent == null) || !(ent instanceof IEntityTransmittable)) return;
 		((IEntityTransmittable)ent).readFromNBTTransmittable(data);
