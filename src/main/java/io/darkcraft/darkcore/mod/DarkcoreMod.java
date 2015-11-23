@@ -20,6 +20,7 @@ import io.darkcraft.darkcore.mod.proxy.CommonProxy;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Random;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -59,6 +60,7 @@ public class DarkcoreMod implements IConfigHandlerMod
 	public static HashSet<String>					bannedSounds		= new HashSet<String>();
 	public static int								chunkLoadCheckTime	= 200;
 	public static boolean							reloadNullTicket	= true;
+	public static Random							r					= new Random();
 
 	public static void refreshConfigs()
 	{
