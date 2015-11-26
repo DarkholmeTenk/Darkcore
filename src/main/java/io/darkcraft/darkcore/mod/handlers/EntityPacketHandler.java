@@ -13,7 +13,7 @@ import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 
 public class EntityPacketHandler implements IDataPacketHandler
 {
-
+	public static final byte dataPacketDisc = 2;
 	public static void syncEntity(Entity ent)
 	{
 		if((ent instanceof IEntityTransmittable) && ServerHelper.isServer())

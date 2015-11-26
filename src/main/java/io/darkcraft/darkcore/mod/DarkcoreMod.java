@@ -88,8 +88,8 @@ public class DarkcoreMod implements IConfigHandlerMod
 		configHandler = ConfigHandlerFactory.getConfigHandler(this);
 		networkChannel = NetworkRegistry.INSTANCE.newEventDrivenChannel("darkcore");
 		packetHandler.registerHandler(0, soundPacketHandler);
-		packetHandler.registerHandler(1, new EntityPacketHandler());
-
+		packetHandler.registerHandler(EntityPacketHandler.dataPacketDisc, new EntityPacketHandler());
+		DarkcoreMod.packetHandler.registerHandler(WorldDataStoreHandler.dataPacketDisc, new WorldDataStoreHandler());
 	}
 
 	@EventHandler

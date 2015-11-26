@@ -1,6 +1,5 @@
 package io.darkcraft.darkcore.mod.handlers;
 
-import io.darkcraft.darkcore.mod.DarkcoreMod;
 import io.darkcraft.darkcore.mod.abstracts.AbstractWorldDataStore;
 import io.darkcraft.darkcore.mod.datastore.Pair;
 import io.darkcraft.darkcore.mod.helpers.ServerHelper;
@@ -13,10 +12,6 @@ import net.minecraft.nbt.NBTTagCompound;
 public class WorldDataStoreHandler implements IDataPacketHandler
 {
 	public static final byte dataPacketDisc = 1;
-	static
-	{
-		DarkcoreMod.packetHandler.registerHandler(dataPacketDisc, new WorldDataStoreHandler());
-	}
 
 	@SuppressWarnings("unchecked")
 	private static HashMap<Pair<Integer,String>,AbstractWorldDataStore> map = new HashMap();
