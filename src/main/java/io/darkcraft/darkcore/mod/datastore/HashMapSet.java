@@ -8,6 +8,9 @@ import java.util.Set;
 public class HashMapSet<K,V>
 {
 	private final HashMap<K,Set<V>> map = new HashMap();
+	private final Iterator<V> deadIter = new Iterator<V>(){@Override
+	public boolean hasNext(){return false;} @Override
+	public V next(){return null;}};
 
 	public Set<V> put(K key, Set<V> values)
 	{
@@ -62,7 +65,7 @@ public class HashMapSet<K,V>
 
 	public Iterator<V> iterator(K key)
 	{
-		if(!map.containsKey(key)) return null;
+		if(!map.containsKey(key)) return deadIter;
 		return map.get(key).iterator();
 	}
 
