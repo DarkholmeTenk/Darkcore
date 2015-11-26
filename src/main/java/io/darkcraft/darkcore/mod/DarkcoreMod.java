@@ -60,6 +60,7 @@ public class DarkcoreMod implements IConfigHandlerMod
 	public static HashSet<String>					bannedSounds		= new HashSet<String>();
 	public static int								chunkLoadCheckTime	= 200;
 	public static boolean							reloadNullTicket	= true;
+	public static boolean							splitTime			= true;
 	public static Random							r					= new Random();
 
 	public static void refreshConfigs()

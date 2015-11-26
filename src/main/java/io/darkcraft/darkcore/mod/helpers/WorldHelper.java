@@ -175,4 +175,33 @@ public class WorldHelper
 			return false;
 		return softBlock(pos.getWorldObj(), pos.iX, pos.iY, pos.iZ);
 	}
+
+	public static double getWorldTime(int wID)
+	{
+		int length = 24000;
+		World w = getWorld(wID);
+		return ((w.getWorldTime() + (length / 4)) % length) / (double) length;
+	}
+
+	public static String getWorldTimeString(int wID)
+	{
+		double t = getWorldTime(wID);
+		double timeScaled = t * 24;
+		double mins = (timeScaled % 1) * 60;
+		int h = (int) Math.floor(timeScaled);
+		String m = String.format("%02d",(int) Math.floor(mins));
+		if(DarkcoreMod.splitTime)
+		{
+			String s;
+			if(h == 0)
+				s = "12";
+			else if(h > 12)
+				s = (h - 12)+"";
+			else
+				s = h+"";
+			return s + ":" + m + (h>=12?"PM":"AM");
+		}
+		else
+			return h + ":" + m;
+	}
 }
