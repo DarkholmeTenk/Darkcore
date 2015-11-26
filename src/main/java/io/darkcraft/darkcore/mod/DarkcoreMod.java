@@ -74,6 +74,7 @@ public class DarkcoreMod implements IConfigHandlerMod
 		String bannedSoundsData = config.getString("Banned sounds", "", "Insert a list of comma separated sounds to be banned","e.g. tardismod:levelup will disable the level up sound for TARDISes");
 		chunkLoadCheckTime = config.getInt("Chunk loading check time", 200, "The number of ticks between chunk loaders being checked and unloaded if necessary");
 		reloadNullTicket = config.getBoolean("Reload null ticket", true, "Attempt to reload a chunk loader if it doesn't have a ticket assigned");
+		splitTime = config.getBoolean("12h time format", true);
 		String[] bannedSoundsBlobs = bannedSoundsData.split(",");
 		bannedSounds.clear();
 		for(String s : bannedSoundsBlobs)
