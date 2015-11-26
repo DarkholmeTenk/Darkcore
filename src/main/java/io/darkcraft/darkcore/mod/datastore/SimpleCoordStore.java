@@ -180,6 +180,8 @@ public class SimpleCoordStore
 
 	public SimpleDoubleCoordStore travelTo(SimpleCoordStore dest, double amountTravelled, boolean newWorld)
 	{
+		if(!Double.isFinite(amountTravelled))
+			return null;
 		int newWorldID = newWorld ? dest.world : world;
 		double nx = x + ((dest.x - x) * amountTravelled);
 		double ny = y + ((dest.y - y) * amountTravelled);
