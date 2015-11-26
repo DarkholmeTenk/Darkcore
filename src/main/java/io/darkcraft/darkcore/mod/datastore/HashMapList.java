@@ -1,24 +1,25 @@
 package io.darkcraft.darkcore.mod.datastore;
 
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
-public class HashMapSet<K,V>
+public class HashMapList<K,V>
 {
-	private final HashMap<K,Set<V>> map = new HashMap();
+	private final HashMap<K,List<V>> map = new HashMap();
 	private final Iterator<V> deadIter = new Iterator<V>(){@Override
 	public boolean hasNext(){return false;} @Override
 	public V next(){return null;}};
 
-	public Set<V> put(K key, Set<V> values)
+	public List<V> put(K key, List<V> values)
 	{
 		if(values == null) return null;
 		return map.put(key, values);
 	}
 
-	public Set<V> get(K key)
+	public List<V> get(K key)
 	{
 		return map.get(key);
 	}
@@ -26,11 +27,11 @@ public class HashMapSet<K,V>
 	public boolean add(K key, V value)
 	{
 		if(!map.containsKey(key))
-			put(key, new HashSet<V>());
+			put(key, new ArrayList<V>());
 		return get(key).add(value);
 	}
 
-	public Set<V> removeKey(K key)
+	public List<V> removeKey(K key)
 	{
 		return map.remove(key);
 	}
@@ -85,7 +86,7 @@ public class HashMapSet<K,V>
 					while(keyIter.hasNext())
 					{
 						K key = keyIter.next();
-						Set<V> s = map.get(key);
+						List<V> s = map.get(key);
 						if(s != null)
 						{
 							valIter = s.iterator();
@@ -140,8 +141,8 @@ public class HashMapSet<K,V>
 	public boolean equals(Object o)
 	{
 		if(o == this) return true;
-		if(!(o instanceof HashMapSet)) return false;
-		HashMapSet h = (HashMapSet) o;
+		if(!(o instanceof HashMapList)) return false;
+		HashMapList h = (HashMapList) o;
 		return h.map.equals(map);
 	}
 }
