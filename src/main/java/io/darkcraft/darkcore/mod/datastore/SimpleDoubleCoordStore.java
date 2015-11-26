@@ -59,7 +59,7 @@ public class SimpleDoubleCoordStore
 	 */
 	public double distance(SimpleDoubleCoordStore other)
 	{
-		if ((other == null) || (world != other.world)) return -1;
+		if ((other == null) || (world != other.world)) return Double.POSITIVE_INFINITY;
 		double total = 0;
 		double temp = (other.x - x);
 		total += (temp * temp);
