@@ -180,7 +180,7 @@ public class SimpleCoordStore
 
 	public SimpleDoubleCoordStore travelTo(SimpleCoordStore dest, double amountTravelled, boolean newWorld)
 	{
-		if(!Double.isFinite(amountTravelled))
+		if(Double.isNaN(amountTravelled) || Double.isInfinite(amountTravelled))
 			return null;
 		int newWorldID = newWorld ? dest.world : world;
 		double nx = x + ((dest.x - x) * amountTravelled);
