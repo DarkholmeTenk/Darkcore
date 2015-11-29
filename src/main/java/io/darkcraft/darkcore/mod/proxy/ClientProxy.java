@@ -1,16 +1,25 @@
 package io.darkcraft.darkcore.mod.proxy;
 
+import io.darkcraft.darkcore.mod.DarkcoreMod;
 import io.darkcraft.darkcore.mod.helpers.WorldHelper;
+import io.darkcraft.darkcore.mod.impl.UniqueSwordRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.World;
+import net.minecraftforge.client.MinecraftForgeClient;
 
 public class ClientProxy extends CommonProxy
 {
 	@Override
+	public void init()
+	{
+		MinecraftForgeClient.registerItemRenderer(DarkcoreMod.uniqueSword, new UniqueSwordRenderer());
+	}
+
+	@Override
 	public World getWorld(int id)
 	{
 		World w = Minecraft.getMinecraft().theWorld;
-		if (w != null && WorldHelper.getWorldID(w) == id) return w;
+		if ((w != null) && (WorldHelper.getWorldID(w) == id)) return w;
 		return null;
 	}
 }

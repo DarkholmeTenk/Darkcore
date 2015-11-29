@@ -1,6 +1,7 @@
 package io.darkcraft.darkcore.mod;
 
 import io.darkcraft.darkcore.mod.abstracts.AbstractBlock;
+import io.darkcraft.darkcore.mod.abstracts.AbstractItem;
 import io.darkcraft.darkcore.mod.abstracts.AbstractTileEntity;
 import io.darkcraft.darkcore.mod.config.ConfigFile;
 import io.darkcraft.darkcore.mod.config.ConfigHandler;
@@ -14,6 +15,7 @@ import io.darkcraft.darkcore.mod.helpers.PlayerHelper;
 import io.darkcraft.darkcore.mod.helpers.ServerHelper;
 import io.darkcraft.darkcore.mod.helpers.WorldHelper;
 import io.darkcraft.darkcore.mod.impl.DebugCommand;
+import io.darkcraft.darkcore.mod.impl.UniqueSwordItem;
 import io.darkcraft.darkcore.mod.interfaces.IConfigHandlerMod;
 import io.darkcraft.darkcore.mod.network.PacketHandler;
 import io.darkcraft.darkcore.mod.proxy.CommonProxy;
@@ -46,6 +48,8 @@ public class DarkcoreMod implements IConfigHandlerMod
 	public static CommonProxy						proxy;
 	public static DarkcoreMod						i;
 
+	public static final String						modName				= "darkcore";
+	public static final String						authName			= "DarkholmeTenk";
 	public static ChunkLoadingHandler				chunkLoadingHandler	= null;
 	public static ConfigHandler						configHandler		= null;
 	public static FMLEventChannel					networkChannel;
@@ -56,12 +60,15 @@ public class DarkcoreMod implements IConfigHandlerMod
 	public static ConfigFile						config				= null;
 	public static boolean							debugText			= true;
 	public static boolean							repostMessage		= true;
-	private static String[]							repostMessages		= { "DarkCore: If you have downloaded this mod from anywhere using an ad-wall or other method of gaining money from this mod then that site is breaking this mod's license.", "Please download from official sources", "You can disable this message in the DarkCore config file" ,""};
+	private static String[]							repostMessages		= {
+			"DarkCore: If you have downloaded this mod from anywhere using an ad-wall or other method of gaining money from this mod then that site is breaking this mod's license.", "Please download from official sources",
+			"You can disable this message in the DarkCore config file", "" };
 	public static HashSet<String>					bannedSounds		= new HashSet<String>();
 	public static int								chunkLoadCheckTime	= 200;
 	public static boolean							reloadNullTicket	= true;
 	public static boolean							splitTime			= true;
 	public static Random							r					= new Random();
+	public static AbstractItem						uniqueSword;
 
 	public static void refreshConfigs()
 	{
@@ -71,15 +78,14 @@ public class DarkcoreMod implements IConfigHandlerMod
 		debugText = config.getBoolean("debug text", false, "Print debug text");
 		repostMessage = config.getBoolean("Display repost message", true, "Set to false if you have seen the repost message", "and are aware the correct download location", "is http://minecraft.curseforge.com/mc-mods/230170-tardis-mod",
 				"and the forum post is http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/2420176-tardis-mod");
-		String bannedSoundsData = config.getString("Banned sounds", "", "Insert a list of comma separated sounds to be banned","e.g. tardismod:levelup will disable the level up sound for TARDISes");
+		String bannedSoundsData = config.getString("Banned sounds", "", "Insert a list of comma separated sounds to be banned", "e.g. tardismod:levelup will disable the level up sound for TARDISes");
 		chunkLoadCheckTime = config.getInt("Chunk loading check time", 200, "The number of ticks between chunk loaders being checked and unloaded if necessary");
 		reloadNullTicket = config.getBoolean("Reload null ticket", true, "Attempt to reload a chunk loader if it doesn't have a ticket assigned");
 		splitTime = config.getBoolean("12h time format", true);
 		String[] bannedSoundsBlobs = bannedSoundsData.split(",");
 		bannedSounds.clear();
-		for(String s : bannedSoundsBlobs)
-			if(!s.isEmpty())
-				bannedSounds.add(s);
+		for (String s : bannedSoundsBlobs)
+			if (!s.isEmpty()) bannedSounds.add(s);
 	}
 
 	@EventHandler
@@ -92,6 +98,7 @@ public class DarkcoreMod implements IConfigHandlerMod
 		packetHandler.registerHandler(0, soundPacketHandler);
 		packetHandler.registerHandler(EntityPacketHandler.dataPacketDisc, new EntityPacketHandler());
 		DarkcoreMod.packetHandler.registerHandler(WorldDataStoreHandler.dataPacketDisc, new WorldDataStoreHandler());
+		uniqueSword = new UniqueSwordItem().register();
 	}
 
 	@EventHandler
@@ -101,6 +108,7 @@ public class DarkcoreMod implements IConfigHandlerMod
 		networkChannel.register(packetHandler);
 		FMLCommonHandler.instance().bus().register(this);
 		comHandler.addCommand(new DebugCommand());
+		proxy.init();
 	}
 
 	@EventHandler

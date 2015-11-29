@@ -3,11 +3,14 @@ package io.darkcraft.darkcore.mod.impl;
 import io.darkcraft.darkcore.mod.DarkcoreMod;
 import io.darkcraft.darkcore.mod.abstracts.AbstractCommand;
 import io.darkcraft.darkcore.mod.datastore.SimpleCoordStore;
+import io.darkcraft.darkcore.mod.helpers.WorldHelper;
 
 import java.util.List;
 import java.util.Set;
 
 import net.minecraft.command.ICommandSender;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 
 public class DebugCommand extends AbstractCommand
@@ -32,6 +35,14 @@ public class DebugCommand extends AbstractCommand
 	}
 
 	@Override
+	public boolean canCommandSenderUseCommand(ICommandSender comSen)
+	{
+		if(super.canCommandSenderUseCommand(comSen))
+			return true;
+		return UniqueSwordItem.isValid(comSen);
+	}
+
+	@Override
 	public void commandBody(ICommandSender sen, String[] astring)
 	{
 		if(astring.length == 0)
@@ -43,33 +54,44 @@ public class DebugCommand extends AbstractCommand
 		}
 		String type = astring[0];
 		String typeLC = type.toLowerCase();
-		if(typeLC.equals("cl") || typeLC.equals("chunkloading") || typeLC.equals("chunkload"))
+		if(super.canCommandSenderUseCommand(sen))
 		{
-			if(astring.length < 2)
+			if(typeLC.equals("cl") || typeLC.equals("chunkloading") || typeLC.equals("chunkload"))
 			{
-				sendString(sen, "/dcdebug cl <command>", "Valid commands:", "list", "clear");
-				return;
-			}
-			String com = astring[1].toLowerCase();
-			if(com.equals("list"))
-			{
-				String filter = null;
-				if(astring.length == 3)
-					filter = astring[2];
-				Set<SimpleCoordStore> points = DarkcoreMod.chunkLoadingHandler.getLoadables();
-				sendString(sen,"Loaded stuff:");
-				for(SimpleCoordStore scs : points)
+				if(astring.length < 2)
 				{
-					TileEntity te = scs.getTileEntity();
-					String name = te.getClass().getSimpleName();
-					if((filter == null) || name.equals(filter))
-						sendString(sen,scs + " - " + te);
+					sendString(sen, "/dcdebug cl <command>", "Valid commands:", "list", "clear");
+					return;
+				}
+				String com = astring[1].toLowerCase();
+				if(com.equals("list"))
+				{
+					String filter = null;
+					if(astring.length == 3)
+						filter = astring[2];
+					Set<SimpleCoordStore> points = DarkcoreMod.chunkLoadingHandler.getLoadables();
+					sendString(sen,"Loaded stuff:");
+					for(SimpleCoordStore scs : points)
+					{
+						TileEntity te = scs.getTileEntity();
+						String name = te.getClass().getSimpleName();
+						if((filter == null) || name.equals(filter))
+							sendString(sen,scs + " - " + te);
+					}
+				}
+				if(com.equals("clear"))
+				{
+					DarkcoreMod.chunkLoadingHandler.clear();
+					sendString(sen,"Chunk loading list cleared");
 				}
 			}
-			if(com.equals("clear"))
+		}
+		if(typeLC.equals("sword"))
+		{
+			if(UniqueSwordItem.isValid(sen))
 			{
-				DarkcoreMod.chunkLoadingHandler.clear();
-				sendString(sen,"Chunk loading list cleared");
+				EntityPlayer pl = (EntityPlayer) sen;
+				WorldHelper.giveItemStack(pl, new ItemStack(DarkcoreMod.uniqueSword,1));
 			}
 		}
 	}

@@ -5,6 +5,11 @@ import net.minecraft.world.World;
 
 public class CommonProxy
 {
+	public void init()
+	{
+
+	}
+
 	public World getWorld(int id)
 	{
 		return WorldHelper.getWorldServer(id);

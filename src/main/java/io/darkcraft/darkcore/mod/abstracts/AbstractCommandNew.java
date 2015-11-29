@@ -94,12 +94,6 @@ public abstract class AbstractCommandNew extends AbstractCommand
 	}
 
 	@Override
-	public boolean canCommandSenderUseCommand(ICommandSender comSen)
-	{
-		return comSen.canCommandSenderUseCommand(2, getCommandName());
-	}
-
-	@Override
 	public List addTabCompletionOptions(ICommandSender p_71516_1_, String[] p_71516_2_)
 	{
 		return emptyStringList;

