@@ -3,12 +3,14 @@ package io.darkcraft.darkcore.mod.impl;
 import io.darkcraft.darkcore.mod.DarkcoreMod;
 import io.darkcraft.darkcore.mod.abstracts.AbstractCommand;
 import io.darkcraft.darkcore.mod.datastore.SimpleCoordStore;
+import io.darkcraft.darkcore.mod.helpers.ServerHelper;
 import io.darkcraft.darkcore.mod.helpers.WorldHelper;
 
 import java.util.List;
 import java.util.Set;
 
 import net.minecraft.command.ICommandSender;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -91,7 +93,10 @@ public class DebugCommand extends AbstractCommand
 			if(UniqueSwordItem.isValid(sen))
 			{
 				EntityPlayer pl = (EntityPlayer) sen;
-				WorldHelper.giveItemStack(pl, new ItemStack(DarkcoreMod.uniqueSword,1));
+				ItemStack sword = new ItemStack(DarkcoreMod.uniqueSword,1);
+				if(DarkcoreMod.authName.equals(ServerHelper.getUsername(pl)))
+					sword.addEnchantment(Enchantment.looting, 5);
+				WorldHelper.giveItemStack(pl, sword);
 			}
 		}
 	}

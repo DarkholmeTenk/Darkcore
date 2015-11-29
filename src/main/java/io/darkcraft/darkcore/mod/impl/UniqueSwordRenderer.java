@@ -77,17 +77,14 @@ public class UniqueSwordRenderer implements IItemRenderer
 				GL11.glTranslated(0, 0.4, 0);
 		}
 		renderBit(deco, "Deco_Cube.003");
-		renderBit(hilt, "Hilt_Cube.001");
-		renderBit(pommel, "Pommel_Cube.002");
 		String pl = null;
 		for(Object o : data)
-		{
 			if(o instanceof EntityPlayer)
-			{
 				pl = ServerHelper.getUsername((EntityPlayer) o);
-
-			}
-		}
+		if(!UniqueSwordItem.isValid(pl))
+			return;
+		renderBit(hilt, "Hilt_Cube.001");
+		renderBit(pommel, "Pommel_Cube.002");
 		double r = UniqueSwordItem.getRed(pl);
 		double g = UniqueSwordItem.getGre(pl);
 		double b = UniqueSwordItem.getBlu(pl);
