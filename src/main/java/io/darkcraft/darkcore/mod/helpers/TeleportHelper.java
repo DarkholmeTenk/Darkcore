@@ -10,6 +10,8 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.play.server.S1FPacketSetExperience;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.ServerConfigurationManager;
+import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.world.World;
 import net.minecraft.world.WorldProviderEnd;
 import net.minecraft.world.WorldServer;
 
@@ -120,5 +122,14 @@ public class TeleportHelper
 	public static void teleportEntity(Entity ent, int worldID)
 	{
 		teleportEntity(ent, worldID, ent.posX, ent.posY, ent.posZ);
+	}
+
+	public static void teleportEntityToOverworldSpawn(Entity ent)
+	{
+		World overworld = WorldHelper.getWorld(0);
+		if(overworld == null)
+			return;
+		ChunkCoordinates scc = overworld.getSpawnPoint();
+		teleportEntity(ent, 0, scc.posX+0.5, scc.posY+1,scc.posZ+0.5);
 	}
 }

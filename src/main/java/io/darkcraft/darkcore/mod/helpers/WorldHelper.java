@@ -204,4 +204,12 @@ public class WorldHelper
 		else
 			return h + ":" + m;
 	}
+
+	public static boolean removeTE(World w, TileEntity te)
+	{
+		if((w == null) || (te == null))
+			return false;
+		w.setBlockToAir(te.xCoord, te.yCoord, te.zCoord);
+		return true;
+	}
 }
