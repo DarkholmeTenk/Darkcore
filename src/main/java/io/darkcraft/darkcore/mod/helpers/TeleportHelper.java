@@ -33,6 +33,9 @@ public class TeleportHelper
 		if (ent instanceof EntityPlayerMP)
 		{
 			EntityPlayerMP pl = (EntityPlayerMP) ent;
+			float xp = pl.experience;
+			int xpT = pl.experienceTotal;
+			int xpL = pl.experienceLevel;
 			if(source.provider instanceof WorldProviderEnd)
 			{
 				conf.transferPlayerToDimension(pl, newDimension, DarkcoreTeleporter.i);
@@ -40,7 +43,7 @@ public class TeleportHelper
 			}
 			conf.transferPlayerToDimension(pl, newDimension, DarkcoreTeleporter.i);
 			pl.playerNetServerHandler.sendPacket(new S2BPacketChangeGameState(1, 0.0F));
-			pl.playerNetServerHandler.sendPacket(new S1FPacketSetExperience(pl.experience, pl.experienceTotal, pl.experienceLevel));
+			pl.playerNetServerHandler.sendPacket(new S1FPacketSetExperience(xp, xpT, xpL));
 		}
 		else
 		{
