@@ -7,6 +7,7 @@ import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.boss.IBossDisplayData;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.network.play.server.S1FPacketSetExperience;
 import net.minecraft.network.play.server.S2BPacketChangeGameState;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.ServerConfigurationManager;
@@ -39,6 +40,7 @@ public class TeleportHelper
 			}
 			conf.transferPlayerToDimension(pl, newDimension, DarkcoreTeleporter.i);
 			pl.playerNetServerHandler.sendPacket(new S2BPacketChangeGameState(1, 0.0F));
+			pl.playerNetServerHandler.sendPacket(new S1FPacketSetExperience(pl.experience, pl.experienceTotal, pl.experienceLevel));
 		}
 		else
 		{
