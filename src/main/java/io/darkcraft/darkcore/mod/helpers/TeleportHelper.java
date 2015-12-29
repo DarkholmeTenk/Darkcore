@@ -7,7 +7,7 @@ import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.boss.IBossDisplayData;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.network.play.server.S1FPacketSetExperience;
+import net.minecraft.network.play.server.S2BPacketChangeGameState;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.ServerConfigurationManager;
 import net.minecraft.util.ChunkCoordinates;
@@ -21,7 +21,7 @@ public class TeleportHelper
 	{
 		if(ent instanceof IBossDisplayData)
 			return ent;
-		if (ServerHelper.isClient()) return ent;
+		//if (ServerHelper.isClient()) return ent;
 		ServerConfigurationManager conf = ServerHelper.getConfigManager();
 		int oldDimension = WorldHelper.getWorldID(ent);
 		WorldServer dest = WorldHelper.getWorldServer(newDimension);
@@ -32,24 +32,13 @@ public class TeleportHelper
 		if (ent instanceof EntityPlayerMP)
 		{
 			EntityPlayerMP pl = (EntityPlayerMP) ent;
-			conf.transferPlayerToDimension(pl, newDimension, DarkcoreTeleporter.i);
-			if (source.provider instanceof WorldProviderEnd) ent = ServerHelper.getConfigManager().respawnPlayer(pl, newDimension, true);
-			pl.playerNetServerHandler.sendPacket(new S1FPacketSetExperience(pl.experience, pl.experienceTotal, pl.experienceLevel));
-			Entity entity = EntityList.createEntityByName(EntityList.getEntityString(ent), dest);
-			if (entity != null)
+			if(source.provider instanceof WorldProviderEnd)
 			{
-				dest.getBlock((int)newX, (int)newY, (int)newZ); //Should force chunk to generate
-				entity.copyDataFrom(ent, true);
-				entity.posX = newX; //Set the entity position so it's in the right chunk
-				entity.posY = newY;
-				entity.posZ = newZ;
-				entity.forceSpawn = true; //Force it to spawn
-				dest.spawnEntityInWorld(entity);
-				ent.isDead = true;
-				source.resetUpdateEntityTick();
-				dest.resetUpdateEntityTick();
-				return entity;
+				conf.transferPlayerToDimension(pl, newDimension, DarkcoreTeleporter.i);
+				pl.dimension = 0;
 			}
+			conf.transferPlayerToDimension(pl, newDimension, DarkcoreTeleporter.i);
+			pl.playerNetServerHandler.sendPacket(new S2BPacketChangeGameState(1, 0.0F));
 		}
 		else
 		{
