@@ -63,6 +63,8 @@ public class TeleportHelper
 				boolean didSpawn = dest.spawnEntityInWorld(entity);
 				if(!didSpawn)
 					System.err.println("Failed to spawn entity");
+				else
+					entity.dimension = newDimension;
 				ent.isDead = didSpawn;
 				source.resetUpdateEntityTick();
 				dest.resetUpdateEntityTick();
