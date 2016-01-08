@@ -43,11 +43,11 @@ public class WorldDataStoreHandler implements IDataPacketHandler
 		{
 			int dim = data.getInteger("AWDSdim");
 			String name = data.getString("AWDSname");
-			System.out.print("RP:"+dim+":"+name);
+			//System.out.print("RP:"+dim+":"+name);
 			AbstractWorldDataStore awds = get(dim,name);
 			if(awds != null)
 			{
-				System.out.println("#NN");
+				//System.out.println("#NN");
 				if(ServerHelper.isClient())
 					awds.readFromNBT(data);
 				else
