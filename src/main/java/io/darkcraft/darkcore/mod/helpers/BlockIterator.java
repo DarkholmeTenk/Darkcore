@@ -43,7 +43,11 @@ public class BlockIterator implements Iterator<SimpleCoordStore>
 	{
 		if (done.contains(n)) return;
 		if (start.diagonalParadoxDistance(n) > maxDist) return;
-		if (cond.isValid(start, from, n)) queue.add(n);
+		if (cond.isValid(start, from, n))
+		{
+			done.add(n);
+			queue.add(n);
+		}
 	}
 
 	private void addNearby(SimpleCoordStore point)
@@ -66,7 +70,6 @@ public class BlockIterator implements Iterator<SimpleCoordStore>
 	{
 		if (queue.isEmpty()) return null;
 		SimpleCoordStore top = queue.remove();
-		done.add(top);
 		addNearby(top);
 		return top;
 	}
