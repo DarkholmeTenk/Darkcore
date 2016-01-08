@@ -123,7 +123,6 @@ public abstract class AbstractTileEntity extends TileEntity
 	@Override
 	public void updateEntity()
 	{
-
 		if (coords == null) coords = new SimpleCoordStore(this);
 		tt++;
 
@@ -148,6 +147,12 @@ public abstract class AbstractTileEntity extends TileEntity
 			init = true;
 			init();
 		}
+		tick();
+	}
+
+	public void tick()
+	{
+
 	}
 
 	public SimpleCoordStore coords()
