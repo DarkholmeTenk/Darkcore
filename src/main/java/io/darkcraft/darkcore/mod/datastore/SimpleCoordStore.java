@@ -215,4 +215,9 @@ public class SimpleCoordStore
 	{
 		getWorldObj().setBlock(x, y, z, b, metadata, notify);
 	}
+
+	public void notifyBlock()
+	{
+		getWorldObj().notifyBlockOfNeighborChange(x, y, z, getBlock());
+	}
 }
