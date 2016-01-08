@@ -8,6 +8,25 @@ import java.util.Set;
 
 public class MathHelper
 {
+	private static double[] sinData;
+	private static int sinNum = 4;
+	static
+	{
+		sinData = new double[360*sinNum];
+		for(int i = 0; i < sinData.length; i++)
+			sinData[i] = Math.sin(Math.toRadians(i/(float)sinNum));
+	}
+
+	public static double sin(double degrees)
+	{
+		return sinData[((int) Math.round(degrees * sinNum)) % sinData.length];
+	}
+
+	public static double cos(double degrees)
+	{
+		return sin(degrees + 90);
+	}
+
 	/**
 	 * Clamps an integer value so that min <= value <= max
 	 */
@@ -78,5 +97,14 @@ public class MathHelper
 		HashSet<SimpleDoubleCoordStore> coords = new HashSet<SimpleDoubleCoordStore>();
 		coords.addAll(magicStore.values());
 		return coords;
+	}
+
+	public static int getNextUpDownInteger(int current)
+	{
+		if(current == 0)
+			return 1;
+		if(current > 0)
+			return -current;
+		return (-current)+1;
 	}
 }
