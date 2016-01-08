@@ -13,9 +13,6 @@ import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.MovingObjectPosition.MovingObjectType;
-import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
 import com.google.common.collect.Multimap;
@@ -111,6 +108,7 @@ public class UniqueSwordItem extends AbstractItem
 			return is;
 		}
 		if (ServerHelper.isClient()) return is;
+		/*
 		double dist = 40;
 		float yaw = pl.rotationYaw;
 		float pit = pl.rotationPitch;
@@ -138,7 +136,7 @@ public class UniqueSwordItem extends AbstractItem
 			else if (mop.sideHit == 4)
 				pl.setPositionAndUpdate(mop.blockX - 0.5, mop.blockY, mop.blockZ + 0.5);
 			else if (mop.sideHit == 5) pl.setPositionAndUpdate(mop.blockX + 1.5, mop.blockY, mop.blockZ + 0.5);
-		}
+		}*/
 		return is;
 	}
 
