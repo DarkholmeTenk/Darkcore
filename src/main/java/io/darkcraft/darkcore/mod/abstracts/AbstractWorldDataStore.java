@@ -2,6 +2,7 @@ package io.darkcraft.darkcore.mod.abstracts;
 
 import io.darkcraft.darkcore.mod.DarkcoreMod;
 import io.darkcraft.darkcore.mod.handlers.WorldDataStoreHandler;
+import io.darkcraft.darkcore.mod.helpers.MathHelper;
 import io.darkcraft.darkcore.mod.helpers.WorldHelper;
 import io.darkcraft.darkcore.mod.network.DataPacket;
 import net.minecraft.nbt.NBTTagCompound;
@@ -11,18 +12,30 @@ import net.minecraft.world.storage.MapStorage;
 
 public abstract class AbstractWorldDataStore extends WorldSavedData
 {
+	private final String	preDimName;
 	private final String	name;
 	protected final int		dimID;
 
+	public static int getDimID(String s)
+	{
+		if(s.contains("_"))
+		{
+			String[] data = s.split("_");
+			return MathHelper.toInt(data[data.length-1],0);
+		}
+		return 0;
+	}
+
 	public AbstractWorldDataStore(String _name)
 	{
-		this(_name, 0);
+		this(_name, getDimID(_name));
 	}
 
 	public AbstractWorldDataStore(String _name, int dim)
 	{
-		super(_name);
-		name = _name;
+		super(_name+"_"+dim);
+		name = _name+"_"+dim;
+		preDimName = _name;
 		dimID = dim;
 		WorldDataStoreHandler.register(this);
 	}
@@ -35,6 +48,8 @@ public abstract class AbstractWorldDataStore extends WorldSavedData
 			{
 				MapStorage data = getData();
 				WorldSavedData wsd = data.loadData(getClass(), getName());
+				if(wsd == null)
+					wsd = data.loadData(getClass(), preDimName);
 				NBTTagCompound nbt = new NBTTagCompound();
 				wsd.writeToNBT(nbt);
 				readFromNBT(nbt);
