@@ -220,4 +220,9 @@ public class SimpleCoordStore
 	{
 		getWorldObj().notifyBlockOfNeighborChange(x, y, z, getBlock());
 	}
+
+	public void setToAir()
+	{
+		getWorldObj().setBlockToAir(x, y, z);
+	}
 }

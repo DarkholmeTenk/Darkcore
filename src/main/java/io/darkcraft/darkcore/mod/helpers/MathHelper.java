@@ -19,6 +19,7 @@ public class MathHelper
 
 	public static double sin(double degrees)
 	{
+		if(degrees < 0) degrees += 36000;
 		return sinData[((int) Math.round(degrees * sinNum)) % sinData.length];
 	}
 
