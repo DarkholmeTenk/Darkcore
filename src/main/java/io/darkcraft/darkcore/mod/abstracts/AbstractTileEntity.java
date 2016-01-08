@@ -146,6 +146,7 @@ public abstract class AbstractTileEntity extends TileEntity
 		{
 			init = true;
 			init();
+			queueUpdate();
 		}
 		tick();
 	}
