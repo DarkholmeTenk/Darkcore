@@ -7,6 +7,7 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
+import org.lwjgl.Sys;
 import org.lwjgl.opengl.GL11;
 
 public abstract class AbstractBlockRenderer extends TileEntitySpecialRenderer
@@ -40,6 +41,13 @@ public abstract class AbstractBlockRenderer extends TileEntitySpecialRenderer
 		/* Note that true tile entity coordinates (tileEntity.xCoord, etc) do not match to render coordinates (d, etc) that are calculated as [true coordinates] - [player coordinates (camera coordinates)] */
 		renderBlock(tessellator, tileEntity, x, y, z);
 		GL11.glPopMatrix();
+	}
+
+	public long getTime()
+	{
+		///return 100;
+		//return System.nanoTime() / 1000;
+		return (Sys.getTime() * 1000) / Sys.getTimerResolution();
 	}
 
 	public abstract AbstractBlock getBlock();
