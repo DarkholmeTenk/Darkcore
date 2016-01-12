@@ -90,6 +90,11 @@ public class PlayerHelper
 		joinStacks.add(is);
 	}
 
+	public static String[] getAllUsernames()
+	{
+		return ServerHelper.getServer().getAllUsernames();
+	}
+
 	public void playerSpawn(PlayerLoggedInEvent event)
 	{
 		EntityPlayer player = event.player;

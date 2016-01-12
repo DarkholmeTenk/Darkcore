@@ -1,9 +1,13 @@
 package io.darkcraft.darkcore.mod.abstracts;
 
+import io.darkcraft.darkcore.mod.helpers.PlayerHelper;
+
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import net.minecraft.command.ICommandSender;
+import scala.actors.threadpool.Arrays;
 
 /**
  * A command class which allows for subcommands easily
@@ -93,9 +97,31 @@ public abstract class AbstractCommandNew extends AbstractCommand
 		return process(sen, strs);
 	}
 
-	@Override
-	public List addTabCompletionOptions(ICommandSender p_71516_1_, String[] p_71516_2_)
+	public List<String> match(String arg, List<String> toMatch)
 	{
+		if((arg == null) || arg.isEmpty()) return toMatch;
+		String lowerArg = arg.toLowerCase();
+		ArrayList<String> data = new ArrayList<String>(toMatch);
+		Iterator<String> iter = data.iterator();
+		while(iter.hasNext())
+		{
+			String lower = iter.next().toLowerCase();
+			if(!lower.startsWith(lowerArg))
+				iter.remove();
+		}
+		return data;
+	}
+
+	public List<String> getPlayerList(String arg)
+	{
+		return match(arg, Arrays.asList(PlayerHelper.getAllUsernames()));
+	}
+
+	@Override
+	public List addTabCompletionOptions(ICommandSender sen, String[] args)
+	{
+		if(isUsernameIndex(args,args.length))
+			return getPlayerList(args[args.length-1]);
 		return emptyStringList;
 	}
 
