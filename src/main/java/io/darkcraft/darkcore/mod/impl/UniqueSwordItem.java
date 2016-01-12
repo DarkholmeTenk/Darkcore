@@ -62,6 +62,12 @@ public class UniqueSwordItem extends AbstractItem
 	}
 
 	@Override
+	public boolean isItemTool(ItemStack is)
+	{
+		return true;
+	}
+
+	@Override
 	public EnumAction getItemUseAction(ItemStack p_77661_1_)
 	{
 		return EnumAction.block;
