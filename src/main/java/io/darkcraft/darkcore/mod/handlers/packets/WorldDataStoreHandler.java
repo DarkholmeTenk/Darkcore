@@ -1,4 +1,4 @@
-package io.darkcraft.darkcore.mod.handlers;
+package io.darkcraft.darkcore.mod.handlers.packets;
 
 import io.darkcraft.darkcore.mod.abstracts.AbstractWorldDataStore;
 import io.darkcraft.darkcore.mod.datastore.Pair;

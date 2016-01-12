@@ -3,6 +3,9 @@ package io.darkcraft.darkcore.mod.impl;
 import io.darkcraft.darkcore.mod.DarkcoreMod;
 import io.darkcraft.darkcore.mod.abstracts.AbstractCommand;
 import io.darkcraft.darkcore.mod.datastore.SimpleCoordStore;
+import io.darkcraft.darkcore.mod.handlers.packets.MessagePacketHandler;
+import io.darkcraft.darkcore.mod.helpers.MathHelper;
+import io.darkcraft.darkcore.mod.helpers.MessageHelper;
 import io.darkcraft.darkcore.mod.helpers.ServerHelper;
 import io.darkcraft.darkcore.mod.helpers.WorldHelper;
 
@@ -14,6 +17,7 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ResourceLocation;
 
 public class DebugCommand extends AbstractCommand
 {
@@ -52,6 +56,7 @@ public class DebugCommand extends AbstractCommand
 			sendString(sen, getCommandUsage(sen));
 			sendString(sen, "Valid Types:");
 			sendString(sen, "ChunkLoading");
+			sendString(sen, "Message");
 			return;
 		}
 		String type = astring[0];
@@ -86,6 +91,25 @@ public class DebugCommand extends AbstractCommand
 					DarkcoreMod.chunkLoadingHandler.clear();
 					sendString(sen,"Chunk loading list cleared");
 				}
+			}
+			else if(typeLC.equals("message") || typeLC.equals("mess") || typeLC.equals("m"))
+			{
+				if(astring.length < 2)
+				{
+					sendString(sen, "/dcdebug message <message> [time] [<resource domain> <resource path>]");
+					return;
+				}
+				String s = astring[1];
+				if(astring.length == 2)
+					MessageHelper.sendToAll(s);
+				else if(astring.length == 3)
+					MessageHelper.sendToAll(s, MathHelper.toInt(astring[2],MessagePacketHandler.secondsDefault));
+				else if(astring.length == 4)
+					MessageHelper.sendToAll(new ResourceLocation(astring[2],astring[3]), s);
+				else if(astring.length == 5)
+					MessageHelper.sendToAll(new ResourceLocation(astring[3],astring[4]), s,
+							MathHelper.toInt(astring[2],MessagePacketHandler.secondsDefault));
+
 			}
 		}
 		if(typeLC.equals("sword"))

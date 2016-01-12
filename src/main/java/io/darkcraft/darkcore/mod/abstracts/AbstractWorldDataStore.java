@@ -1,7 +1,7 @@
 package io.darkcraft.darkcore.mod.abstracts;
 
 import io.darkcraft.darkcore.mod.DarkcoreMod;
-import io.darkcraft.darkcore.mod.handlers.WorldDataStoreHandler;
+import io.darkcraft.darkcore.mod.handlers.packets.WorldDataStoreHandler;
 import io.darkcraft.darkcore.mod.helpers.MathHelper;
 import io.darkcraft.darkcore.mod.helpers.WorldHelper;
 import io.darkcraft.darkcore.mod.network.DataPacket;
