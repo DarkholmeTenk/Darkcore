@@ -1,6 +1,7 @@
 package io.darkcraft.darkcore.mod.client;
 
 import io.darkcraft.darkcore.mod.DarkcoreMod;
+import io.darkcraft.darkcore.mod.datastore.UVStore;
 import io.darkcraft.darkcore.mod.helpers.MathHelper;
 import io.darkcraft.darkcore.mod.helpers.RenderHelper;
 
@@ -33,22 +34,24 @@ public class MessageOverlayRenderer extends Gui
 		public final ResourceLocation rl;
 		public final long arrivalTime;
 		public final int secs;
+		public final UVStore uv;
 
-		public Message(String message, ResourceLocation icon, int s, long arr)
+		public Message(String message, ResourceLocation icon, int s, long arr, UVStore uv)
 		{
 			m = message;
 			rl = icon;
 			secs = s;
 			arrivalTime = arr;
+			this.uv = uv;
 		}
 	}
 
 	private static ArrayList<Message> messageList = new ArrayList();
-	public static void addMessage(String s, ResourceLocation rl, int secs, long arr)
+	public static void addMessage(String s, ResourceLocation rl, int secs, long arr, UVStore uv)
 	{
 		synchronized(messageList)
 		{
-			messageList.add(new Message(s,rl,secs,arr / 1000));
+			messageList.add(new Message(s,rl,secs,arr / 1000, uv));
 		}
 	}
 
@@ -78,7 +81,7 @@ public class MessageOverlayRenderer extends Gui
 		render(event.resolution);
 	}
 
-	private void face(Tessellator tess, int x, int y, int w, int h, float u, float v, float uw, float vh)
+	private void face(Tessellator tess, int x, int y, int w, int h, double u, double v, double uw, double vh)
 	{
 		tess.addVertexWithUV(x, y+h, zLevel, u, v);
 		tess.addVertexWithUV(x+w, y+h, zLevel, u+uw, v);
@@ -98,26 +101,26 @@ public class MessageOverlayRenderer extends Gui
 		tess.draw();
 	}
 
-	private int renderMessage(ResourceLocation icon, String s)
+	private int renderMessage(Message m)
 	{
 		List<String> lines;
 		int h = 1;
 		float scale = 0.7f;
 		int actualWidth =  MathHelper.floor((w - mh) / scale);
-		if(icon != null)
+		if(m.rl != null)
 		{
 			actualWidth = MathHelper.floor((w - (2 * mh) - th) / scale);
 			h = 2;
 		}
-		lines = fr.listFormattedStringToWidth(s, actualWidth);
+		lines = fr.listFormattedStringToWidth(m.m, actualWidth);
 		h = Math.max(h, lines.size());
 		renderBox(h);
-		if(icon != null)
+		if(m.rl != null)
 		{
 			Tessellator tess = Tessellator.instance;
 			tess.startDrawingQuads();
-			RenderHelper.bindTexture(icon);
-			face(Tessellator.instance,th,th,mh*2,mh*2,0,0,1,1);
+			RenderHelper.bindTexture(m.rl);
+			face(Tessellator.instance,th,th,mh*2,mh*2,m.uv.u,m.uv.v,m.uv.U,m.uv.V);
 			tess.draw();
 		}
 		{
@@ -127,7 +130,7 @@ public class MessageOverlayRenderer extends Gui
 			int mh = (int) Math.ceil(this.mh / scale);
 			for(int i = 0; i < lines.size(); i++)
 			{
-				fr.drawString(lines.get(i), icon == null ? th : mh*3, th + (mh * i), 0);
+				fr.drawString(lines.get(i), m.rl == null ? th : mh*3, th + (mh * i), 0);
 			}
 			GL11.glPopMatrix();
 			GL11.glColor3f(1, 1, 1);
@@ -142,7 +145,7 @@ public class MessageOverlayRenderer extends Gui
 			GL11.glPushMatrix();
 			for(Message m : getMessages())
 			{
-				GL11.glTranslated(0, renderMessage(m.rl,m.m), 0);
+				GL11.glTranslated(0, renderMessage(m), 0);
 			}
 			GL11.glPopMatrix();
 		}
