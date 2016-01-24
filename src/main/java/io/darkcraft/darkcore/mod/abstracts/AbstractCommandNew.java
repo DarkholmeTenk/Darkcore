@@ -3,11 +3,11 @@ package io.darkcraft.darkcore.mod.abstracts;
 import io.darkcraft.darkcore.mod.helpers.PlayerHelper;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
 import net.minecraft.command.ICommandSender;
-import scala.actors.threadpool.Arrays;
 
 /**
  * A command class which allows for subcommands easily
