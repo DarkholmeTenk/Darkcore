@@ -1,5 +1,6 @@
 package io.darkcraft.darkcore.mod.abstracts;
 
+import io.darkcraft.darkcore.mod.interfaces.IBlockIteratorCondition;
 import io.darkcraft.darkcore.mod.interfaces.IColorableBlock;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -67,9 +68,9 @@ public class SimulacrumBlock extends AbstractBlock
 	}
 
 	@Override
-	public boolean colorBlock(World w, int x, int y, int z, EntityPlayer pl, ItemStack is, int color, int depth)
+	public boolean colorBlock(World w, int x, int y, int z, EntityPlayer pl, IBlockIteratorCondition cond, ItemStack is, int color, int depth)
 	{
-		return sim.colorBlock(w, x, y, z, pl, is, color, depth);
+		return sim.colorBlock(w, x, y, z, pl, cond, is, color, depth);
 	}
 
 	@Override

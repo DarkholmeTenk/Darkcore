@@ -6,6 +6,7 @@ import io.darkcraft.darkcore.mod.datastore.SimpleCoordStore;
 import io.darkcraft.darkcore.mod.helpers.BlockIterator;
 import io.darkcraft.darkcore.mod.helpers.MathHelper;
 import io.darkcraft.darkcore.mod.impl.DefaultItemBlock;
+import io.darkcraft.darkcore.mod.interfaces.IBlockIteratorCondition;
 import io.darkcraft.darkcore.mod.interfaces.IColorableBlock;
 import io.darkcraft.darkcore.mod.interfaces.IExplodable;
 import io.darkcraft.darkcore.mod.multiblock.BlockState;
@@ -391,13 +392,13 @@ public abstract class AbstractBlock extends Block
 		return MapColor.getMapColorForBlockColored(p_149728_1_);
 	}
 
-	protected boolean colorBlock(World w, int x, int y, int z, EntityPlayer pl, ItemStack is, int color, int depth)
+	protected boolean colorBlock(World w, int x, int y, int z, EntityPlayer pl, IBlockIteratorCondition cond, ItemStack is, int color, int depth)
 	{
 		if(depth >= maxColorSpread) return false;
 		int oldMeta = w.getBlockMetadata(x, y, z);
 		w.setBlockMetadataWithNotify(x, y, z, color, 3);
 		if ((oldMeta != color) && (depth == 0)) return true;
-		BlockIterator iter = new BlockIterator(new SimpleCoordStore(w,x,y,z), BlockIterator.sameExcMetaNS, colorSpreadDiagonal, maxColorSpread);
+		BlockIterator iter = new BlockIterator(new SimpleCoordStore(w,x,y,z), cond, colorSpreadDiagonal, maxColorSpread);
 		iter.next(); //Pull the start one off
 		while(iter.hasNext())
 		{
@@ -418,13 +419,14 @@ public abstract class AbstractBlock extends Block
 		if (pl == null) return false;
 		if (this instanceof IColorableBlock)
 		{
+			IBlockIteratorCondition ibic = ((IColorableBlock)this).getColoringIterator(new SimpleCoordStore(w,x,y,z));
 			ItemStack is = pl.getHeldItem();
 			if (is == null) return false;
 			Item item = is.getItem();
 			if (item instanceof ItemDye)
 			{
 				int md = is.getItemDamage();
-				return colorBlock(w, x, y, z, pl, is, md, 0);
+				return colorBlock(w, x, y, z, pl, ibic, is, md, 0);
 			}
 		}
 		return false;
