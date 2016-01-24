@@ -48,7 +48,7 @@ public class WorldDataStoreHandler implements IDataPacketHandler
 			if(awds != null)
 			{
 				//System.out.println("#NN");
-				if(ServerHelper.isClient())
+				if(ServerHelper.isClient() && !ServerHelper.isIntegratedClient())
 					awds.readFromNBT(data);
 				else
 					awds.sendUpdate();
