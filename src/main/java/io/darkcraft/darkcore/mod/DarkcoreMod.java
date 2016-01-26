@@ -8,6 +8,7 @@ import io.darkcraft.darkcore.mod.config.ConfigHandler;
 import io.darkcraft.darkcore.mod.config.ConfigHandlerFactory;
 import io.darkcraft.darkcore.mod.handlers.ChunkLoadingHandler;
 import io.darkcraft.darkcore.mod.handlers.CommandHandler;
+import io.darkcraft.darkcore.mod.handlers.WeatherWatchingHandler;
 import io.darkcraft.darkcore.mod.handlers.packets.EntityPacketHandler;
 import io.darkcraft.darkcore.mod.handlers.packets.MessagePacketHandler;
 import io.darkcraft.darkcore.mod.handlers.packets.SoundPacketHandler;
@@ -109,6 +110,9 @@ public class DarkcoreMod implements IConfigHandlerMod
 		refreshConfigs();
 		networkChannel.register(packetHandler);
 		FMLCommonHandler.instance().bus().register(this);
+		WeatherWatchingHandler wwHandler = new WeatherWatchingHandler();
+		FMLCommonHandler.instance().bus().register(wwHandler);
+		MinecraftForge.EVENT_BUS.register(wwHandler);
 		comHandler.addCommand(new DebugCommand());
 		proxy.init();
 	}
