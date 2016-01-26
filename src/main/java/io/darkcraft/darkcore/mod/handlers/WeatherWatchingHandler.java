@@ -1,17 +1,16 @@
 package io.darkcraft.darkcore.mod.handlers;
 
 import io.darkcraft.darkcore.mod.events.LightningEvent;
-import io.darkcraft.darkcore.mod.helpers.WorldHelper;
+import io.darkcraft.darkcore.mod.helpers.ServerHelper;
 
 import java.util.Collections;
-import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.WeakHashMap;
 
 import net.minecraft.entity.effect.EntityLightningBolt;
-import net.minecraft.world.WorldServer;
-import net.minecraftforge.common.DimensionManager;
+import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.EntityEvent.EntityConstructing;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -22,13 +21,13 @@ import cpw.mods.fml.relauncher.Side;
 public class WeatherWatchingHandler
 {
 	private Set<EntityLightningBolt> sentEvents = Collections.newSetFromMap(new WeakHashMap<EntityLightningBolt,Boolean>());
-	private HashSet<Integer> worldSet = new HashSet();
+	private Set<World> worldSet = Collections.newSetFromMap(new WeakHashMap<World,Boolean>());
 
-	private void handleWorldServer(WorldServer ws)
+	private boolean handleWorld(World w)
 	{
-		if(ws == null) return;
-		worldSet.remove(ws);
-		List effects = ws.weatherEffects;
+		if(w == null) return true;
+		List effects = w.weatherEffects;
+		boolean retVal = false;
 		if(effects != null)
 		{
 			for(Object o : effects)
@@ -38,12 +37,14 @@ public class WeatherWatchingHandler
 					EntityLightningBolt lightning = (EntityLightningBolt) o;
 					if(!sentEvents.contains(lightning))
 					{
+						retVal = true;
 						sentEvents.add(lightning);
 						MinecraftForge.EVENT_BUS.post(new LightningEvent(lightning));
 					}
 				}
 			}
 		}
+		return retVal;
 	}
 
 	@SubscribeEvent
@@ -51,17 +52,23 @@ public class WeatherWatchingHandler
 	{
 		if((event.side == Side.SERVER) && (event.phase == Phase.END))
 		{
-			WorldServer[] wss = DimensionManager.getWorlds();
-			for(WorldServer ws : wss)
-				if(worldSet.contains(ws))
-					handleWorldServer(ws);
+			if(worldSet.isEmpty()) return;
+			Iterator<World> iter = worldSet.iterator();
+			while(iter.hasNext())
+			{
+				World w = iter.next();
+				if(w != null)
+					if(handleWorld(w))
+						iter.remove();
+			}
 		}
 	}
 
 	@SubscribeEvent
 	public void entityConstruct(EntityConstructing event)
 	{
-		if(event.entity instanceof EntityLightningBolt)
-			worldSet.add(WorldHelper.getWorldID(event.entity));
+		if(ServerHelper.isServer())
+			if((event.entity != null) && (event.entity instanceof EntityLightningBolt))
+				worldSet.add(event.entity.worldObj);
 	}
 }
