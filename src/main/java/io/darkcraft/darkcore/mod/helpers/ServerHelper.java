@@ -134,9 +134,43 @@ public class ServerHelper
 
 	public static void sendString(EntityPlayer pl, String string, EnumChatFormatting color)
 	{
+		sendString(pl, string, color, false, false, false, false);
+	}
+	
+	public static void sendItalicString(EntityPlayer pl, String string, EnumChatFormatting color)
+	{
+		sendString(pl, string, color, true, false, false, false);
+
+	}
+	
+	public static void sendBoldString(EntityPlayer pl, String string, EnumChatFormatting color)
+	{
+		sendString(pl, string, color, false, true, false, false);
+
+	}
+	
+	public static void sendStrikedThroughString(EntityPlayer pl, String string, EnumChatFormatting color)
+	{
+		sendString(pl, string, color, false, false, true, false);
+
+	}
+	
+	public static void sendUnderlinedString(EntityPlayer pl, String string, EnumChatFormatting color)
+	{
+		sendString(pl, string, color, false, false, false, true);
+
+	}
+	
+	public static void sendString(EntityPlayer pl, String string, EnumChatFormatting color, boolean italics, boolean bold, boolean strikeThrough, boolean underLined)
+	{
 		ChatComponentText c = new ChatComponentText("");
 		c.getChatStyle().setColor(color);
+		c.getChatStyle().setItalic(italics);
+		c.getChatStyle().setBold(bold);
+		c.getChatStyle().setStrikethrough(strikeThrough);
+		c.getChatStyle().setUnderlined(underLined);
 		c.appendText(string);
 		pl.addChatMessage(c);
 	}
+	
 }
