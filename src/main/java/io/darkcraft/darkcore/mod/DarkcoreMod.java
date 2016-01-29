@@ -43,6 +43,11 @@ import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 import cpw.mods.fml.common.network.FMLEventChannel;
 import cpw.mods.fml.common.network.NetworkRegistry;
 
+/**
+ * When creating a mod using DarkCore, if that mod implements new blocks/items, you should call {@link #registerCreativeTab(String, CreativeTabs)} before instantiating your items
+ * @author dark
+ *
+ */
 @Mod(modid = "darkcore", version = "0.3")
 public class DarkcoreMod implements IConfigHandlerMod
 {

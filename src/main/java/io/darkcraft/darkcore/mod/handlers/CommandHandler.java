@@ -1,5 +1,6 @@
 package io.darkcraft.darkcore.mod.handlers;
 
+import io.darkcraft.darkcore.mod.DarkcoreMod;
 import io.darkcraft.darkcore.mod.abstracts.AbstractCommand;
 
 import java.util.ArrayList;
@@ -10,6 +11,11 @@ public class CommandHandler
 {
 	private ArrayList<AbstractCommand>	coms		= new ArrayList<AbstractCommand>();
 	private boolean						registered	= false;
+
+	public static void registerCommand(AbstractCommand c)
+	{
+		DarkcoreMod.comHandler.addCommand(c);
+	}
 
 	public void addCommand(AbstractCommand c)
 	{

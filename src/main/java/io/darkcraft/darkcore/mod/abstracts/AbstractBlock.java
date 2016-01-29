@@ -6,6 +6,7 @@ import io.darkcraft.darkcore.mod.datastore.SimpleCoordStore;
 import io.darkcraft.darkcore.mod.helpers.BlockIterator;
 import io.darkcraft.darkcore.mod.helpers.MathHelper;
 import io.darkcraft.darkcore.mod.impl.DefaultItemBlock;
+import io.darkcraft.darkcore.mod.interfaces.IActivatablePrecise;
 import io.darkcraft.darkcore.mod.interfaces.IBlockIteratorCondition;
 import io.darkcraft.darkcore.mod.interfaces.IColorableBlock;
 import io.darkcraft.darkcore.mod.interfaces.IExplodable;
@@ -32,6 +33,17 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+/**
+ * Performs a variety of functions to do with the creation of new blocks, the allocation of IIcons, coloring, etc.<br>
+ *
+ * Constructor should just contain a call to super with the mod id in or alternatively either a {@link net.minecraft.block.material.Material} or a boolean (true if render,false if no render) followed by the mod id.<br>
+ *
+ * Tile entity containers should extend {@link AbstractBlockContainer} instead of this.<br>
+ *
+ * Once instantiated, blocks can be added to the GameRegistry by calling register(), which returns this for chaining.
+ * @author dark
+ *
+ */
 public abstract class AbstractBlock extends Block
 {
 	private IIcon				iconBuffer			= null;
@@ -48,7 +60,7 @@ public abstract class AbstractBlock extends Block
 	private static int			maxColorSpread		= 16;
 	private static boolean		colorSpreadDiagonal	= false;
 
-	public static void refreshConfigs()
+	public final static void refreshConfigs()
 	{
 		if (config == null) config = DarkcoreMod.configHandler.registerConfigNeeder("AbstractBlock");
 		coloredUsesDye = config.getBoolean("Colored blocks use up dye", false, "If true, when dying a colored block, the dye will be used up.", "If false, the dye will not be used up");
@@ -56,6 +68,12 @@ public abstract class AbstractBlock extends Block
 		colorSpreadDiagonal = config.getBoolean("Color spread diagonal", false, "Can colors spread diagonally");
 	}
 
+	/**
+	 * Instantiates the block with a given material and source mod.
+	 * Also adds the block to the mod's creative tab if one has been set and makes the block unbreakable by default.
+	 * @param blockMaterial the material to be made out of
+	 * @param sourcemod the modid of the mod the block belongs to
+	 */
 	public AbstractBlock(Material blockMaterial, String sourcemod)
 	{
 		super(blockMaterial);
@@ -71,17 +89,30 @@ public abstract class AbstractBlock extends Block
 		else if (subNames == null) setIconArray(1);
 	}
 
+	/**
+	 * see {@link #AbstractBlock(Material, String)}
+	 * @param render true if the block should render, false if not
+	 * @param sm the modid of the mod the block belongs to
+	 */
 	public AbstractBlock(boolean render, String sm)
 	{
 		this(sm);
 		renderIcon = render;
 	}
 
+	/**
+	 * see {@link #AbstractBlock(Material, String)}
+	 * @param sm the modid of the mod the block belongs to
+	 */
 	public AbstractBlock(String sm)
 	{
 		this(Material.iron, sm);
 	}
 
+	/**
+	 * Registers the block with the game registry, as well as any item block or tile entity if appropriate
+	 * @return this, for the purposes of chaining with the constructor. E.g. AbstractBlock block = new MyBlock().register()
+	 */
 	public AbstractBlock register()
 	{
 		Class<? extends AbstractItemBlock> aib = getIB();
@@ -94,6 +125,9 @@ public abstract class AbstractBlock extends Block
 		return this;
 	}
 
+	/**
+	 * @return an {@link AbstractItemBlock} to register with this item
+	 */
 	public Class<? extends AbstractItemBlock> getIB()
 	{
 		if(((subNames != null) && (subNames.length > 0) ) || (this instanceof AbstractBlockContainer))
@@ -116,6 +150,10 @@ public abstract class AbstractBlock extends Block
 		return new ItemStack(this, am, dam);
 	}
 
+	/**
+	 * Call this with an array of subnames if your block should have multiple variations based on metadata.
+	 * @param subnames
+	 */
 	public void setSubNames(String... subnames)
 	{
 		if (subnames.length == 0) subNames = null;
@@ -170,6 +208,9 @@ public abstract class AbstractBlock extends Block
 		return "Malformed";
 	}
 
+	/**
+	 * Should be called during {@link #initData()} with an unlocalized name for your block
+	 */
 	@Override
 	public Block setBlockName(String par1Str)
 	{
@@ -410,6 +451,9 @@ public abstract class AbstractBlock extends Block
 		return true;
 	}
 
+	/**
+	 * If you would like to add behaviour to right clicking the block, please see {@link IActivatablePrecise}
+	 */
 	@Override
 	public boolean onBlockActivated(World w, int x, int y, int z, EntityPlayer pl, int s, float i, float j, float k)
 	{
@@ -417,6 +461,8 @@ public abstract class AbstractBlock extends Block
 		if((b != this) && !(b instanceof SimulacrumBlock)) return false;
 		if((b instanceof SimulacrumBlock) && (((SimulacrumBlock)b).sim != this)) return false;
 		if (pl == null) return false;
+		if (this instanceof IActivatablePrecise)
+			if(((IActivatablePrecise)this).activate(pl, s, x+i, y+j, z+k)) return true;
 		if (this instanceof IColorableBlock)
 		{
 			IBlockIteratorCondition ibic = ((IColorableBlock)this).getColoringIterator(new SimpleCoordStore(w,x,y,z));
@@ -438,6 +484,9 @@ public abstract class AbstractBlock extends Block
 		return 0;
 	}
 
+	/**
+	 * If you want to add behaviour to the block upon an explosion, please see {@link IExplodable}
+	 */
 	@Override
 	public void onBlockExploded(World world, int x, int y, int z, Explosion explosion)
 	{

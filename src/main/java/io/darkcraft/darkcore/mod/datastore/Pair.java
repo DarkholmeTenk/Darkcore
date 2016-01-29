@@ -1,5 +1,12 @@
 package io.darkcraft.darkcore.mod.datastore;
 
+/**
+ * Allows you to store 2 things
+ * @author dark
+ *
+ * @param <A>
+ * @param <B>
+ */
 public class Pair<A,B>
 {
 	public final A a;

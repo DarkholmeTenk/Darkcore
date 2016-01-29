@@ -8,6 +8,7 @@ import java.util.Set;
 import java.util.UUID;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -17,6 +18,16 @@ import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 
 public class PlayerHelper
 {
+	public static EntityPlayerMP getPlayer(String username)
+	{
+		return ServerHelper.getPlayer(username);
+	}
+
+	public static String getUsername(EntityPlayer player)
+	{
+		return ServerHelper.getUsername(player);
+	}
+
 	public static PlayerHelper		i			= new PlayerHelper();
 	private static UUIDStore		store		= null;
 	private static Set<ItemStack>	joinStacks	= new HashSet<ItemStack>();
