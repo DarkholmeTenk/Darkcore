@@ -22,18 +22,29 @@ public abstract class AbstractBlockContainer extends AbstractBlock implements IT
 {
 	private boolean	dropWithData	= false;
 
+	/**
+	 * See {@link #AbstractBlockContainer(boolean, boolean, String)}
+	 */
 	public AbstractBlockContainer(String sm)
 	{
 		super(sm);
 		isBlockContainer = true;
 	}
 
+	/**
+	 * See {@link #AbstractBlockContainer(boolean, boolean, String)}
+	 */
 	public AbstractBlockContainer(boolean render, String sm)
 	{
 		super(render, sm);
 		isBlockContainer = true;
 	}
 
+	/**
+	 * @param visible whether the block should render
+	 * @param _dropWithData whether Tile Entities contained by this block should keep their NBT data when the block is broken
+	 * @param sm the modid of the mod this block belongs to
+	 */
 	public AbstractBlockContainer(boolean visible, boolean _dropWithData, String sm)
 	{
 		super(visible, sm);
@@ -64,6 +75,10 @@ public abstract class AbstractBlockContainer extends AbstractBlock implements IT
 		return tileentity != null ? tileentity.receiveClientEvent(par5, par6) : false;
 	}
 
+	/**
+	 * If you want to add behaviour to this as a block, see {@link IActivatablePrecise}<br>
+	 * If you want to add behaviour to the TE this block contains, see {@link IActivatable} or {@link IActivatablePrecise}
+	 */
 	@Override
 	public boolean onBlockActivated(World w, int x, int y, int z, EntityPlayer pl, int s, float i, float j, float k)
 	{
@@ -120,6 +135,9 @@ public abstract class AbstractBlockContainer extends AbstractBlock implements IT
 
 	public abstract Class<? extends TileEntity> getTEClass();
 
+	/**
+	 * If you want to add explosion behaviour to this block as a block or the TE this block contains, see {@link IExplodable}
+	 */
 	@Override
 	public void onBlockExploded(World world, int x, int y, int z, Explosion explosion)
 	{

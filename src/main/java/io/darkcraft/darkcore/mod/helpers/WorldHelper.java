@@ -22,11 +22,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class WorldHelper
 {
-	/**
-	 * Attempts to get the world specified by id. If this is run on the client, it will either return the client side world or null.
-	 *
-	 * @return either the world or null
-	 */
+
 
 	private static HashMap<Integer, String> worldNameMap = new HashMap();
 
@@ -35,6 +31,11 @@ public class WorldHelper
 		worldNameMap.clear();
 	}
 
+	/**
+	 * Attempts to get the world specified by id. If this is run on the client, it will either return the client side world or null.
+	 *
+	 * @return either the world or null
+	 */
 	public static World getWorld(int id)
 	{
 		if (ServerHelper.isClient())
@@ -43,6 +44,11 @@ public class WorldHelper
 			return getWorldServer(id);
 	}
 
+	/**
+	 * Will get the {@link WorldServer} specified by the id, will print an error to the console if the world doesn't exist
+	 * @param id
+	 * @return
+	 */
 	public static WorldServer getWorldServer(int id)
 	{
 		try
@@ -57,27 +63,44 @@ public class WorldHelper
 		return null;
 	}
 
+	/**
+	 * @param w the world to get the ID of
+	 * @return the id of w
+	 */
 	public static int getWorldID(World w)
 	{
 		return w.provider.dimensionId;
 	}
 
+	/**
+	 * @return the id of te's world
+	 */
 	public static int getWorldID(TileEntity te)
 	{
 		return getWorldID(te.getWorldObj());
 	}
 
+	/**
+	 * @param ent
+	 * @return the id of ent's world
+	 */
 	public static int getWorldID(Entity ent)
 	{
 		return getWorldID(ent.worldObj);
 	}
 
+	/**
+	 * @return the client world
+	 */
 	@SideOnly(Side.CLIENT)
 	private static World getCW()
 	{
 		return Minecraft.getMinecraft().theWorld;
 	}
 
+	/**
+	 * @return the id of the client world
+	 */
 	public static int getClientWorldID()
 	{
 		if(ServerHelper.isClient())
@@ -85,6 +108,10 @@ public class WorldHelper
 		return 0;
 	}
 
+	/**
+	 * @param worldID the ID of the world to get the name of
+	 * @return the name of worldID
+	 */
 	public static String getDimensionName(int worldID)
 	{
 		if(worldNameMap.containsKey(worldID))
@@ -93,6 +120,10 @@ public class WorldHelper
 		return getDimensionName(w);
 	}
 
+	/**
+	 * @param w the world to get the name of
+	 * @return the name of w
+	 */
 	public static String getDimensionName(World w)
 	{
 		int id = getWorldID(w);
@@ -114,6 +145,11 @@ public class WorldHelper
 		return false;
 	}
 
+	/**
+	 * Spawns an entity item containing is at pl's location with 0 pickup delay, effectively giving it to them
+	 * @param pl
+	 * @param is
+	 */
 	public static void giveItemStack(EntityPlayer pl, ItemStack is)
 	{
 		EntityItem ie = new EntityItem(pl.worldObj, pl.posX, pl.posY, pl.posZ, is);
@@ -121,6 +157,11 @@ public class WorldHelper
 		pl.worldObj.spawnEntityInWorld(ie);
 	}
 
+	/**
+	 * Drops an entity item containing is at the {@link SimpleDoubleCoordStore} specified
+	 * @param is the itemstack to be in the entity
+	 * @param sdcs the location to drop the item
+	 */
 	public static void dropItemStack(ItemStack is, SimpleDoubleCoordStore sdcs)
 	{
 		if ((is == null) || (sdcs == null)) return;
@@ -131,6 +172,12 @@ public class WorldHelper
 		w.spawnEntityInWorld(ie);
 	}
 
+	/**
+	 * Puts is into dest
+	 * @param is the itemstack to put
+	 * @param dest the IInventory to put it into
+	 * @return any remaining items which could not be transferred, or null if transfer was completely successful
+	 */
 	public static ItemStack transferItemStack(ItemStack is, IInventory dest)
 	{
 		int size = dest.getSizeInventory();
@@ -176,6 +223,10 @@ public class WorldHelper
 		return softBlock(pos.getWorldObj(), pos.iX, pos.iY, pos.iZ);
 	}
 
+	/**
+	 * @param wID the world to get the time for
+	 * @return the time in the world scaled between 0(12am) and 0.9999...(11:59:59...pm)
+	 */
 	public static double getWorldTime(int wID)
 	{
 		int length = 24000;
@@ -183,6 +234,10 @@ public class WorldHelper
 		return ((w.getWorldTime() + (length / 4)) % length) / (double) length;
 	}
 
+	/**
+	 * @param wID the world ID to get the time of
+	 * @return a string representing the time in world wID
+	 */
 	public static String getWorldTimeString(int wID)
 	{
 		double t = getWorldTime(wID);

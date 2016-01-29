@@ -11,6 +11,13 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ChatComponentText;
 
+/**
+ * Commands should be registered by calling {@linkplain io.darkcraft.darkcore.mod.handlers.CommandHandler#registerCommand(AbstractCommand) CommandHandler.registerCommand(AbstractCommand)}<br>
+ * See {@link AbstractCommandNew} for a newer version of this
+ *
+ * @author dark
+ *
+ */
 public abstract class AbstractCommand implements ICommand
 {
 	private static List<String> emptyList = new ArrayList<String>();

@@ -18,6 +18,15 @@ import net.minecraft.world.WorldServer;
 
 public class TeleportHelper
 {
+	/**
+	 * Transfers ent to newDimension hopefully skipping any end teleportation glitches or anything
+	 * @param ent the entity to teleport
+	 * @param newDimension the id of the dimension to teleport to
+	 * @param newX the new X coord (only works on non-players)
+	 * @param newY the new Y coord (only works on non-players)
+	 * @param newZ the new Z coord (only works on non-players)
+	 * @return a new entity if the transfer resulted in a new entity getting created
+	 */
 	public static Entity transferEntityToDimension(Entity ent, int newDimension, double newX, double newY, double newZ)
 	{
 		if(ent instanceof IBossDisplayData)
@@ -74,11 +83,28 @@ public class TeleportHelper
 		return ent;
 	}
 
+	/**
+	 * Teleports ent to worldID at x,y,z
+	 * @param ent
+	 * @param worldID
+	 * @param x
+	 * @param y
+	 * @param z
+	 */
 	public static void teleportEntity(Entity ent, int worldID, double x, double y, double z)
 	{
 		teleportEntity(ent, worldID, x, y, z, 0);
 	}
 
+	/**
+	 * Teleports ent to worldID at x,y,z with rotation rot
+	 * @param ent
+	 * @param worldID
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @param rot
+	 */
 	public static void teleportEntity(Entity ent, int worldID, double x, double y, double z, double rot)
 	{
 		if(ent instanceof IBossDisplayData)
@@ -105,21 +131,41 @@ public class TeleportHelper
 		}
 	}
 
+	/**
+	 * Teleports ent to pos with rotation 0
+	 * @param ent
+	 * @param pos
+	 */
 	public static void teleportEntity(Entity ent, SimpleDoubleCoordStore pos)
 	{
 		teleportEntity(ent,pos,0);
 	}
 
+	/**
+	 * Teleports ent to pos with rotation rot
+	 * @param ent
+	 * @param pos
+	 * @param rot
+	 */
 	public static void teleportEntity(Entity ent, SimpleDoubleCoordStore pos, double rot)
 	{
 		teleportEntity(ent, pos.world, pos.x, pos.y, pos.z, rot);
 	}
 
+	/**
+	 * Teleports ent to worldID but keeps their x,y,z the same
+	 * @param ent
+	 * @param worldID
+	 */
 	public static void teleportEntity(Entity ent, int worldID)
 	{
 		teleportEntity(ent, worldID, ent.posX, ent.posY, ent.posZ);
 	}
 
+	/**
+	 * Teleports ent to the overworld spawn, a relatively safe location
+	 * @param ent
+	 */
 	public static void teleportEntityToOverworldSpawn(Entity ent)
 	{
 		World overworld = WorldHelper.getWorld(0);

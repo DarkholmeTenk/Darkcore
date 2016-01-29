@@ -2,6 +2,11 @@ package io.darkcraft.darkcore.mod.interfaces;
 
 import io.darkcraft.darkcore.mod.datastore.SimpleCoordStore;
 
+/**
+ * To be used with {@linkplain io.darkcraft.darkcore.mod.helpers.BlockIterator BlockIterator}
+ * @author dark
+ *
+ */
 public interface IBlockIteratorCondition
 {
 	/**
