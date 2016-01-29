@@ -21,6 +21,8 @@ import cpw.mods.fml.relauncher.Side;
 
 public class ServerHelper
 {
+	
+	
 	public static boolean isServer()
 	{
 		return !FMLCommonHandler.instance().getEffectiveSide().equals(Side.CLIENT);
@@ -111,56 +113,125 @@ public class ServerHelper
 		return player.getCommandSenderName();
 	}
 
+	/**
+	 * Sends a message in the chat
+	 * 
+	 * @param pl
+	 * @param source
+	 * @param String s
+	 */
 	public static void sendString(EntityPlayer pl, String source, String s)
 	{
 		sendString(pl, new ChatComponentText("[" + source + "] " + s));
 	}
 
+	/**
+	 * Sends a message in the chat
+	 * 
+	 * @param pl
+	 * @param message
+	 */
 	public static void sendString(EntityPlayer pl, ChatComponentText message)
 	{
 		if(pl == null) return;
 		pl.addChatMessage(message);
 	}
 
+	/**
+	 * Sends a message in the chat
+	 *  
+	 * @param pl
+	 * @param string
+	 */
 	public static void sendString(EntityPlayer pl, String string)
 	{
 		sendString(pl, new ChatComponentText(string));
 	}
 
+	/**
+	 * Sends a coloured message in the chat
+	 * 
+	 * @param pl
+	 * @param source
+	 * @param string
+	 * @param color
+	 */
 	public static void sendString(EntityPlayer pl, String source, String string, EnumChatFormatting color)
 	{
 		sendString(pl, "["+source+"]"+string, color);
 	}
 
+	/**
+	 * Sends a coloured message in the chat
+	 * 
+	 * @param pl
+	 * @param string
+	 * @param color
+	 */
 	public static void sendString(EntityPlayer pl, String string, EnumChatFormatting color)
 	{
 		sendString(pl, string, color, false, false, false, false);
 	}
 	
+	/**
+	 * Sends an italic message in the chat
+	 * 
+	 * @param pl
+	 * @param string
+	 * @param color
+	 */
 	public static void sendItalicString(EntityPlayer pl, String string, EnumChatFormatting color)
 	{
 		sendString(pl, string, color, true, false, false, false);
 
 	}
 	
+	/**
+	 * Sends a bold message in the chat
+	 * 
+	 * @param pl
+	 * @param string
+	 * @param color
+	 */
 	public static void sendBoldString(EntityPlayer pl, String string, EnumChatFormatting color)
 	{
 		sendString(pl, string, color, false, true, false, false);
 
 	}
 	
+	/**
+	 * Sends a struck through message in the chat
+	 * 
+	 * @param pl
+	 * @param string
+	 * @param color
+	 */
 	public static void sendStrikedThroughString(EntityPlayer pl, String string, EnumChatFormatting color)
 	{
 		sendString(pl, string, color, false, false, true, false);
 
 	}
 	
+	/**
+	 * Sends an underlined through message in the chat
+	 * 
+	 * @param pl
+	 * @param string
+	 * @param color
+	 */
 	public static void sendUnderlinedString(EntityPlayer pl, String string, EnumChatFormatting color)
 	{
 		sendString(pl, string, color, false, false, false, true);
 
 	}
 	
+	/**
+	 * Sends a styled message in the chat
+	 * 
+	 * @param pl
+	 * @param string
+	 * @param color
+	 */
 	public static void sendString(EntityPlayer pl, String string, EnumChatFormatting color, boolean italics, boolean bold, boolean strikeThrough, boolean underLined)
 	{
 		ChatComponentText c = new ChatComponentText("");
