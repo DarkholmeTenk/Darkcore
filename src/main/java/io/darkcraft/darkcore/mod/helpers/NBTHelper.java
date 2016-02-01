@@ -33,7 +33,11 @@ public class NBTHelper
 		for(int i = from; i < to; i++)
 		{
 			if(nbt.hasKey("i"+i))
+			{
 				items[i] = ItemStack.loadItemStackFromNBT(nbt.getCompoundTag("i"+i));
+				if(items[i].stackSize <= 0)
+					items[i] = null;
+			}
 			else
 				items[i] = null;
 		}
