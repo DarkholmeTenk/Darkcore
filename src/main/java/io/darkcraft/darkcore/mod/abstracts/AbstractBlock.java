@@ -25,6 +25,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
@@ -513,5 +514,7 @@ public abstract class AbstractBlock extends Block
 	public abstract void initData();
 
 	public abstract void initRecipes();
+
+	public void addInfo(int metadata, NBTTagCompound nbt, List infoList){};
 
 }

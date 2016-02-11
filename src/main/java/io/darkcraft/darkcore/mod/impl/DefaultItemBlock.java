@@ -2,7 +2,13 @@ package io.darkcraft.darkcore.mod.impl;
 
 import io.darkcraft.darkcore.mod.abstracts.AbstractBlock;
 import io.darkcraft.darkcore.mod.abstracts.AbstractItemBlock;
+
+import java.util.List;
+
 import net.minecraft.block.Block;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
 
 public class DefaultItemBlock extends AbstractItemBlock
 {
@@ -22,4 +28,12 @@ public class DefaultItemBlock extends AbstractItemBlock
 		return b;
 	}
 
+	@Override
+	public void addInfo(ItemStack is, EntityPlayer player, List infoList)
+	{
+		if((is == null) || !(is.getItem() instanceof ItemBlock)) return;
+		Block b = ((ItemBlock)is.getItem()).field_150939_a;
+		if(b instanceof AbstractBlock)
+			((AbstractBlock)b).addInfo(is.getItemDamage(), is.stackTagCompound, infoList);
+	}
 }
