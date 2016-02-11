@@ -29,6 +29,7 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.oredict.OreDictionary;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -473,6 +474,12 @@ public abstract class AbstractBlock extends Block
 			{
 				int md = is.getItemDamage();
 				return colorBlock(w, x, y, z, pl, ibic, is, md, 0);
+			}else{
+				int[] oreDictIDs = OreDictionary.getOreIDs(is);
+				for(int id : oreDictIDs)
+				{	
+					return colorBlock(w, x, y, z, pl, ibic, is, OreDictionary.getOres(OreDictionary.getOreName(id)).get(0).getItemDamage(), 0);
+				}
 			}
 		}
 		return false;
