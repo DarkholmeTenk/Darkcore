@@ -22,6 +22,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
@@ -475,11 +476,16 @@ public abstract class AbstractBlock extends Block
 			{
 				int md = is.getItemDamage();
 				return colorBlock(w, x, y, z, pl, ibic, is, md, 0);
-			}else{
+			}
+			else
+			{
 				int[] oreDictIDs = OreDictionary.getOreIDs(is);
-				for(int id : oreDictIDs)
-				{	
-					return colorBlock(w, x, y, z, pl, ibic, is, OreDictionary.getOres(OreDictionary.getOreName(id)).get(0).getItemDamage(), 0);
+				if(oreDictIDs.length == 0)
+					return false;
+				for(ItemStack id : OreDictionary.getOres(OreDictionary.getOreName(oreDictIDs[0])))
+				{
+					if(OreDictionary.itemMatches(new ItemStack(Items.dye, 1, 32767), id, false))
+						return colorBlock(w, x, y, z, pl, ibic, is, id.getItemDamage(), 0);
 				}
 			}
 		}
