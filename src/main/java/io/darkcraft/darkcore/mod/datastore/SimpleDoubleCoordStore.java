@@ -46,6 +46,11 @@ public class SimpleDoubleCoordStore
 		this(w, ent.posX, ent.posY, ent.posZ);
 	}
 
+	public SimpleDoubleCoordStore(Entity ent)
+	{
+		this(WorldHelper.getWorldID(ent), ent);
+	}
+
 	public SimpleDoubleCoordStore(EntityLivingBase ent)
 	{
 		this(WorldHelper.getWorldID(ent), ent.posX, ent.posY, ent.posZ);
