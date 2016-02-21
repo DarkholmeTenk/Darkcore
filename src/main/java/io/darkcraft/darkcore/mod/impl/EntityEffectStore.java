@@ -42,7 +42,7 @@ public class EntityEffectStore implements IExtendedEntityProperties
 		if(entity.isDead) return false;
 		if(effects.size() == 0) return false;
 		for(AbstractEffect eff : effects.values())
-			if(eff.duration != -1)
+			if((eff.duration != -1) || eff.doesTick)
 				return true;
 		return false;
 	}
