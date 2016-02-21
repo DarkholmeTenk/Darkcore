@@ -120,7 +120,9 @@ public class DarkcoreMod implements IConfigHandlerMod
 		FMLCommonHandler.instance().bus().register(wwHandler);
 		MinecraftForge.EVENT_BUS.register(wwHandler);
 		comHandler.addCommand(new DebugCommand());
-		MinecraftForge.EVENT_BUS.register(new EffectHandler());
+		EffectHandler eh = new EffectHandler();
+		MinecraftForge.EVENT_BUS.register(eh);
+		FMLCommonHandler.instance().bus().register(eh);
 		proxy.init();
 	}
 

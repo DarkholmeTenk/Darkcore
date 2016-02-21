@@ -13,7 +13,7 @@ public abstract class AbstractEffect
 	public final boolean doesTick;
 	public final int tickFreq;
 	public final int duration;
-	private int tt = 0;
+	private int tt = -1;
 
 	public AbstractEffect(String _id, EntityLivingBase ent, int duration)
 	{
@@ -52,6 +52,7 @@ public abstract class AbstractEffect
 	{
 		nbt.setString("id", id);
 		nbt.setInteger("tt", tt);
+		nbt.setInteger("dur", duration);
 		writeToNBT(nbt);
 	}
 

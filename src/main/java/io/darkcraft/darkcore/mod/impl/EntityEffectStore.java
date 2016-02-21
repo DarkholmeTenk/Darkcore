@@ -68,7 +68,7 @@ public class EntityEffectStore implements IExtendedEntityProperties
 		while(nbt.hasKey("eff"+i))
 		{
 			NBTTagCompound effTag = nbt.getCompoundTag("eff"+i);
-			AbstractEffect effect = EffectHandler.getEffect(effTag);
+			AbstractEffect effect = EffectHandler.getEffect(entity, effTag);
 			if(effect != null)
 				addEffect(effect);
 			else
@@ -97,6 +97,8 @@ public class EntityEffectStore implements IExtendedEntityProperties
 	public void addEffect(AbstractEffect effect)
 	{
 		effects.put(effect.id, effect);
+		if(shouldBeWatched())
+			EffectHandler.addWatchedStore(this);
 	}
 
 	public void remove(String id)

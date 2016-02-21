@@ -4,8 +4,11 @@ import io.darkcraft.darkcore.mod.abstracts.effects.AbstractEffect;
 import io.darkcraft.darkcore.mod.abstracts.effects.IEffectFactory;
 import io.darkcraft.darkcore.mod.impl.EntityEffectStore;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
+import java.util.WeakHashMap;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -15,24 +18,25 @@ import net.minecraftforge.event.entity.EntityEvent.EntityConstructing;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.Phase;
+import cpw.mods.fml.common.gameevent.TickEvent.Type;
 
 public class EffectHandler
 {
 	private static HashSet<IEffectFactory> factories = new HashSet<IEffectFactory>();
-	private static HashSet<EntityEffectStore> watchedStores = new HashSet<EntityEffectStore>();
+	private static Set<EntityEffectStore> watchedStores = Collections.newSetFromMap(new WeakHashMap<EntityEffectStore,Boolean>());
 
 	public static void registerEffectFactory(IEffectFactory factory)
 	{
 		factories.add(factory);
 	}
 
-	public static AbstractEffect getEffect(NBTTagCompound nbt)
+	public static AbstractEffect getEffect(EntityLivingBase ent, NBTTagCompound nbt)
 	{
 		String id = nbt.getString("id");
 		if((id == null) || id.isEmpty()) return null;
 		for(IEffectFactory fact : factories)
 		{
-			AbstractEffect effect = fact.createEffect(id, nbt);
+			AbstractEffect effect = fact.createEffect(ent, id, nbt);
 			if(effect != null)
 			{
 				effect.read(nbt);
@@ -44,7 +48,10 @@ public class EffectHandler
 
 	public static void addWatchedStore(EntityEffectStore store)
 	{
-		watchedStores.add(store);
+		synchronized(watchedStores)
+		{
+			watchedStores.add(store);
+		}
 	}
 
 	public static EntityEffectStore getEffectStore(EntityLivingBase ent)
@@ -69,14 +76,17 @@ public class EffectHandler
 	@SubscribeEvent
 	public void entTickEvent(TickEvent tick)
 	{
-		if(tick.phase != Phase.END) return;
-		Iterator<EntityEffectStore> iter = watchedStores.iterator();
-		while(iter.hasNext())
+		if((tick.phase != Phase.END) || (tick.type != Type.SERVER)) return;
+		synchronized(watchedStores)
 		{
-			EntityEffectStore store = iter.next();
-			store.tick();
-			if(!store.shouldBeWatched())
-				iter.remove();
+			Iterator<EntityEffectStore> iter = watchedStores.iterator();
+			while(iter.hasNext())
+			{
+				EntityEffectStore store = iter.next();
+				store.tick();
+				if(!store.shouldBeWatched())
+					iter.remove();
+			}
 		}
 	}
 }
