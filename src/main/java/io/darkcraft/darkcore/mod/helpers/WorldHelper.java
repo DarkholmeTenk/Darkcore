@@ -60,6 +60,8 @@ public class WorldHelper
 		{
 			e.printStackTrace();
 		}
+		if(DarkcoreMod.debugText)
+			Thread.dumpStack();
 		return null;
 	}
 
