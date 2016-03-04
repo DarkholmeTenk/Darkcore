@@ -7,10 +7,14 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.scoreboard.Scoreboard;
+import net.minecraft.scoreboard.Team;
+import net.minecraft.world.World;
 
 import com.mojang.authlib.GameProfile;
 
@@ -101,11 +105,6 @@ public class PlayerHelper
 		joinStacks.add(is);
 	}
 
-	public static String[] getAllUsernames()
-	{
-		return ServerHelper.getServer().getAllUsernames();
-	}
-
 	public void playerSpawn(PlayerLoggedInEvent event)
 	{
 		EntityPlayer player = event.player;
@@ -115,9 +114,51 @@ public class PlayerHelper
 		getStore().addUser(player);
 	}
 
+	public static String[] getAllUsernames()
+	{
+		return ServerHelper.getServer().getAllUsernames();
+	}
+
+	public static Team getTeam(EntityLivingBase ent)
+	{
+		return ent.getTeam();
+	}
+
+	public static Scoreboard getScoreboard(int dim)
+	{
+		World w = WorldHelper.getWorld(dim);
+		if(w == null) return null;
+		return w.getScoreboard();
+	}
+
+	public static Team getTeam(int dim,String id)
+	{
+		Scoreboard sb = getScoreboard(dim);
+		if(sb == null) return null;
+		return sb.getTeam(id);
+	}
+
+	public static boolean swordsEnabled()
+	{
+		return getStore().swordsEnabled;
+	}
+
+	public static void toggleSwords()
+	{
+		UUIDStore st = getStore();
+		st.swordsEnabled = !st.swordsEnabled;
+	}
+
+	/*
+	 *
+	 * UUID Storage system for detecting player name changes
+	 * @author dark
+	 *
+	 */
 	public static class UUIDStore extends AbstractWorldDataStore
 	{
 		private HashMap<UUID, String>	uuidMap	= new HashMap<UUID, String>();
+		public boolean swordsEnabled = true;
 
 		public UUIDStore()
 		{
@@ -206,6 +247,7 @@ public class PlayerHelper
 					}
 				}
 			}
+			swordsEnabled = nbt.getBoolean("swen");
 		}
 
 		@Override
@@ -219,6 +261,7 @@ public class PlayerHelper
 					nbt.setString("uuid" + (i++), uuid.toString() + "|" + uuidMap.get(uuid));
 				}
 			}
+			nbt.setBoolean("swen", swordsEnabled);
 		}
 
 	}
