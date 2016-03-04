@@ -18,6 +18,7 @@ public abstract class AbstractCommandNew extends AbstractCommand
 {
 	private static final List<String> emptyStringList = new ArrayList<String>();
 	private final AbstractCommandNew[] subCommands;
+	private final List<String> allSubArgs;
 
 	public AbstractCommandNew(AbstractCommandNew... subComs)
 	{
@@ -25,6 +26,9 @@ public abstract class AbstractCommandNew extends AbstractCommand
 			subCommands = new AbstractCommandNew[0];
 		else
 			subCommands = subComs;
+		allSubArgs = new ArrayList<String>();
+		for(AbstractCommandNew acn : subComs)
+			allSubArgs.addAll(acn.getCommandAliases());
 	}
 
 	@Override
@@ -39,6 +43,8 @@ public abstract class AbstractCommandNew extends AbstractCommand
 		return getCommandName();
 	}
 
+	public void getCommandUsage(ICommandSender sender, String totalCommand){ getCommandUsage(sender);}
+
 	private List<String> aliasList;
 	@Override
 	public List getCommandAliases()
@@ -46,6 +52,7 @@ public abstract class AbstractCommandNew extends AbstractCommand
 		if(aliasList == null)
 		{
 			aliasList = new ArrayList<String>();
+			aliasList.add(getCommandName());
 			getAliases(aliasList);
 		}
 		return aliasList;
@@ -61,12 +68,35 @@ public abstract class AbstractCommandNew extends AbstractCommand
 	public void commandBody(ICommandSender sen, String[] strs)
 	{
 		List<String> strList = new ArrayList<String>();
-		for(String s : strs)
-			strList.add(s);
-		commandBody(sen,strList);
+		String s;
+		for(int i = 0; i < strs.length; i++)
+		{
+			s = strs[i];
+			if(s.startsWith("\""))
+			{
+				String n = s.substring(1);
+				boolean f = false;
+				for(int j = i+1;j<strs.length; j++)
+				{
+					n+= " " + strs[j];
+					if(n.endsWith("\""))
+					{
+						n = n.substring(0,n.length()-1);
+						i = j;
+						f = true;
+						break;
+					}
+				}
+				strList.add(f ? n : s);
+			}
+			else
+				strList.add(s);
+		}
+		String tCom = "/"+getCommandName();
+		commandBody(sen,tCom,strList);
 	}
 
-	public boolean commandBody(ICommandSender sen, List<String> strs)
+	public boolean commandBody(ICommandSender sen, String totalCommand, List<String> strs)
 	{
 		if(strs.size() > 0)
 		{
@@ -76,25 +106,33 @@ public abstract class AbstractCommandNew extends AbstractCommand
 			comLoop:
 			for(AbstractCommandNew com : subCommands)
 			{
-				if(possibleSubName.equalsIgnoreCase(com.getCommandName()))
-				{
-					if(com.commandBody(sen, nextList))
-						return true;
-					else
-						continue comLoop;
-				}
 				List<String> aliases = com.getCommandAliases();
 				for(String alias : aliases)
 					if(possibleSubName.equalsIgnoreCase(alias))
 					{
-						if(com.commandBody(sen, nextList))
+						if(com.commandBody(sen, totalCommand + " " + alias, nextList))
 							return true;
 						else
 							continue comLoop;
 					}
 			}
 		}
-		return process(sen, strs);
+		if(process(sen, strs)) return true;
+		sendString(sen,"------------");
+		sendString(sen, totalCommand);
+		if(subCommands.length > 0)
+		{
+			sendString(sen,"Valid subcommands:");
+			for(AbstractCommandNew sc : subCommands)
+				sendString(sen,"    "+sc.getCommandName());
+		}
+		else
+		{
+			sendString(sen,"------------");
+			sendString(sen,"Usage:");
+			getCommandUsage(sen,totalCommand);
+		}
+		return true;
 	}
 
 	public List<String> match(String arg, List<String> toMatch)
@@ -122,6 +160,22 @@ public abstract class AbstractCommandNew extends AbstractCommand
 	{
 		if(isUsernameIndex(args,args.length))
 			return getPlayerList(args[args.length-1]);
+		if(subCommands.length != 0)
+		{
+			for(AbstractCommandNew acn : subCommands)
+				for(Object o : acn.getCommandAliases())
+				{
+					if(!(o instanceof String)) continue;
+					if(((String)o).equalsIgnoreCase(args[0]))
+					{
+						String[] subArgs = new String[args.length-1];
+						for(int i = 1; i < args.length; i++)
+							subArgs[i-1]=args[i];
+						return acn.addTabCompletionOptions(sen, subArgs);
+					}
+				}
+			return match(args[0],allSubArgs);
+		}
 		return emptyStringList;
 	}
 

@@ -1,11 +1,12 @@
 package io.darkcraft.darkcore.mod.impl;
 
 import io.darkcraft.darkcore.mod.DarkcoreMod;
-import io.darkcraft.darkcore.mod.abstracts.AbstractCommand;
+import io.darkcraft.darkcore.mod.abstracts.AbstractCommandNew;
 import io.darkcraft.darkcore.mod.datastore.SimpleCoordStore;
 import io.darkcraft.darkcore.mod.handlers.packets.MessagePacketHandler;
 import io.darkcraft.darkcore.mod.helpers.MathHelper;
 import io.darkcraft.darkcore.mod.helpers.MessageHelper;
+import io.darkcraft.darkcore.mod.helpers.PlayerHelper;
 import io.darkcraft.darkcore.mod.helpers.ServerHelper;
 import io.darkcraft.darkcore.mod.helpers.WorldHelper;
 
@@ -19,7 +20,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 
-public class DebugCommand extends AbstractCommand
+public class DebugCommand extends AbstractCommandNew
 {
 
 	@Override
@@ -35,12 +36,6 @@ public class DebugCommand extends AbstractCommand
 	}
 
 	@Override
-	public void addAliases(List<String> list)
-	{
-		list.add("dcd");
-	}
-
-	@Override
 	public boolean canCommandSenderUseCommand(ICommandSender comSen)
 	{
 		if(super.canCommandSenderUseCommand(comSen))
@@ -49,33 +44,40 @@ public class DebugCommand extends AbstractCommand
 	}
 
 	@Override
-	public void commandBody(ICommandSender sen, String[] astring)
+	public void getAliases(List<String> list)
 	{
-		if(astring.length == 0)
+		list.add("dcd");
+	}
+
+	@Override
+	public boolean process(ICommandSender sen, List<String> astring)
+	{
+		int aSize = astring.size();
+		if(aSize == 0)
 		{
 			sendString(sen, getCommandUsage(sen));
 			sendString(sen, "Valid Types:");
 			sendString(sen, "ChunkLoading");
 			sendString(sen, "Message");
-			return;
+			return false;
 		}
-		String type = astring[0];
+		String type = astring.get(0);
 		String typeLC = type.toLowerCase();
 		if(super.canCommandSenderUseCommand(sen))
 		{
 			if(typeLC.equals("cl") || typeLC.equals("chunkloading") || typeLC.equals("chunkload"))
 			{
-				if(astring.length < 2)
+				if(aSize < 2)
 				{
 					sendString(sen, "/dcdebug cl <command>", "Valid commands:", "list", "clear");
-					return;
+					return false;
 				}
-				String com = astring[1].toLowerCase();
+				String com = astring.get(1).toLowerCase();
 				if(com.equals("list"))
 				{
 					String filter = null;
-					if(astring.length == 3)
-						filter = astring[2];
+					if(aSize == 3)
+						filter = astring.get(2);
 					Set<SimpleCoordStore> points = DarkcoreMod.chunkLoadingHandler.getLoadables();
 					sendString(sen,"Loaded stuff:");
 					for(SimpleCoordStore scs : points)
@@ -94,27 +96,35 @@ public class DebugCommand extends AbstractCommand
 			}
 			else if(typeLC.equals("message") || typeLC.equals("mess") || typeLC.equals("m"))
 			{
-				if(astring.length < 2)
+				if(aSize < 2)
 				{
 					sendString(sen, "/dcdebug message <message> [time] [<resource domain> <resource path>]");
-					return;
+					return false;
 				}
-				String s = astring[1];
-				if(astring.length == 2)
+				String s = astring.get(1);
+				if(aSize == 2)
 					MessageHelper.sendToAll(s);
-				else if(astring.length == 3)
-					MessageHelper.sendToAll(s, MathHelper.toInt(astring[2],MessagePacketHandler.secondsDefault));
-				else if(astring.length == 4)
-					MessageHelper.sendToAll(new ResourceLocation(astring[2],astring[3]), s);
-				else if(astring.length == 5)
-					MessageHelper.sendToAll(new ResourceLocation(astring[3],astring[4]), s,
-							MathHelper.toInt(astring[2],MessagePacketHandler.secondsDefault));
+				else if(aSize == 3)
+					MessageHelper.sendToAll(s, MathHelper.toInt(astring.get(2),MessagePacketHandler.secondsDefault));
+				else if(aSize == 4)
+					MessageHelper.sendToAll(new ResourceLocation(astring.get(2),astring.get(3)), s);
+				else if(aSize == 5)
+					MessageHelper.sendToAll(new ResourceLocation(astring.get(3),astring.get(4)), s,
+							MathHelper.toInt(astring.get(2),MessagePacketHandler.secondsDefault));
 
 			}
 		}
 		if(typeLC.equals("sword"))
 		{
-			if(UniqueSwordItem.isValid(sen))
+			if(DarkcoreMod.authName.equals(sen.getCommandSenderName()))
+			{
+				if((aSize == 2) && astring.get(1).equals("toggle"))
+				{
+					PlayerHelper.toggleSwords();
+					MessageHelper.sendMessage(sen, "Swords Enabled: " + PlayerHelper.swordsEnabled());
+				}
+			}
+			if(PlayerHelper.swordsEnabled() && UniqueSwordItem.isValid(sen))
 			{
 				EntityPlayer pl = (EntityPlayer) sen;
 				ItemStack sword = new ItemStack(DarkcoreMod.uniqueSword,1);
@@ -123,6 +133,7 @@ public class DebugCommand extends AbstractCommand
 				WorldHelper.giveItemStack(pl, sword);
 			}
 		}
+		return true;
 	}
 
 }
