@@ -14,6 +14,11 @@ public abstract class AbstractBlockRenderer extends TileEntitySpecialRenderer
 {
 	protected static FontRenderer							fr;
 
+	public boolean handleLighting()
+	{
+		return true;
+	}
+
 	@Override
 	public void renderTileEntityAt(TileEntity tileEntity, double d0, double d1, double d2, float f)
 	{
@@ -32,12 +37,15 @@ public abstract class AbstractBlockRenderer extends TileEntitySpecialRenderer
 
 		Tessellator tessellator = Tessellator.instance;
 
-		float brightness = w.getBlockLightValue(x, y, z);
-		int l = w.getLightBrightnessForSkyBlocks(x, y, z, 0);
-		int l1 = l % 65536;
-		int l2 = l / 65536;
-		tessellator.setColorOpaque_F(brightness, brightness, brightness);
-		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, l1, l2);
+		if(handleLighting())
+		{
+			float brightness = w.getBlockLightValue(x, y, z);
+			int l = w.getLightBrightnessForSkyBlocks(x, y, z, 0);
+			int l1 = l % 65536;
+			int l2 = l / 65536;
+			tessellator.setColorOpaque_F(brightness, brightness, brightness);
+			OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, l1, l2);
+		}
 		/* Note that true tile entity coordinates (tileEntity.xCoord, etc) do not match to render coordinates (d, etc) that are calculated as [true coordinates] - [player coordinates (camera coordinates)] */
 		renderBlock(tessellator, tileEntity, x, y, z);
 		GL11.glPopMatrix();
