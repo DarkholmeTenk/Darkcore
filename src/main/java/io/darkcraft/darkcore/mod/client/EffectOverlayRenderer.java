@@ -100,6 +100,9 @@ public class EffectOverlayRenderer  extends Gui
 
 	private void renderEffect(AbstractEffect effect, int i)
 	{
+		RenderHelper.bindTexture(effect.getIcon());
+		UVStore uv = effect.getIconLocation();
+		if(uv == null) uv = UVStore.defaultUV;
 		if((effect.duration >= 1200) && !displayOver1m) return;
 		if((effect.duration == -1) && !displayUnlimited) return;
 		GL11.glPushMatrix();
@@ -108,8 +111,6 @@ public class EffectOverlayRenderer  extends Gui
 		int yo = 32;
 		int x = i % 5;
 		int y = i / 5;
-		RenderHelper.bindTexture(effect.getIcon());
-		UVStore uv = effect.getIconLocation();
 		GL11.glColor3f(1, 1, 1);
 		face(x*xo,y*yo,is,is,uv.u,uv.v,uv.U,uv.V);
 		fr.drawString(getDuration(effect), x * xo, (y * yo)+is+5, 0);

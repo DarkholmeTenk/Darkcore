@@ -1,6 +1,9 @@
 package io.darkcraft.darkcore.mod.abstracts.effects;
 
 import io.darkcraft.darkcore.mod.datastore.UVStore;
+
+import java.lang.ref.WeakReference;
+
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
@@ -8,7 +11,7 @@ import net.minecraft.util.ResourceLocation;
 public abstract class AbstractEffect
 {
 	public final String id;
-	public final EntityLivingBase entity;
+	public final WeakReference<EntityLivingBase> entity;
 	public final boolean visible;
 	public final boolean doesTick;
 	public final int tickFreq;
@@ -26,8 +29,13 @@ public abstract class AbstractEffect
 		visible = _visible;
 		doesTick = _doesTick;
 		tickFreq = _tickFreq;
-		entity = ent;
+		entity = new WeakReference(ent);
 		duration = _duration;
+	}
+
+	public EntityLivingBase getEntity()
+	{
+		return entity.get();
 	}
 
 	public int getTT()
@@ -43,6 +51,19 @@ public abstract class AbstractEffect
 			apply();
 	}
 
+	/**
+	 * Called when the effect is added to an entity (including when that entity is created (e.g. when a player logs in or the chunk loads))
+	 */
+	public void effectAdded(){}
+
+	/**
+	 * Called when the effect is removed from an entity
+	 */
+	public void effectRemoved(){}
+
+	/**
+	 * Called every tickFreq if doesTick is true
+	 */
 	public abstract void apply();
 
 	public ResourceLocation getIcon(){return null;}
@@ -62,7 +83,16 @@ public abstract class AbstractEffect
 		readFromNBT(nbt);
 	}
 
+	/**
+	 * Save the current state of the effect to NBT (id, tt and duration are all saved automatically in the write function)
+	 * @param nbt
+	 */
 	protected abstract void writeToNBT(NBTTagCompound nbt);
 
+	/**
+	 * Load the state of the effect from the nbt
+	 * (id and dur should be used in the factory to create the effect and tt is read in the read function)
+	 * @param nbt
+	 */
 	protected abstract void readFromNBT(NBTTagCompound nbt);
 }

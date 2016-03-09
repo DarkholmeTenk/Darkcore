@@ -47,7 +47,10 @@ public class EntityEffectStore implements IExtendedEntityProperties
 			eff.update();
 			int tt = eff.getTT();
 			if((eff.duration != -1) && (eff.duration <= tt))
+			{
+				eff.effectRemoved();
 				iter.remove();
+			}
 		}
 		if(updateQueued)
 		{
@@ -79,6 +82,7 @@ public class EntityEffectStore implements IExtendedEntityProperties
 	public void addEffect(AbstractEffect effect)
 	{
 		effects.put(effect.id, effect);
+		effect.effectAdded();
 		if(shouldBeWatched())
 			EffectHandler.addWatchedStore(this);
 		sendUpdate();
@@ -86,7 +90,8 @@ public class EntityEffectStore implements IExtendedEntityProperties
 
 	public void remove(String id)
 	{
-		effects.remove(id);
+		AbstractEffect eff = effects.remove(id);
+		if(eff != null) eff.effectRemoved();
 		sendUpdate();
 	}
 
