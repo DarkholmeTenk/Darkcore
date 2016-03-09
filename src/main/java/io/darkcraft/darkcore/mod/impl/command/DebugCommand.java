@@ -1,13 +1,14 @@
-package io.darkcraft.darkcore.mod.impl;
+package io.darkcraft.darkcore.mod.impl.command;
 
 import io.darkcraft.darkcore.mod.DarkcoreMod;
-import io.darkcraft.darkcore.mod.abstracts.AbstractCommand;
+import io.darkcraft.darkcore.mod.abstracts.AbstractCommandNew;
 import io.darkcraft.darkcore.mod.datastore.SimpleCoordStore;
 import io.darkcraft.darkcore.mod.handlers.packets.MessagePacketHandler;
 import io.darkcraft.darkcore.mod.helpers.MathHelper;
 import io.darkcraft.darkcore.mod.helpers.MessageHelper;
 import io.darkcraft.darkcore.mod.helpers.ServerHelper;
 import io.darkcraft.darkcore.mod.helpers.WorldHelper;
+import io.darkcraft.darkcore.mod.impl.UniqueSwordItem;
 
 import java.util.List;
 import java.util.Set;
@@ -19,7 +20,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 
-public class DebugCommand extends AbstractCommand
+public class DebugCommand extends AbstractCommandNew
 {
 
 	@Override

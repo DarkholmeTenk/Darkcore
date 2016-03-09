@@ -43,6 +43,25 @@ public class EffectOverlayRenderer  extends Gui
 		tess.addVertexWithUV(x, y, zLevel, u, V);
 	}
 
+	private String getDuration(AbstractEffect effect)
+	{
+		int sl = (effect.duration - (effect.getTT() / 20));
+		if(sl < 3600)
+		{
+			int ml = sl / 60;
+			sl = sl % 60;
+			return String.format("%02d:%02d", ml,sl);
+		}
+		else
+		{
+			int hl = sl / 3600;
+			sl %= 3600;
+			int ml = sl / 60;
+			sl %= 60;
+			return String.format("%02d:%02d:%02d", hl,ml,sl);
+		}
+	}
+
 	private void renderEffects()
 	{
 		EntityPlayer pl = Minecraft.getMinecraft().thePlayer;
@@ -66,6 +85,7 @@ public class EffectOverlayRenderer  extends Gui
 		RenderHelper.bindTexture(effect.getIcon());
 		UVStore uv = effect.getIconLocation();
 		face(x,y,0.1,0.1,uv.u,uv.v,uv.U,uv.V);
+		fr.drawString(getDuration(effect), x, y, 0);
 		GL11.glPopMatrix();
 	}
 

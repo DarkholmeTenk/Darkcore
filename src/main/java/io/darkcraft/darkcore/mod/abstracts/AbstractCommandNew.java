@@ -87,8 +87,13 @@ public abstract class AbstractCommandNew extends AbstractCommand
 				for(String alias : aliases)
 					if(possibleSubName.equalsIgnoreCase(alias))
 					{
-						if(com.commandBody(sen, nextList))
-							return true;
+						if(com.canCommandSenderUseCommand(sen))
+						{
+							if(com.commandBody(sen, nextList))
+								return true;
+							else
+								continue comLoop;
+						}
 						else
 							continue comLoop;
 					}
