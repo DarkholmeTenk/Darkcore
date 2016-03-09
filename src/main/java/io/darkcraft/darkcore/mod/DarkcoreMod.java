@@ -51,7 +51,7 @@ import cpw.mods.fml.common.network.NetworkRegistry;
  * @author dark
  *
  */
-@Mod(modid = "darkcore", version = "0.3")
+@Mod(modid = "darkcore", version = "0.35")
 public class DarkcoreMod implements IConfigHandlerMod
 {
 	@SidedProxy(clientSide = "io.darkcraft.darkcore.mod.proxy.ClientProxy", serverSide = "io.darkcraft.darkcore.mod.proxy.CommonProxy")

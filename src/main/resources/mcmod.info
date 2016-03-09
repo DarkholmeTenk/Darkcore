@@ -4,6 +4,8 @@
   "name": "Dark Core",
   "description": "Provides core functionality to darkcraft mods",
   "url": "http://darkcraft.io",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
   "authorList": ["DarkholmeTenk"],
   "credits": "DarkholmeTenk",
   "logoFile": "",
