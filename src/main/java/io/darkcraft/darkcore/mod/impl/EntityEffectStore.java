@@ -4,6 +4,7 @@ import io.darkcraft.darkcore.mod.DarkcoreMod;
 import io.darkcraft.darkcore.mod.abstracts.effects.AbstractEffect;
 import io.darkcraft.darkcore.mod.handlers.EffectHandler;
 import io.darkcraft.darkcore.mod.handlers.packets.EffectsPacketHandler;
+import io.darkcraft.darkcore.mod.helpers.ServerHelper;
 import io.darkcraft.darkcore.mod.network.DataPacket;
 
 import java.lang.ref.WeakReference;
@@ -89,6 +90,7 @@ public class EntityEffectStore implements IExtendedEntityProperties
 
 	private void sendUpdate()
 	{
+		if(ServerHelper.isClient()) return;
 		if((getEntity() == null) || getEntity().isDead) return;
 		if(!(getEntity() instanceof EntityPlayerMP)) return;
 		EntityPlayerMP pl = (EntityPlayerMP) getEntity();
