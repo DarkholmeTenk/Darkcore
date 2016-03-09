@@ -1,6 +1,7 @@
 package io.darkcraft.darkcore.mod.proxy;
 
 import io.darkcraft.darkcore.mod.DarkcoreMod;
+import io.darkcraft.darkcore.mod.client.EffectOverlayRenderer;
 import io.darkcraft.darkcore.mod.client.MessageOverlayRenderer;
 import io.darkcraft.darkcore.mod.helpers.WorldHelper;
 import io.darkcraft.darkcore.mod.impl.UniqueSwordRenderer;
@@ -16,6 +17,8 @@ public class ClientProxy extends CommonProxy
 	{
 		MinecraftForgeClient.registerItemRenderer(DarkcoreMod.uniqueSword, new UniqueSwordRenderer());
 		MinecraftForge.EVENT_BUS.register(MessageOverlayRenderer.i);
+		MinecraftForge.EVENT_BUS.register(EffectOverlayRenderer.i);
+		EffectOverlayRenderer.refreshConfigs();
 	}
 
 	@Override
