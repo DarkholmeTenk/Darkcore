@@ -19,6 +19,7 @@ import net.minecraftforge.event.entity.EntityEvent.EntityConstructing;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.Phase;
+import cpw.mods.fml.common.gameevent.TickEvent.Type;
 
 public class EffectHandler
 {
@@ -76,6 +77,7 @@ public class EffectHandler
 	@SubscribeEvent
 	public void entTickEvent(TickEvent tick)
 	{
+		if((ServerHelper.isClient() && (tick.type != Type.CLIENT)) || (ServerHelper.isServer() && (tick.type != Type.SERVER))) return;
 		if((tick.phase != Phase.END) || (ServerHelper.isIntegratedClient())) return;
 		synchronized(watchedStores)
 		{

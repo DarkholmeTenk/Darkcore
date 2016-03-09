@@ -10,6 +10,7 @@ import io.darkcraft.darkcore.mod.handlers.ChunkLoadingHandler;
 import io.darkcraft.darkcore.mod.handlers.CommandHandler;
 import io.darkcraft.darkcore.mod.handlers.EffectHandler;
 import io.darkcraft.darkcore.mod.handlers.WeatherWatchingHandler;
+import io.darkcraft.darkcore.mod.handlers.packets.EffectsPacketHandler;
 import io.darkcraft.darkcore.mod.handlers.packets.EntityPacketHandler;
 import io.darkcraft.darkcore.mod.handlers.packets.MessagePacketHandler;
 import io.darkcraft.darkcore.mod.handlers.packets.SoundPacketHandler;
@@ -17,6 +18,7 @@ import io.darkcraft.darkcore.mod.handlers.packets.WorldDataStoreHandler;
 import io.darkcraft.darkcore.mod.helpers.PlayerHelper;
 import io.darkcraft.darkcore.mod.helpers.ServerHelper;
 import io.darkcraft.darkcore.mod.helpers.WorldHelper;
+import io.darkcraft.darkcore.mod.impl.TestEffectFactory;
 import io.darkcraft.darkcore.mod.impl.UniqueSwordItem;
 import io.darkcraft.darkcore.mod.impl.command.DebugCommand;
 import io.darkcraft.darkcore.mod.interfaces.IConfigHandlerMod;
@@ -106,6 +108,7 @@ public class DarkcoreMod implements IConfigHandlerMod
 		packetHandler.registerHandler(0, soundPacketHandler);
 		packetHandler.registerHandler(EntityPacketHandler.dataPacketDisc, new EntityPacketHandler());
 		packetHandler.registerHandler(MessagePacketHandler.messagePacketDisc, new MessagePacketHandler());
+		packetHandler.registerHandler(EffectsPacketHandler.effPacketDisc, new EffectsPacketHandler());
 		DarkcoreMod.packetHandler.registerHandler(WorldDataStoreHandler.dataPacketDisc, new WorldDataStoreHandler());
 		uniqueSword = new UniqueSwordItem().register();
 	}
@@ -121,6 +124,7 @@ public class DarkcoreMod implements IConfigHandlerMod
 		MinecraftForge.EVENT_BUS.register(wwHandler);
 		comHandler.addCommand(new DebugCommand());
 		EffectHandler eh = new EffectHandler();
+		EffectHandler.registerEffectFactory(new TestEffectFactory());
 		MinecraftForge.EVENT_BUS.register(eh);
 		FMLCommonHandler.instance().bus().register(eh);
 		proxy.init();

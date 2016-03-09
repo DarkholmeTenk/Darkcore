@@ -44,7 +44,8 @@ public class EntityEffectStore implements IExtendedEntityProperties
 			Entry<String, AbstractEffect> effEnt = iter.next();
 			AbstractEffect eff = effEnt.getValue();
 			eff.update();
-			if((eff.duration != -1) && (eff.duration <= eff.getTT()))
+			int tt = eff.getTT();
+			if((eff.duration != -1) && (eff.duration <= tt))
 				iter.remove();
 		}
 	}

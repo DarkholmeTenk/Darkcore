@@ -29,7 +29,7 @@ public class EffectOverlayRenderer  extends Gui
 	@SubscribeEvent
 	public void handlerEvent(RenderGameOverlayEvent event)
 	{
-		if(event.isCanceled() || (event.type != ElementType.CHAT)) return;
+		if(event.isCanceled() || (event.type != ElementType.HOTBAR)) return;
 		if(fr == null) fr = Minecraft.getMinecraft().fontRenderer;
 		render(event.resolution);
 	}
@@ -37,15 +37,17 @@ public class EffectOverlayRenderer  extends Gui
 	private void face(double x, double y, double w, double h, double u, double v, double U, double V)
 	{
 		Tessellator tess = Tessellator.instance;
-		tess.addVertexWithUV(x, y+h, zLevel, u, v);
-		tess.addVertexWithUV(x+w, y+h, zLevel, U, v);
-		tess.addVertexWithUV(x+w, y, zLevel, U, V);
-		tess.addVertexWithUV(x, y, zLevel, u, V);
+		tess.startDrawingQuads();
+		tess.addVertexWithUV(x, y+h, zLevel, u, V);
+		tess.addVertexWithUV(x+w, y+h, zLevel, U, V);
+		tess.addVertexWithUV(x+w, y, zLevel, U, v);
+		tess.addVertexWithUV(x, y, zLevel, u, v);
+		tess.draw();
 	}
 
 	private String getDuration(AbstractEffect effect)
 	{
-		int sl = (effect.duration - (effect.getTT() / 20));
+		int sl = (effect.duration - effect.getTT())/20;
 		if(sl < 3600)
 		{
 			int ml = sl / 60;
@@ -80,17 +82,24 @@ public class EffectOverlayRenderer  extends Gui
 	private void renderEffect(AbstractEffect effect, int i)
 	{
 		GL11.glPushMatrix();
+		int is = 20;
+		int xo = 45;
+		int yo = 60;
 		int x = i % 6;
 		int y = i / 6;
 		RenderHelper.bindTexture(effect.getIcon());
 		UVStore uv = effect.getIconLocation();
-		face(x,y,0.1,0.1,uv.u,uv.v,uv.U,uv.V);
-		fr.drawString(getDuration(effect), x, y, 0);
+		GL11.glColor3f(1, 1, 1);
+		face(x*xo,y*yo,is,is,uv.u,uv.v,uv.U,uv.V);
+		fr.drawString(getDuration(effect), x * xo, (y * yo)+is+5, 0);
 		GL11.glPopMatrix();
 	}
 
 	private void render(ScaledResolution res)
 	{
+		GL11.glPushMatrix();
+		GL11.glTranslated(res.getScaledWidth_double()/3, 5, 0);
 		renderEffects();
+		GL11.glPopMatrix();
 	}
 }
