@@ -18,6 +18,7 @@ public class ClientProxy extends CommonProxy
 		MinecraftForgeClient.registerItemRenderer(DarkcoreMod.uniqueSword, new UniqueSwordRenderer());
 		MinecraftForge.EVENT_BUS.register(MessageOverlayRenderer.i);
 		MinecraftForge.EVENT_BUS.register(EffectOverlayRenderer.i);
+		EffectOverlayRenderer.refreshConfigs();
 	}
 
 	@Override

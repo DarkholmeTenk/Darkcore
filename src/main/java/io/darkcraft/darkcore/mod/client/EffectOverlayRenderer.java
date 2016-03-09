@@ -1,6 +1,8 @@
 package io.darkcraft.darkcore.mod.client;
 
+import io.darkcraft.darkcore.mod.DarkcoreMod;
 import io.darkcraft.darkcore.mod.abstracts.effects.AbstractEffect;
+import io.darkcraft.darkcore.mod.config.ConfigFile;
 import io.darkcraft.darkcore.mod.datastore.UVStore;
 import io.darkcraft.darkcore.mod.handlers.EffectHandler;
 import io.darkcraft.darkcore.mod.helpers.RenderHelper;
@@ -23,6 +25,22 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class EffectOverlayRenderer  extends Gui
 {
+	private static ConfigFile config;
+	private static boolean displayUnlimited = true;
+	private static boolean displayOver1m = true;
+	private static double xo = 0.35;
+	private static double yo = 0.005;
+	private static double scale = 1;
+
+	public static void refreshConfigs()
+	{
+		if(config == null) config = DarkcoreMod.configHandler.registerConfigNeeder("EffectOverlay");
+		displayUnlimited = config.getBoolean("Display Unlimited", true, "If true, effects with no duration will be visible in the overlay");
+		displayOver1m = config.getBoolean("Display Over 1 m", true, "If true, effects with durations longer than 1m will be visible in the overlay");
+		xo = config.getDouble("X Offset", 0.35, "The x offset relative to screen resolution that the overlay will render at");
+		yo = config.getDouble("Y Offset", 0.005, "The y offset relative to screen resolution that the overlay will render at");
+		scale = config.getDouble("Scale", 1, "The scale of the effect renderer");
+	}
 	public static EffectOverlayRenderer i = new EffectOverlayRenderer();
 	private FontRenderer fr;
 
@@ -47,6 +65,7 @@ public class EffectOverlayRenderer  extends Gui
 
 	private String getDuration(AbstractEffect effect)
 	{
+		if(effect.duration == -1) return "";
 		int sl = (effect.duration - effect.getTT())/20;
 		if(sl < 3600)
 		{
@@ -81,12 +100,14 @@ public class EffectOverlayRenderer  extends Gui
 
 	private void renderEffect(AbstractEffect effect, int i)
 	{
+		if((effect.duration >= 1200) && !displayOver1m) return;
+		if((effect.duration == -1) && !displayUnlimited) return;
 		GL11.glPushMatrix();
-		int is = 20;
+		int is = 16;
 		int xo = 45;
-		int yo = 60;
-		int x = i % 6;
-		int y = i / 6;
+		int yo = 32;
+		int x = i % 5;
+		int y = i / 5;
 		RenderHelper.bindTexture(effect.getIcon());
 		UVStore uv = effect.getIconLocation();
 		GL11.glColor3f(1, 1, 1);
@@ -98,7 +119,8 @@ public class EffectOverlayRenderer  extends Gui
 	private void render(ScaledResolution res)
 	{
 		GL11.glPushMatrix();
-		GL11.glTranslated(res.getScaledWidth_double()/3, 5, 0);
+		GL11.glTranslated(res.getScaledWidth_double()*xo, res.getScaledHeight_double()*yo, 0);
+		GL11.glScaled(scale, scale, 1);
 		renderEffects();
 		GL11.glPopMatrix();
 	}

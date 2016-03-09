@@ -24,6 +24,7 @@ public class EntityEffectStore implements IExtendedEntityProperties
 {
 	private HashMap<String,AbstractEffect> effects = new HashMap<String,AbstractEffect>();
 	private final WeakReference<EntityLivingBase> entity;
+	private boolean updateQueued = true;
 
 	public EntityEffectStore(EntityLivingBase ent)
 	{
@@ -47,6 +48,11 @@ public class EntityEffectStore implements IExtendedEntityProperties
 			int tt = eff.getTT();
 			if((eff.duration != -1) && (eff.duration <= tt))
 				iter.remove();
+		}
+		if(updateQueued)
+		{
+			sendUpdate();
+			updateQueued = false;
 		}
 	}
 
@@ -100,6 +106,11 @@ public class EntityEffectStore implements IExtendedEntityProperties
 		nbt.setString("dcEff", "plOnly");
 		DataPacket dp = new DataPacket(nbt,EffectsPacketHandler.effPacketDisc);
 		DarkcoreMod.networkChannel.sendTo(dp, pl);
+	}
+
+	public void queueUpdate()
+	{
+		updateQueued = true;
 	}
 
 	@Override
