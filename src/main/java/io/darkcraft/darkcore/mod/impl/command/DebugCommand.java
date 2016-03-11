@@ -11,7 +11,7 @@ public class DebugCommand extends AbstractCommandNew
 {
 	public DebugCommand()
 	{
-		super(new DCDChunkLoadingCommand(), new DCDSwordCommand(), new DCDMessageCommand(), new DCDEffectCommand());
+		super(new DCDChunkLoadingCommand(), new DCDSwordCommand(), new DCDMessageCommand(), new DCDEffectCommand(), new DCDWorldCommand());
 	}
 
 	@Override

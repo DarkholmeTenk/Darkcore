@@ -144,6 +144,7 @@ public class DarkcoreMod implements IConfigHandlerMod
 	{
 		comHandler.registerCommands(event);
 		new DarkcoreTeleporter(event.getServer().worldServerForDimension(0));
+		WorldHelper.WorldNameStore.refreshWorldNameStore();
 	}
 
 	private void resetChunkLoadingHandler()

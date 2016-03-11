@@ -1,9 +1,11 @@
 package io.darkcraft.darkcore.mod.helpers;
 
 import io.darkcraft.darkcore.mod.DarkcoreMod;
+import io.darkcraft.darkcore.mod.abstracts.AbstractWorldDataStore;
 import io.darkcraft.darkcore.mod.datastore.SimpleDoubleCoordStore;
 
 import java.util.HashMap;
+import java.util.Map.Entry;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFire;
@@ -13,6 +15,7 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -138,6 +141,16 @@ public class WorldHelper
 			return name;
 		}
 		return "Unknown";
+	}
+
+	public static void setDimensionName(World w, String newName)
+	{
+		int id = getWorldID(w);
+		WorldNameStore.i.update(w,newName);
+		if((newName == null) || newName.isEmpty() || newName.equals("null"))
+			worldNameMap.remove(id);
+		else
+			worldNameMap.put(id, newName);
 	}
 
 	public static boolean sameItem(ItemStack a, ItemStack b)
@@ -268,5 +281,61 @@ public class WorldHelper
 			return false;
 		w.setBlockToAir(te.xCoord, te.yCoord, te.zCoord);
 		return true;
+	}
+
+	public static class WorldNameStore extends AbstractWorldDataStore
+	{
+		private static WorldNameStore i;
+
+		public static void refreshWorldNameStore()
+		{
+			i = new WorldNameStore();
+			i.load();
+			i.save();
+		}
+
+		private HashMap<Integer,String> nameMap = new HashMap();
+
+		public WorldNameStore(){super("dcDimNameStore",0);}
+
+		public WorldNameStore(String s){super(s);}
+
+		public void update(World w, String newName)
+		{
+			int id = getWorldID(w);
+			if((newName == null) || newName.isEmpty() || newName.equals("null"))
+				nameMap.remove(id);
+			else
+			nameMap.put(id, newName);
+			markDirty();
+		}
+
+		private void copyToWorldNameMap()
+		{
+			for(Entry<Integer,String> ent : nameMap.entrySet())
+				worldNameMap.put(ent.getKey(), ent.getValue());
+		}
+
+		@Override
+		public void readFromNBT(NBTTagCompound nbt)
+		{
+			nameMap.clear();
+			for(int i = 0; nbt.hasKey("wi"+i); i++)
+				nameMap.put(nbt.getInteger("wi"+i), nbt.getString("wn"+i));
+			copyToWorldNameMap();
+		}
+
+		@Override
+		public void writeToNBT(NBTTagCompound nbt)
+		{
+			int i = 0;
+			for(Entry<Integer, String> ent : nameMap.entrySet())
+			{
+				nbt.setInteger("wi"+i, ent.getKey());
+				nbt.setString("wn"+i, ent.getValue());
+				i++;
+			}
+		}
+
 	}
 }
