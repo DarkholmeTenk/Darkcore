@@ -71,13 +71,7 @@ public abstract class AbstractBlock extends Block
 		colorSpreadDiagonal = config.getBoolean("Color spread diagonal", false, "Can colors spread diagonally");
 	}
 
-	/**
-	 * Instantiates the block with a given material and source mod.
-	 * Also adds the block to the mod's creative tab if one has been set and makes the block unbreakable by default.
-	 * @param blockMaterial the material to be made out of
-	 * @param sourcemod the modid of the mod the block belongs to
-	 */
-	public AbstractBlock(Material blockMaterial, String sourcemod)
+	public AbstractBlock(boolean render, Material blockMaterial, String sourcemod)
 	{
 		super(blockMaterial);
 		sm = sourcemod;
@@ -86,7 +80,7 @@ public abstract class AbstractBlock extends Block
 		setResistance(6000000.0F);
 		setHardness(-1.0f);
 		initData();
-		renderIcon = true;
+		renderIcon = render;
 		if (this instanceof IColorableBlock)
 			setSubNames(ItemDye.field_150923_a);
 		else if (subNames == null) setIconArray(1);
@@ -96,14 +90,24 @@ public abstract class AbstractBlock extends Block
 	}
 
 	/**
+	 * Instantiates the block with a given material and source mod.
+	 * Also adds the block to the mod's creative tab if one has been set and makes the block unbreakable by default.
+	 * @param blockMaterial the material to be made out of
+	 * @param sourcemod the modid of the mod the block belongs to
+	 */
+	public AbstractBlock(Material blockMaterial, String sourcemod)
+	{
+		this(true, blockMaterial, sourcemod);
+	}
+
+	/**
 	 * see {@link #AbstractBlock(Material, String)}
 	 * @param render true if the block should render, false if not
 	 * @param sm the modid of the mod the block belongs to
 	 */
 	public AbstractBlock(boolean render, String sm)
 	{
-		this(sm);
-		renderIcon = render;
+		this(render, Material.iron, sm);
 	}
 
 	/**
@@ -112,7 +116,7 @@ public abstract class AbstractBlock extends Block
 	 */
 	public AbstractBlock(String sm)
 	{
-		this(Material.iron, sm);
+		this(true, Material.iron, sm);
 	}
 
 	/**
