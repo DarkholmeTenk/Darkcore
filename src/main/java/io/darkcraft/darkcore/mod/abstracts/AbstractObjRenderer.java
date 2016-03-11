@@ -15,6 +15,7 @@ public abstract class AbstractObjRenderer extends AbstractBlockRenderer
 		if(fr == null)
 			fr = func_147498_b();
 		GL11.glPushMatrix();
+		GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		// This will move our renderer so that it will be on proper place in the world
@@ -27,12 +28,15 @@ public abstract class AbstractObjRenderer extends AbstractBlockRenderer
 
 		Tessellator tessellator = Tessellator.instance;
 
-		float brightness = w.getBlockLightValue(x, y, z);
-		int l = w.getLightBrightnessForSkyBlocks(x, y, z, 0);
-		int l1 = l % 65536;
-		int l2 = l / 65536;
-		tessellator.setColorOpaque_F(brightness, brightness, brightness);
-		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, l1, l2);
+		if(handleLighting())
+		{
+			float brightness = w.getBlockLightValue(x, y, z);
+			int l = w.getLightBrightnessForSkyBlocks(x, y, z, 0);
+			int l1 = l % 65536;
+			int l2 = l / 65536;
+			tessellator.setColorOpaque_F(brightness, brightness, brightness);
+			OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, l1, l2);
+		}
 		/* Note that true tile entity coordinates (tileEntity.xCoord, etc) do not match to render coordinates (d, etc) that are calculated as [true coordinates] - [player coordinates (camera coordinates)] */
 		GL11.glPushMatrix();
 		GL11.glTranslated(0.5, 0.5, 0.5);
@@ -40,6 +44,7 @@ public abstract class AbstractObjRenderer extends AbstractBlockRenderer
 		renderBlock(tessellator, tileEntity, x, y, z);
 		GL11.glPopMatrix();
 		renderNormal(tessellator, tileEntity, x, y, z);
+		GL11.glPopAttrib();
 		GL11.glPopMatrix();
 	}
 

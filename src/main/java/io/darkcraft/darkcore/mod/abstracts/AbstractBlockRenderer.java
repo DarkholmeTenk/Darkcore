@@ -25,6 +25,7 @@ public abstract class AbstractBlockRenderer extends TileEntitySpecialRenderer
 		if(fr == null)
 			fr = func_147498_b();
 		GL11.glPushMatrix();
+		GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		// This will move our renderer so that it will be on proper place in the world
@@ -48,6 +49,7 @@ public abstract class AbstractBlockRenderer extends TileEntitySpecialRenderer
 		}
 		/* Note that true tile entity coordinates (tileEntity.xCoord, etc) do not match to render coordinates (d, etc) that are calculated as [true coordinates] - [player coordinates (camera coordinates)] */
 		renderBlock(tessellator, tileEntity, x, y, z);
+		GL11.glPopAttrib();
 		GL11.glPopMatrix();
 	}
 
