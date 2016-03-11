@@ -90,6 +90,9 @@ public abstract class AbstractBlock extends Block
 		if (this instanceof IColorableBlock)
 			setSubNames(ItemDye.field_150923_a);
 		else if (subNames == null) setIconArray(1);
+		opaque = isOpaqueCube();
+        lightOpacity = isOpaqueCube() ? 255 : 0;
+        canBlockGrass = !blockMaterial.getCanBlockGrass();
 	}
 
 	/**
