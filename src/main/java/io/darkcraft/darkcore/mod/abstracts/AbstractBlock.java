@@ -465,7 +465,7 @@ public abstract class AbstractBlock extends Block
 		if((b instanceof SimulacrumBlock) && (((SimulacrumBlock)b).sim != this)) return false;
 		if (pl == null) return false;
 		if (this instanceof IActivatablePrecise)
-			if(((IActivatablePrecise)this).activate(pl, s, x+i, y+j, z+k)) return true;
+			if(((IActivatablePrecise)this).activate(pl, s, x+Math.max(i,0.9999f), y+Math.max(j,0.9999f), z+Math.max(k,0.9999f))) return true;
 		if (this instanceof IColorableBlock)
 		{
 			IBlockIteratorCondition ibic = ((IColorableBlock)this).getColoringIterator(new SimpleCoordStore(w,x,y,z));

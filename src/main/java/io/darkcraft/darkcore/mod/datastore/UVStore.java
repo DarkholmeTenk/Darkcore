@@ -51,4 +51,9 @@ public class UVStore
 			return readFromNBT(nbt.getCompoundTag(name));
 		return defaultUV;
 	}
+
+	public UVStore div(double i)
+	{
+		return new UVStore(u/i,U/i,v/i,V/i);
+	}
 }
