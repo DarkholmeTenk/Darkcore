@@ -5,6 +5,7 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.World;
@@ -155,6 +156,11 @@ public class SimpleCoordStore
 	public ChunkCoordIntPair toChunkCoords()
 	{
 		return new ChunkCoordIntPair(x >> 4, z >> 4);
+	}
+
+	public ChunkCoordinates toChunkCoordinates()
+	{
+		return new ChunkCoordinates(x,y,z);
 	}
 
 	public TileEntity getTileEntity()
