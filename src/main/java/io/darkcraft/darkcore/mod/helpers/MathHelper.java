@@ -108,4 +108,22 @@ public class MathHelper
 			return -current;
 		return (-current)+1;
 	}
+
+	public static String getTimeString(int seconds)
+	{
+		if(seconds < 3600)
+		{
+			int ml = seconds / 60;
+			seconds = seconds % 60;
+			return String.format("%02d:%02d", ml,seconds);
+		}
+		else
+		{
+			int hl = seconds / 3600;
+			seconds %= 3600;
+			int ml = seconds / 60;
+			seconds %= 60;
+			return String.format("%02d:%02d:%02d", hl,ml,seconds);
+		}
+	}
 }
