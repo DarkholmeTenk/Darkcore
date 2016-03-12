@@ -21,8 +21,8 @@ import cpw.mods.fml.relauncher.Side;
 
 public class ServerHelper
 {
-	
-	
+
+
 	public static boolean isServer()
 	{
 		return !FMLCommonHandler.instance().getEffectiveSide().equals(Side.CLIENT);
@@ -97,6 +97,7 @@ public class ServerHelper
 
 	public static EntityPlayerMP getPlayer(String username)
 	{
+		if((username == null) || username.isEmpty()) return null;
 		List playerEnts = getConfigManager().playerEntityList;
 		for (Object o : playerEnts)
 		{
@@ -115,7 +116,7 @@ public class ServerHelper
 
 	/**
 	 * Sends a message in the chat
-	 * 
+	 *
 	 * @param pl
 	 * @param source
 	 * @param String s
@@ -127,7 +128,7 @@ public class ServerHelper
 
 	/**
 	 * Sends a message in the chat
-	 * 
+	 *
 	 * @param pl
 	 * @param message
 	 */
@@ -139,7 +140,7 @@ public class ServerHelper
 
 	/**
 	 * Sends a message in the chat
-	 *  
+	 *
 	 * @param pl
 	 * @param string
 	 */
@@ -150,7 +151,7 @@ public class ServerHelper
 
 	/**
 	 * Sends a coloured message in the chat
-	 * 
+	 *
 	 * @param pl
 	 * @param source
 	 * @param string
@@ -163,7 +164,7 @@ public class ServerHelper
 
 	/**
 	 * Sends a coloured message in the chat
-	 * 
+	 *
 	 * @param pl
 	 * @param string
 	 * @param color
@@ -172,10 +173,10 @@ public class ServerHelper
 	{
 		sendString(pl, string, color, false, false, false, false);
 	}
-	
+
 	/**
 	 * Sends an italic message in the chat
-	 * 
+	 *
 	 * @param pl
 	 * @param string
 	 * @param color
@@ -185,10 +186,10 @@ public class ServerHelper
 		sendString(pl, string, color, true, false, false, false);
 
 	}
-	
+
 	/**
 	 * Sends a bold message in the chat
-	 * 
+	 *
 	 * @param pl
 	 * @param string
 	 * @param color
@@ -198,10 +199,10 @@ public class ServerHelper
 		sendString(pl, string, color, false, true, false, false);
 
 	}
-	
+
 	/**
 	 * Sends a struck through message in the chat
-	 * 
+	 *
 	 * @param pl
 	 * @param string
 	 * @param color
@@ -211,10 +212,10 @@ public class ServerHelper
 		sendString(pl, string, color, false, false, true, false);
 
 	}
-	
+
 	/**
 	 * Sends an underlined through message in the chat
-	 * 
+	 *
 	 * @param pl
 	 * @param string
 	 * @param color
@@ -224,10 +225,10 @@ public class ServerHelper
 		sendString(pl, string, color, false, false, false, true);
 
 	}
-	
+
 	/**
 	 * Sends a styled message in the chat
-	 * 
+	 *
 	 * @param pl
 	 * @param string
 	 * @param color
@@ -243,5 +244,5 @@ public class ServerHelper
 		c.appendText(string);
 		pl.addChatMessage(c);
 	}
-	
+
 }
