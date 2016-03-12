@@ -8,7 +8,7 @@ import io.darkcraft.darkcore.mod.interfaces.IActivatable;
 import io.darkcraft.darkcore.mod.interfaces.IActivatablePrecise;
 import io.darkcraft.darkcore.mod.interfaces.IBlockUpdateDetector;
 import io.darkcraft.darkcore.mod.interfaces.IExplodable;
-import io.darkcraft.darkcore.mod.interfaces.IMultiBlockPart;
+import io.darkcraft.darkcore.mod.multiblock.IMultiBlockPart;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.entity.player.EntityPlayer;

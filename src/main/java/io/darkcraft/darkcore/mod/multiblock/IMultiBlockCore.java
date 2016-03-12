@@ -1,4 +1,4 @@
-package io.darkcraft.darkcore.mod.interfaces;
+package io.darkcraft.darkcore.mod.multiblock;
 
 import io.darkcraft.darkcore.mod.datastore.SimpleCoordStore;
 

@@ -9,7 +9,7 @@ import io.darkcraft.darkcore.mod.datastore.SimpleDoubleCoordStore;
 import io.darkcraft.darkcore.mod.helpers.ServerHelper;
 import io.darkcraft.darkcore.mod.helpers.WorldHelper;
 import io.darkcraft.darkcore.mod.interfaces.IChunkLoader;
-import io.darkcraft.darkcore.mod.interfaces.IMultiBlockCore;
+import io.darkcraft.darkcore.mod.multiblock.IMultiBlockCore;
 
 import java.util.Random;
 
