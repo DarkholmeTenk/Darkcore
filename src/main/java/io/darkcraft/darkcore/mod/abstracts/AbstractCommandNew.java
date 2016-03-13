@@ -74,6 +74,11 @@ public abstract class AbstractCommandNew extends AbstractCommand
 			s = strs[i];
 			if(s.startsWith("\""))
 			{
+				if(s.endsWith("\""))
+				{
+					strList.add(s.substring(1, s.length()-1));
+					continue;
+				}
 				String n = s.substring(1);
 				boolean f = false;
 				for(int j = i+1;j<strs.length; j++)
