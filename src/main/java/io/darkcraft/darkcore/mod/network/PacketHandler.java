@@ -48,7 +48,10 @@ public class PacketHandler
 	public boolean registerHandler(int discriminator, IDataPacketHandler handler)
 	{
 		if (handlers.containsKey(discriminator))
-			throw new RuntimeException("Unable to register packet handler with discriminator " + discriminator + ":" + handler.toString());
+		{
+			IDataPacketHandler old = handlers.get(discriminator);
+			throw new RuntimeException("Unable to register packet handler with discriminator " + discriminator + ":" + handler + ":" + old);
+		}
 		handlers.put(discriminator, handler);
 		return true;
 	}

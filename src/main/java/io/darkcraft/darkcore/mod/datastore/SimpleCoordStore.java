@@ -5,6 +5,7 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.ChunkCoordIntPair;
@@ -230,5 +231,10 @@ public class SimpleCoordStore
 	public void setToAir()
 	{
 		getWorldObj().setBlockToAir(x, y, z);
+	}
+
+	public AxisAlignedBB getAABB(int h)
+	{
+		return AxisAlignedBB.getBoundingBox(x, y, z, x+1, y+h, z+1);
 	}
 }

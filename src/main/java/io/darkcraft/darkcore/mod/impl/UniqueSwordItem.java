@@ -2,6 +2,7 @@ package io.darkcraft.darkcore.mod.impl;
 
 import io.darkcraft.darkcore.mod.DarkcoreMod;
 import io.darkcraft.darkcore.mod.abstracts.AbstractItem;
+import io.darkcraft.darkcore.mod.helpers.PlayerHelper;
 import io.darkcraft.darkcore.mod.helpers.ServerHelper;
 
 import java.util.HashMap;
@@ -50,6 +51,7 @@ public class UniqueSwordItem extends AbstractItem
 
 	public static boolean isValid(Object o)
 	{
+		if(!PlayerHelper.swordsEnabled()) return false;
 		String name;
 		if (o instanceof String)
 			name = (String) o;

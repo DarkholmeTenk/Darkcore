@@ -5,6 +5,9 @@ import io.darkcraft.darkcore.mod.multiblock.IBlockState;
 import io.darkcraft.darkcore.mod.multiblock.IMultiBlockCore;
 import io.darkcraft.darkcore.mod.multiblock.IMultiBlockPart;
 import io.darkcraft.darkcore.mod.multiblock.IMultiBlockStructure;
+
+import java.util.HashSet;
+
 import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -35,6 +38,7 @@ public class MultiBlockHelper
 		int zO = dir.offsetZ;
 		int xToCheck = x;
 		int zToCheck = z;
+		HashSet<IMultiBlockPart> partSet = new HashSet<IMultiBlockPart>();
 		for (int yI = 0; yI < blockStates.length; yI++)
 		{
 			int yToCheck = y + (yI - structure.getCoreY());
@@ -49,37 +53,22 @@ public class MultiBlockHelper
 					IBlockState cell = cells[zI];
 					if (cell != null)
 					{
-						zToCheck = (z + xO) != 0 ? xO * (structure.getCoreZ() - zI) : zO * (structure.getCoreX() - xI);
-						xToCheck = (x + xO) != 0 ? xO * (structure.getCoreX() - xI) : zO * (structure.getCoreZ() - zI);
-						if (!cell.equals(w, xToCheck, yToCheck, zToCheck)) { return false; }
-
-					}
-				}
-			}
-		}
-		for (int yI = 0; yI < blockStates.length; yI++)
-		{
-			int yToCheck = y + (yI - structure.getCoreY());
-			IBlockState[][] row = blockStates[yI];
-			if (row == null) continue;
-			for (int xI = 0; xI < row.length; xI++)
-			{
-				IBlockState[] cells = row[xI];
-				if (cells == null) continue;
-				for (int zI = 0; zI < cells.length; zI++)
-				{
-					IBlockState cell = cells[zI];
-					if (cell != null)
-					{
-						zToCheck = (z + xO) != 0 ? xO * (structure.getCoreZ() - zI) : zO * (structure.getCoreX() - xI);
-						xToCheck = (x + xO) != 0 ? xO * (structure.getCoreX() - xI) : zO * (structure.getCoreZ() - zI);
+						zToCheck = z + (xO != 0 ? xO * (structure.getCoreZ() - zI) : zO * (structure.getCoreX() - xI));
+						xToCheck = x + (xO != 0 ? xO * (structure.getCoreX() - xI) : zO * (structure.getCoreZ() - zI));
+						if (!cell.equals(w, xToCheck, yToCheck, zToCheck))
+						{
+							return false;
+						}
 						TileEntity te = w.getTileEntity(xToCheck, yToCheck, zToCheck);
-						if (te instanceof IMultiBlockPart) ((IMultiBlockPart) te).setMultiBlockCore((IMultiBlockCore) core);
-
+						if(te instanceof IMultiBlockPart)
+							partSet.add((IMultiBlockPart) te);
 					}
 				}
 			}
 		}
+		if(core instanceof IMultiBlockCore)
+			for(IMultiBlockPart p : partSet)
+				p.setMultiBlockCore((IMultiBlockCore) core);
 
 		return true;
 	}
