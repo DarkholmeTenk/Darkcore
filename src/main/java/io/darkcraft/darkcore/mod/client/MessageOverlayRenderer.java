@@ -105,7 +105,7 @@ public class MessageOverlayRenderer extends Gui
 	{
 		List<String> lines;
 		int h = 1;
-		float scale = 0.7f;
+		float scale = 0.6875f;
 		int actualWidth =  MathHelper.floor((w - mh) / scale);
 		if(m.rl != null)
 		{
