@@ -50,6 +50,7 @@ public class EffectOverlayRenderer  extends Gui
 		if(event.isCanceled() || (event.type != ElementType.HOTBAR)) return;
 		if(fr == null) fr = Minecraft.getMinecraft().fontRenderer;
 		render(event.resolution);
+		GL11.glColor3f(1, 1, 1);
 	}
 
 	private void face(double x, double y, double w, double h, double u, double v, double U, double V)

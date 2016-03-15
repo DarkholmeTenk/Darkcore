@@ -121,7 +121,8 @@ public class MessageOverlayRenderer extends Gui
 			Tessellator tess = Tessellator.instance;
 			tess.startDrawingQuads();
 			RenderHelper.bindTexture(m.rl);
-			face(Tessellator.instance,th,th,mh*2,mh*2,m.uv.u,m.uv.v,m.uv.U,m.uv.V);
+			RenderHelper.uiFace(th, th, mh*2, mh*2, 1, m.uv, false);
+			//face(Tessellator.instance,th,th,mh*2,mh*2,m.uv.u,m.uv.v,m.uv.U,m.uv.V);
 			tess.draw();
 		}
 		{

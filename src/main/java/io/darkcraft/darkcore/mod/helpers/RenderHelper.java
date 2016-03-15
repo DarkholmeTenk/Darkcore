@@ -24,4 +24,17 @@ public class RenderHelper
 		if(draw)
 			tess.draw();
 	}
+
+	public static void uiFace(float x, float y, float w, float h, float zLevel, UVStore uv, boolean draw)
+	{
+		Tessellator tess = Tessellator.instance;
+		if(draw)
+			tess.startDrawingQuads();
+		tess.addVertexWithUV(x, y, zLevel, uv.u, uv.v);
+		tess.addVertexWithUV(x, y+h, zLevel, uv.u, uv.V);
+		tess.addVertexWithUV(x+w, y+h, zLevel, uv.U, uv.V);
+		tess.addVertexWithUV(x+w, y, zLevel, uv.U, uv.v);
+		if(draw)
+			tess.draw();
+	}
 }
