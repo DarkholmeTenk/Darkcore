@@ -26,6 +26,8 @@ public class ClientProxy extends CommonProxy
 	{
 		World w = Minecraft.getMinecraft().theWorld;
 		if ((w != null) && (WorldHelper.getWorldID(w) == id)) return w;
+		if(DarkcoreMod.debugText)
+			Thread.dumpStack();
 		return null;
 	}
 }
