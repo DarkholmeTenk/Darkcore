@@ -56,6 +56,16 @@ public class SimpleDoubleCoordStore
 		this(WorldHelper.getWorldID(ent), ent.posX, ent.posY, ent.posZ);
 	}
 
+	public double diagonalParadoxDistance(double sx, double sy, double sz)
+	{
+		return Math.abs(x-sx) + Math.abs(y-sy) + Math.abs(z-sz);
+	}
+
+	public double diagonalParadoxDistance(SimpleDoubleCoordStore scds)
+	{
+		return diagonalParadoxDistance(scds.x, scds.y, scds.z);
+	}
+
 	/**
 	 * Returns the distance between this and other simple double coord store
 	 *

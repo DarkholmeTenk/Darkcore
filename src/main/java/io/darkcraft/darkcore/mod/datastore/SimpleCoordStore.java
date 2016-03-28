@@ -208,9 +208,19 @@ public class SimpleCoordStore
 		return Math.sqrt(xr + yr + zr);
 	}
 
-	public long diagonalParadoxDistance(SimpleCoordStore destLocation)
+	public long diagonalParadoxDistance(long sx, long sy, long sz)
 	{
-		return Math.abs((long)x - destLocation.x) + Math.abs((long)y - destLocation.y) + Math.abs((long)z - destLocation.z);
+		return Math.abs(x - sx) + Math.abs(y - sy) + Math.abs(z - sz);
+	}
+
+	public long diagonalParadoxDistance(SimpleCoordStore dest)
+	{
+		return diagonalParadoxDistance(dest.x, dest.y, dest.z);
+	}
+
+	public long diagonalParadoxDistance(SimpleDoubleCoordStore dest)
+	{
+		return diagonalParadoxDistance(dest.iX, dest.iY, dest.iZ);
 	}
 
 	public void setMetadata(int meta, int notify)
