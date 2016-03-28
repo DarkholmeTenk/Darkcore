@@ -62,6 +62,7 @@ public class EntityEffectStore implements IExtendedEntityProperties
 	public boolean shouldBeWatched()
 	{
 		if((getEntity() == null) || getEntity().isDead) return false;
+		if(updateQueued) return true;
 		if(effects.size() == 0) return false;
 		for(AbstractEffect eff : effects.values())
 			if((eff.duration != -1) || eff.doesTick)
@@ -85,14 +86,14 @@ public class EntityEffectStore implements IExtendedEntityProperties
 		effect.effectAdded();
 		if(shouldBeWatched())
 			EffectHandler.addWatchedStore(this);
-		sendUpdate();
+		queueUpdate();
 	}
 
 	public void remove(String id)
 	{
 		AbstractEffect eff = effects.remove(id);
 		if(eff != null) eff.effectRemoved();
-		sendUpdate();
+		queueUpdate();
 	}
 
 	public Collection<AbstractEffect> getEffects()
@@ -103,7 +104,8 @@ public class EntityEffectStore implements IExtendedEntityProperties
 	private void sendUpdate()
 	{
 		if(ServerHelper.isClient()) return;
-		if((getEntity() == null) || getEntity().isDead) return;
+		Entity ent = getEntity();
+		if((ent == null) || ent.isDead) return;
 		if(!(getEntity() instanceof EntityPlayerMP)) return;
 		EntityPlayerMP pl = (EntityPlayerMP) getEntity();
 		NBTTagCompound nbt = new NBTTagCompound();
