@@ -34,7 +34,7 @@ public class BlockIterator implements Iterator<SimpleCoordStore>
 	}
 
 	@Override
-	public boolean hasNext()
+	public synchronized boolean hasNext()
 	{
 		return !queue.isEmpty();
 	}
@@ -66,7 +66,7 @@ public class BlockIterator implements Iterator<SimpleCoordStore>
 	}
 
 	@Override
-	public SimpleCoordStore next()
+	public synchronized SimpleCoordStore next()
 	{
 		if (queue.isEmpty()) return null;
 		SimpleCoordStore top = queue.remove();
