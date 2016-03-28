@@ -167,6 +167,13 @@ public class WorldHelper
 	 */
 	public static void giveItemStack(EntityPlayer pl, ItemStack is)
 	{
+		if((is == null) || (pl == null)) return;
+		if(ServerHelper.isClient())
+		{
+			Exception e = new RuntimeException("Mod is trying to give item stack client side!");
+			e.printStackTrace();
+			return;
+		}
 		EntityItem ie = new EntityItem(pl.worldObj, pl.posX, pl.posY, pl.posZ, is);
 		ie.delayBeforeCanPickup = 0;
 		pl.worldObj.spawnEntityInWorld(ie);
@@ -180,6 +187,12 @@ public class WorldHelper
 	public static void dropItemStack(ItemStack is, SimpleDoubleCoordStore sdcs)
 	{
 		if ((is == null) || (sdcs == null)) return;
+		if(ServerHelper.isClient())
+		{
+			Exception e = new RuntimeException("Mod is trying to drop item stack client side!");
+			e.printStackTrace();
+			return;
+		}
 		World w = sdcs.getWorldObj();
 		if (w == null) return;
 		EntityItem ie = new EntityItem(w, sdcs.x, sdcs.y, sdcs.z, is);
