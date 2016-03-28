@@ -49,6 +49,9 @@ public class EffectOverlayRenderer  extends Gui
 	{
 		if(event.isCanceled() || (event.type != ElementType.HOTBAR)) return;
 		if(fr == null) fr = Minecraft.getMinecraft().fontRenderer;
+		GL11.glColor3f(1, 1, 1);
+		GL11.glEnable(GL11.GL_BLEND);
+		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		render(event.resolution);
 		GL11.glColor3f(1, 1, 1);
 	}
