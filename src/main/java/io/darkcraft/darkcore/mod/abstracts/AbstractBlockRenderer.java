@@ -55,8 +55,6 @@ public abstract class AbstractBlockRenderer extends TileEntitySpecialRenderer
 
 	public long getTime()
 	{
-		///return 100;
-		//return System.nanoTime() / 1000;
 		return (Sys.getTime() * 1000) / Sys.getTimerResolution();
 	}
 

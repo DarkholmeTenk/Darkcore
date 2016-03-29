@@ -5,6 +5,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.ResourceLocation;
 
+import org.lwjgl.Sys;
+
 public class RenderHelper
 {
 	public static void bindTexture(ResourceLocation rl)
@@ -36,5 +38,10 @@ public class RenderHelper
 		tess.addVertexWithUV(x+w, y, zLevel, uv.U, uv.v);
 		if(draw)
 			tess.draw();
+	}
+
+	public static long getTime()
+	{
+		return (Sys.getTime() * 1000) / Sys.getTimerResolution();
 	}
 }
