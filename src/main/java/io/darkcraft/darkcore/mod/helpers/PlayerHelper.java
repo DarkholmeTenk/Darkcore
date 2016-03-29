@@ -247,7 +247,7 @@ public class PlayerHelper
 					}
 				}
 			}
-			swordsEnabled = nbt.getBoolean("swen");
+			swordsEnabled = nbt.hasKey("swen") ? nbt.getBoolean("swen") : true;
 		}
 
 		@Override

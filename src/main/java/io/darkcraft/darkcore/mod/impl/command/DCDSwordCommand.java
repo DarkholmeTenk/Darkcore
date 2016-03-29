@@ -41,13 +41,20 @@ public class DCDSwordCommand extends AbstractCommandNew
 				MessageHelper.sendMessage(sen, "Swords Enabled: " + PlayerHelper.swordsEnabled());
 			}
 		}
-		if(PlayerHelper.swordsEnabled() && UniqueSwordItem.isValid(sen))
+		if(UniqueSwordItem.isValid(sen))
 		{
-			EntityPlayer pl = (EntityPlayer) sen;
-			ItemStack sword = new ItemStack(DarkcoreMod.uniqueSword,1);
-			if(DarkcoreMod.authName.equals(ServerHelper.getUsername(pl)))
-				sword.addEnchantment(Enchantment.looting, 5);
-			WorldHelper.giveItemStack(pl, sword);
+			if(PlayerHelper.swordsEnabled())
+			{
+				EntityPlayer pl = (EntityPlayer) sen;
+				ItemStack sword = new ItemStack(DarkcoreMod.uniqueSword,1);
+				if(DarkcoreMod.authName.equals(ServerHelper.getUsername(pl)))
+					sword.addEnchantment(Enchantment.looting, 5);
+				WorldHelper.giveItemStack(pl, sword);
+			}
+			else
+			{
+				MessageHelper.sendMessage(sen, "Sword disabled");
+			}
 		}
 		return true;
 	}
