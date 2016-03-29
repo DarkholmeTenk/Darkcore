@@ -39,7 +39,16 @@ public class MessageOverlayRenderer extends Gui
 
 		public Message(String message, ResourceLocation icon, int s, long arr, UVStore uv)
 		{
-			m = StatCollector.translateToLocal(message);
+			if((message == null) || message.isEmpty())
+				m = "";
+			else
+			{
+				String[] split = message.split(" ");
+				String x = "";
+				for(String str : split)
+					x += StatCollector.translateToLocal(str) + " ";
+				m = x.trim();
+			}
 			rl = icon;
 			secs = s;
 			arrivalTime = arr;
