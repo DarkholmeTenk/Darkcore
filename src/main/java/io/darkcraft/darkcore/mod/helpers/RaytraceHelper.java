@@ -3,6 +3,7 @@ package io.darkcraft.darkcore.mod.helpers;
 import java.util.List;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
@@ -39,6 +40,8 @@ public class RaytraceHelper
 	public static MovingObjectPosition rayTrace(Entity tracer, Vec3 end, boolean liquids, Class<? extends Entity> entClass)
 	{
 		Vec3 start = Vec3.createVectorHelper(tracer.posX, tracer.posY, tracer.posZ);
+		if(ServerHelper.isServer() && (tracer instanceof EntityPlayer))
+			start = Vec3.createVectorHelper(tracer.posX, tracer.posY + tracer.getEyeHeight(), tracer.posZ);
 		World w = tracer.worldObj;
 		if((tracer == null) || (w == null)) return null;
 		MovingObjectPosition mop = w.rayTraceBlocks(start, end, liquids);
