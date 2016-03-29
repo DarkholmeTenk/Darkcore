@@ -23,7 +23,7 @@ public class EntityPacketHandler implements IDataPacketHandler
 			int wid = WorldHelper.getWorldID(ent);
 			nbt.setInteger("world", wid);
 			((IEntityTransmittable)ent).writeToNBTTransmittable(nbt);
-			DataPacket dp = new DataPacket(nbt,(byte) 1);
+			DataPacket dp = new DataPacket(nbt,dataPacketDisc);
 			DarkcoreMod.networkChannel.sendToAllAround(dp, new TargetPoint(wid, ent.posX, ent.posY, ent.posZ, 120));
 		}
 	}
