@@ -81,7 +81,7 @@ public abstract class AbstractWorldDataStore extends WorldSavedData
 		nbt.setInteger("AWDSdim", getDimension());
 		nbt.setString("AWDSname", getName());
 		writeToNBT(nbt);
-		DataPacket dp = new DataPacket(nbt, WorldDataStoreHandler.dataPacketDisc);
+		DataPacket dp = new DataPacket(nbt, WorldDataStoreHandler.disc);
 		DarkcoreMod.networkChannel.sendToDimension(dp, getDimension());
 	}
 

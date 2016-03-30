@@ -13,7 +13,7 @@ import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 
 public class EntityPacketHandler implements IDataPacketHandler
 {
-	public static final byte dataPacketDisc = 2;
+	public static final String disc = "core.ent";
 	public static void syncEntity(Entity ent)
 	{
 		if((ent instanceof IEntityTransmittable) && ServerHelper.isServer())
@@ -23,7 +23,7 @@ public class EntityPacketHandler implements IDataPacketHandler
 			int wid = WorldHelper.getWorldID(ent);
 			nbt.setInteger("world", wid);
 			((IEntityTransmittable)ent).writeToNBTTransmittable(nbt);
-			DataPacket dp = new DataPacket(nbt,dataPacketDisc);
+			DataPacket dp = new DataPacket(nbt,disc);
 			DarkcoreMod.networkChannel.sendToAllAround(dp, new TargetPoint(wid, ent.posX, ent.posY, ent.posZ, 120));
 		}
 	}

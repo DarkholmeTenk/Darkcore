@@ -12,7 +12,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class EffectsPacketHandler implements IDataPacketHandler
 {
-	public static final byte effPacketDisc = 4;
+	public static final String disc = "core.eff";
 	@Override
 	public void handleData(NBTTagCompound data)
 	{

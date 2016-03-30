@@ -9,7 +9,7 @@ import net.minecraft.util.ResourceLocation;
 
 public class MessagePacketHandler implements IDataPacketHandler
 {
-	public static final byte messagePacketDisc = 3;
+	public static final String disc = "core.mess";
 	public static final int secondsDefault = 4;
 
 	public static DataPacket getDataPacket(ResourceLocation rl, String message, int seconds, UVStore uv)
@@ -24,7 +24,7 @@ public class MessagePacketHandler implements IDataPacketHandler
 		}
 		nbt.setString("m", message);
 		nbt.setInteger("s", seconds);
-		return new DataPacket(nbt, messagePacketDisc);
+		return new DataPacket(nbt, disc);
 	}
 
 	public static DataPacket getDataPacket(ResourceLocation rl, String message, int seconds)

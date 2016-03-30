@@ -111,7 +111,7 @@ public class EntityEffectStore implements IExtendedEntityProperties
 		NBTTagCompound nbt = new NBTTagCompound();
 		saveNBTData(nbt);
 		nbt.setString("dcEff", "plOnly");
-		DataPacket dp = new DataPacket(nbt,EffectsPacketHandler.effPacketDisc);
+		DataPacket dp = new DataPacket(nbt,EffectsPacketHandler.disc);
 		DarkcoreMod.networkChannel.sendTo(dp, pl);
 	}
 
