@@ -53,8 +53,10 @@ public class PacketHandler
 		if (handlers.containsKey(discriminator))
 		{
 			IDataPacketHandler old = handlers.get(discriminator);
-			throw new RuntimeException("Unable to register packet handler with discriminator " + discriminator + ":" + handler + ":" + old);
+			throw new RuntimeException("Unable to register packet handler " + discriminator + " - conflict " + handler + ":" + old);
 		}
+		if(discriminator.getBytes().length > 255)
+			throw new RuntimeException("Unable to register packet handler " + discriminator + " - name too long");
 		handlers.put(discriminator, handler);
 		return true;
 	}
