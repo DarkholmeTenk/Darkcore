@@ -52,10 +52,11 @@ public class EntityDataStorePacketHandler implements IDataPacketHandler
 		EntityLivingBase ent = aeds.getEntity();
 		if((ent == null) || ent.isDead) return false;
 		NBTTagCompound nbt = new NBTTagCompound();
+		aeds.writeTransmittable(nbt);
+		if(nbt.hasNoTags()) return false;
 		nbt.setInteger("entID", ent.getEntityId());
 		nbt.setInteger("world", WorldHelper.getWorldID(ent));
 		nbt.setString("aedsID", aeds.id);
-		aeds.writeTransmittable(nbt);
 		DataPacket dp = new DataPacket(nbt,disc);
 		if(aeds.notifyArea())
 			DarkcoreMod.networkChannel.sendToAllAround(dp, new TargetPoint(WorldHelper.getWorldID(ent),ent.posX,ent.posY,ent.posZ,120));
