@@ -10,7 +10,6 @@ import io.darkcraft.darkcore.mod.handlers.ChunkLoadingHandler;
 import io.darkcraft.darkcore.mod.handlers.CommandHandler;
 import io.darkcraft.darkcore.mod.handlers.EffectHandler;
 import io.darkcraft.darkcore.mod.handlers.WeatherWatchingHandler;
-import io.darkcraft.darkcore.mod.handlers.packets.EffectsPacketHandler;
 import io.darkcraft.darkcore.mod.handlers.packets.EntityDataStorePacketHandler;
 import io.darkcraft.darkcore.mod.handlers.packets.EntityPacketHandler;
 import io.darkcraft.darkcore.mod.handlers.packets.MessagePacketHandler;
@@ -109,7 +108,6 @@ public class DarkcoreMod implements IConfigHandlerMod
 		packetHandler.registerHandler(SoundPacketHandler.disc, soundPacketHandler);
 		packetHandler.registerHandler(EntityPacketHandler.disc, new EntityPacketHandler());
 		packetHandler.registerHandler(MessagePacketHandler.disc, new MessagePacketHandler());
-		packetHandler.registerHandler(EffectsPacketHandler.disc, new EffectsPacketHandler());
 		packetHandler.registerHandler(EntityDataStorePacketHandler.disc, new EntityDataStorePacketHandler());
 		DarkcoreMod.packetHandler.registerHandler(WorldDataStoreHandler.disc, new WorldDataStoreHandler());
 		uniqueSword = new UniqueSwordItem().register();

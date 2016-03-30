@@ -61,7 +61,7 @@ public class EffectHandler
 		if((store == null) || !(store instanceof EntityEffectStore))
 		{
 			store = new EntityEffectStore(ent);
-			ent.registerExtendedProperties("dcEff", store);
+			ent.registerExtendedProperties(EntityEffectStore.disc, store);
 		}
 		return (EntityEffectStore) store;
 	}
