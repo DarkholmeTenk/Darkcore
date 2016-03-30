@@ -51,7 +51,7 @@ import cpw.mods.fml.common.network.NetworkRegistry;
  * @author dark
  *
  */
-@Mod(modid = "darkcore", version = "0.35")
+@Mod(modid = "darkcore", version = "0.4")
 public class DarkcoreMod implements IConfigHandlerMod
 {
 	@SidedProxy(clientSide = "io.darkcraft.darkcore.mod.proxy.ClientProxy", serverSide = "io.darkcraft.darkcore.mod.proxy.CommonProxy")
@@ -105,11 +105,11 @@ public class DarkcoreMod implements IConfigHandlerMod
 		ConfigHandlerFactory.setConfigDir(ev.getModConfigurationDirectory());
 		configHandler = ConfigHandlerFactory.getConfigHandler(this);
 		networkChannel = NetworkRegistry.INSTANCE.newEventDrivenChannel("darkcore");
-		packetHandler.registerHandler(0, soundPacketHandler);
-		packetHandler.registerHandler(EntityPacketHandler.dataPacketDisc, new EntityPacketHandler());
-		packetHandler.registerHandler(MessagePacketHandler.messagePacketDisc, new MessagePacketHandler());
-		packetHandler.registerHandler(EffectsPacketHandler.effPacketDisc, new EffectsPacketHandler());
-		DarkcoreMod.packetHandler.registerHandler(WorldDataStoreHandler.dataPacketDisc, new WorldDataStoreHandler());
+		packetHandler.registerHandler(SoundPacketHandler.disc, soundPacketHandler);
+		packetHandler.registerHandler(EntityPacketHandler.disc, new EntityPacketHandler());
+		packetHandler.registerHandler(MessagePacketHandler.disc, new MessagePacketHandler());
+		packetHandler.registerHandler(EffectsPacketHandler.disc, new EffectsPacketHandler());
+		DarkcoreMod.packetHandler.registerHandler(WorldDataStoreHandler.disc, new WorldDataStoreHandler());
 		uniqueSword = new UniqueSwordItem().register();
 	}
 

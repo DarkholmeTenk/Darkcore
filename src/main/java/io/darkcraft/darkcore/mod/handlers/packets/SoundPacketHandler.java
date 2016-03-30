@@ -10,6 +10,7 @@ import net.minecraft.world.World;
 
 public class SoundPacketHandler implements IDataPacketHandler
 {
+	public static final String disc = "core.sound";
 	@Override
 	public void handleData(NBTTagCompound data)
 	{

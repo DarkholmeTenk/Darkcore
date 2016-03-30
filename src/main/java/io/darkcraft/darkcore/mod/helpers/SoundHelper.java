@@ -3,6 +3,7 @@ package io.darkcraft.darkcore.mod.helpers;
 import io.darkcraft.darkcore.mod.DarkcoreMod;
 import io.darkcraft.darkcore.mod.datastore.SimpleCoordStore;
 import io.darkcraft.darkcore.mod.datastore.SimpleDoubleCoordStore;
+import io.darkcraft.darkcore.mod.handlers.packets.SoundPacketHandler;
 import io.darkcraft.darkcore.mod.network.DataPacket;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
@@ -70,7 +71,7 @@ public class SoundHelper
 		if (speed != 1) data.setFloat("spe", speed);
 		if(ServerHelper.isServer())
 		{
-			DataPacket packet = new DataPacket(data, (byte) 0);
+			DataPacket packet = new DataPacket(data, SoundPacketHandler.disc);
 			DarkcoreMod.networkChannel.sendToDimension(packet, dim);
 		}
 		else

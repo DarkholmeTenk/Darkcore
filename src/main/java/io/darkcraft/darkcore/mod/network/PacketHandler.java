@@ -4,7 +4,6 @@ import io.darkcraft.darkcore.mod.DarkcoreMod;
 import io.darkcraft.darkcore.mod.interfaces.IDataPacketHandler;
 
 import java.util.HashMap;
-import java.util.Set;
 
 import net.minecraft.nbt.NBTTagCompound;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -15,7 +14,7 @@ import cpw.mods.fml.common.network.internal.FMLProxyPacket;
 
 public class PacketHandler
 {
-	HashMap<Integer, IDataPacketHandler>	handlers	= new HashMap<Integer, IDataPacketHandler>();
+	HashMap<String, IDataPacketHandler>	handlers	= new HashMap<String, IDataPacketHandler>();
 
 	@SubscribeEvent
 	public void handleCustomClientPacket(ClientCustomPacketEvent event)
@@ -34,9 +33,13 @@ public class PacketHandler
 	{
 		if (DarkcoreMod.debugText) System.out.println("Packet received!");
 		FMLProxyPacket p = event.packet;
-		int discriminator = p.payload().getByte(0);
+		int length = p.payload().getByte(0);
+		byte[] bytes = new byte[length];
 		p.payload().readerIndex(1);
+		p.payload().readBytes(bytes);
+		p.payload().readerIndex(1+length);
 		p.payload().discardReadBytes();
+		String discriminator = new String(bytes);
 		DataPacket dp = new DataPacket(p.payload());
 		NBTTagCompound nbt = dp.getNBT();
 		if (handlers.containsKey(discriminator))
@@ -45,23 +48,16 @@ public class PacketHandler
 			System.err.println("Packet with unknown discriminator " + discriminator + " received!");
 	}
 
-	public boolean registerHandler(int discriminator, IDataPacketHandler handler)
+	public boolean registerHandler(String discriminator, IDataPacketHandler handler)
 	{
 		if (handlers.containsKey(discriminator))
 		{
 			IDataPacketHandler old = handlers.get(discriminator);
-			throw new RuntimeException("Unable to register packet handler with discriminator " + discriminator + ":" + handler + ":" + old);
+			throw new RuntimeException("Unable to register packet handler " + discriminator + " - conflict " + handler + ":" + old);
 		}
+		if(discriminator.getBytes().length > 255)
+			throw new RuntimeException("Unable to register packet handler " + discriminator + " - name too long");
 		handlers.put(discriminator, handler);
 		return true;
-	}
-
-	public byte getNextFreeDiscriminator()
-	{
-		Set<Integer> taken = handlers.keySet();
-		for(int i = 0; i<256;i++)
-			if(!taken.contains(i))
-				return (byte)i;
-		return -1;
 	}
 }

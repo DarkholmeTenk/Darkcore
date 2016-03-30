@@ -11,7 +11,7 @@ import net.minecraft.nbt.NBTTagCompound;
 
 public class WorldDataStoreHandler implements IDataPacketHandler
 {
-	public static final byte dataPacketDisc = 1;
+	public static final String disc = "core.awds";
 
 	@SuppressWarnings("unchecked")
 	private static HashMap<Pair<Integer,String>,AbstractWorldDataStore> map = new HashMap();
