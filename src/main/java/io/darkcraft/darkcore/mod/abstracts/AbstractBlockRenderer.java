@@ -1,11 +1,13 @@
 package io.darkcraft.darkcore.mod.abstracts;
 
+import io.darkcraft.darkcore.mod.helpers.RenderHelper;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.client.IItemRenderer;
 
@@ -19,6 +21,14 @@ public abstract class AbstractBlockRenderer extends TileEntitySpecialRenderer im
 	public boolean handleLighting()
 	{
 		return true;
+	}
+
+	public void bindTexture(ResourceLocation rl)
+	{
+		if(field_147501_a == null)
+			RenderHelper.bindTexture(rl);
+		else
+			super.bindTexture(rl);
 	}
 
 	@Override
