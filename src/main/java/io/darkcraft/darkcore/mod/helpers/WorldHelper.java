@@ -20,6 +20,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+import net.minecraftforge.oredict.OreDictionary;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -155,8 +156,9 @@ public class WorldHelper
 
 	public static boolean sameItem(ItemStack a, ItemStack b)
 	{
-		if ((a == null) ^ (b == null)) return false;
-		if (a.getItem() != null) return a.getItem().equals(b.getItem()) && (a.getItemDamage() == b.getItemDamage());
+		if ((a == null) || (b == null)) return false;
+		if(a.isItemEqual(b)) return true;
+		if(OreDictionary.itemMatches(b, a, false)) return true;
 		return false;
 	}
 
