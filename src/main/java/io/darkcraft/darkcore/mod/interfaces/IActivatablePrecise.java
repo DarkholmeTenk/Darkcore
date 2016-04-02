@@ -6,6 +6,8 @@ import net.minecraft.entity.player.EntityPlayer;
  * Implement on {@linkplain io.darkcraft.darkcore.mod.abstracts.AbstractBlock AbstractBlock}
  * or a TileEntity contained within {@linkplain io.darkcraft.darkcore.mod.abstracts.AbstractBlockContainer AbstractBlockContainer} to have
  * it respond to right clicks.
+ *
+ * Prevents the onBlockActivated from returning false due to needing to send data to the server!
  * @author dark
  *
  */

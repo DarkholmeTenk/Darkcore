@@ -23,6 +23,7 @@ public abstract class AbstractBlockRenderer extends TileEntitySpecialRenderer im
 		return true;
 	}
 
+	@Override
 	public void bindTexture(ResourceLocation rl)
 	{
 		if(field_147501_a == null)
@@ -96,24 +97,26 @@ public abstract class AbstractBlockRenderer extends TileEntitySpecialRenderer im
 			GL11.glScaled(upSize, upSize, upSize);
 		if(type == ItemRenderType.EQUIPPED_FIRST_PERSON)
 		{
+			doSize = 0.75;
+			GL11.glScaled(doSize, doSize, doSize);
 			GL11.glRotated(250, 0, 1, 0);
 			GL11.glRotated(-15, 0, 0, 1);
 			GL11.glTranslated(0.4, 0.5, 0);
 		}
 		else if(type == ItemRenderType.EQUIPPED)
 		{
+			doSize = 0.75;
+			GL11.glScaled(doSize, doSize, doSize);
 			GL11.glRotated(-35, 0, 1, 0);
 			GL11.glRotated(58, 0, 0, 1);
 			GL11.glRotated(-10, 1, 0, 0);
-			GL11.glTranslated(0.9, -0.65, 0);
+			GL11.glTranslated(0.9, -1, 0);
 		}
 		else
 		{
 			doSize = 0.75;
 			GL11.glScaled(doSize, doSize, doSize);
-			if(type == ItemRenderType.INVENTORY)
-				GL11.glTranslated(0, -0.5, 0);
-			else
+			if(type != ItemRenderType.INVENTORY)
 				GL11.glTranslated(0, 0.4, 0);
 		}
 	}
