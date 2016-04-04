@@ -27,7 +27,8 @@ public class OreDictionaryHelper
 
 	public static ItemStack getItemStack(String ore, int num)
 	{
-		List<ItemStack> iss = OreDictionary.getOres(ore, false);
+		if(!OreDictionary.doesOreNameExist(ore)) return null;
+		List<ItemStack> iss = OreDictionary.getOres(ore);
 		if(iss.size() == 0) return null;
 		ItemStack is = iss.get(0).copy();
 		is.stackSize = num;
