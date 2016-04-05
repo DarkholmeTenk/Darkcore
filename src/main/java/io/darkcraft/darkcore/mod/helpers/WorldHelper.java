@@ -154,11 +154,18 @@ public class WorldHelper
 			worldNameMap.put(id, newName);
 	}
 
+	public static boolean sameNBT(ItemStack a, ItemStack b)
+	{
+		if((a.stackTagCompound == null) ^ (b.stackTagCompound == null)) return false;
+		if(a.stackTagCompound == null) return true;
+		return a.stackTagCompound.equals(b.stackTagCompound);
+	}
+
 	public static boolean sameItem(ItemStack a, ItemStack b)
 	{
 		if ((a == null) || (b == null)) return false;
-		if(a.isItemEqual(b)) return true;
-		if(OreDictionary.itemMatches(b, a, false)) return true;
+		if(a.isItemEqual(b) && sameNBT(a,b)) return true;
+		if(OreDictionary.itemMatches(b, a, false) && sameNBT(a,b)) return true;
 		return false;
 	}
 
