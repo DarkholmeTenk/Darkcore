@@ -12,7 +12,7 @@ import net.minecraft.world.World;
 
 public class RaytraceHelper
 {
-	private static final double defaultExpansion = 0.2;
+	private static final double defaultExpansion = 0.3;
 
 	public static MovingObjectPosition rayIntersectEntity(Entity ent, Vec3 origin, Vec3 end)
 	{
@@ -47,8 +47,11 @@ public class RaytraceHelper
 		MovingObjectPosition mop = w.rayTraceBlocks(start, end, liquids);
 		double dist = Double.MAX_VALUE;
 		if(mop != null)
+		{
 			dist = start.distanceTo(mop.hitVec);
-		List entityList = w.getEntitiesWithinAABBExcludingEntity(tracer, getAABB(start, end).expand(0.1, 0.1, 0.1));
+			end = mop.hitVec;
+		}
+		List entityList = w.getEntitiesWithinAABBExcludingEntity(tracer, getAABB(start, end).expand(0.3, 0.3, 0.3));
 		for(Object o : entityList)
 		{
 			if(!(o instanceof Entity)) continue;
@@ -56,10 +59,7 @@ public class RaytraceHelper
 			if(!e.canBeCollidedWith()) continue;
 			if((entClass != null) && !entClass.isInstance(e)) continue;
 			MovingObjectPosition entityMop = rayIntersectEntity(e, start, end);
-			if(entityMop == null)
-			{
-				continue;
-			};
+			if(entityMop == null) continue;
 			entityMop.entityHit = e;
 			entityMop.typeOfHit = MovingObjectType.ENTITY;
 			double entDist = start.distanceTo(entityMop.hitVec);
