@@ -32,7 +32,7 @@ public class AirBlockState implements IBlockState
 	@Override
 	public Block getDefaultBlock()
 	{
-		return null;
+		return Blocks.air;
 	}
 
 	@Override
