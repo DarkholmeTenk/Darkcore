@@ -24,6 +24,7 @@ public class RecipeHandler
 		{
 			for(IRecipeContainer r : recipeContainers)
 				r.initRecipes();
+			recipeContainers = null;
 		}
 	}
 }
