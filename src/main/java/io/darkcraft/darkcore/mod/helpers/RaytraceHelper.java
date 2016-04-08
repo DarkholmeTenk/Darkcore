@@ -51,7 +51,7 @@ public class RaytraceHelper
 			dist = start.distanceTo(mop.hitVec);
 			end = mop.hitVec;
 		}
-		List entityList = w.getEntitiesWithinAABBExcludingEntity(tracer, getAABB(start, end).expand(0.3, 0.3, 0.3));
+		List entityList = w.getEntitiesWithinAABBExcludingEntity(tracer, getAABB(start, end).expand(0.8, 0.8, 0.8));
 		for(Object o : entityList)
 		{
 			if(!(o instanceof Entity)) continue;
