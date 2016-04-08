@@ -17,7 +17,7 @@ import org.lwjgl.opengl.GL11;
 
 public class RenderHelper
 {
-	private static RenderBlocks rb;
+	private static RenderBlocks rb = new RenderBlocks();
 	public static void bindTexture(ResourceLocation rl)
 	{
 		Minecraft.getMinecraft().renderEngine.bindTexture(rl);
