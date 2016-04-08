@@ -10,4 +10,8 @@ public interface IBlockState
 	public boolean equals(World w, int x, int y, int z);
 
 	public void set(World w, int x, int y, int z);
+
+	public Block getDefaultBlock();
+
+	public int getDefaultMeta();
 }

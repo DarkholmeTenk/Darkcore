@@ -35,4 +35,16 @@ public class CombinedBlockState implements IBlockState
 		subStates[0].set(w, x, y, z);
 	}
 
+	@Override
+	public Block getDefaultBlock()
+	{
+		return subStates[0].getDefaultBlock();
+	}
+
+	@Override
+	public int getDefaultMeta()
+	{
+		return subStates[0].getDefaultMeta();
+	}
+
 }

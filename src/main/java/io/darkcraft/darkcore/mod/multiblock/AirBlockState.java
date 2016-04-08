@@ -29,4 +29,16 @@ public class AirBlockState implements IBlockState
 		w.setBlockToAir(x, y, z);
 	}
 
+	@Override
+	public Block getDefaultBlock()
+	{
+		return null;
+	}
+
+	@Override
+	public int getDefaultMeta()
+	{
+		return 0;
+	}
+
 }

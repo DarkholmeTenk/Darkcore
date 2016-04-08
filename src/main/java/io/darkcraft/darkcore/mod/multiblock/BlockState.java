@@ -75,4 +75,16 @@ public class BlockState implements IBlockState
 	{
 		return b.getClass().getSimpleName();
 	}
+
+	@Override
+	public Block getDefaultBlock()
+	{
+		return b;
+	}
+
+	@Override
+	public int getDefaultMeta()
+	{
+		return m == -1 ? 0 : m;
+	}
 }
