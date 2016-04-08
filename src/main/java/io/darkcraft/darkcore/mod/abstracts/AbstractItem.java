@@ -1,6 +1,8 @@
 package io.darkcraft.darkcore.mod.abstracts;
 
 import io.darkcraft.darkcore.mod.DarkcoreMod;
+import io.darkcraft.darkcore.mod.handlers.RecipeHandler;
+import io.darkcraft.darkcore.mod.interfaces.IRecipeContainer;
 
 import java.util.List;
 
@@ -14,7 +16,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public abstract class AbstractItem extends Item
+public abstract class AbstractItem extends Item implements IRecipeContainer
 {
 	private IIcon			iconBuffer;
 	private String			unlocalizedFragment;
@@ -28,6 +30,7 @@ public abstract class AbstractItem extends Item
 		modName = mod;
 		CreativeTabs tab = DarkcoreMod.getCreativeTab(mod);
 		if (tab != null) setCreativeTab(tab);
+		RecipeHandler.addRecipeContainer(this);
 	}
 
 	public AbstractItem register()

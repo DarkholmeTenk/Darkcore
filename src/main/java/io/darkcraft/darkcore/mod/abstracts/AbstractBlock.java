@@ -3,6 +3,7 @@ package io.darkcraft.darkcore.mod.abstracts;
 import io.darkcraft.darkcore.mod.DarkcoreMod;
 import io.darkcraft.darkcore.mod.config.ConfigFile;
 import io.darkcraft.darkcore.mod.datastore.SimpleCoordStore;
+import io.darkcraft.darkcore.mod.handlers.RecipeHandler;
 import io.darkcraft.darkcore.mod.handlers.packets.PreciseRightClickHandler;
 import io.darkcraft.darkcore.mod.helpers.BlockIterator;
 import io.darkcraft.darkcore.mod.helpers.MathHelper;
@@ -12,6 +13,7 @@ import io.darkcraft.darkcore.mod.interfaces.IActivatablePrecise;
 import io.darkcraft.darkcore.mod.interfaces.IBlockIteratorCondition;
 import io.darkcraft.darkcore.mod.interfaces.IColorableBlock;
 import io.darkcraft.darkcore.mod.interfaces.IExplodable;
+import io.darkcraft.darkcore.mod.interfaces.IRecipeContainer;
 import io.darkcraft.darkcore.mod.multiblock.BlockState;
 
 import java.util.List;
@@ -49,7 +51,7 @@ import cpw.mods.fml.relauncher.SideOnly;
  * @author dark
  *
  */
-public abstract class AbstractBlock extends Block
+public abstract class AbstractBlock extends Block implements IRecipeContainer
 {
 	private IIcon				iconBuffer			= null;
 	private String				unlocalizedFragment	= "";
@@ -89,6 +91,7 @@ public abstract class AbstractBlock extends Block
 		opaque = isOpaqueCube();
         lightOpacity = isOpaqueCube() ? 255 : 0;
         canBlockGrass = !blockMaterial.getCanBlockGrass();
+        RecipeHandler.addRecipeContainer(this);
 	}
 
 	/**
@@ -533,6 +536,7 @@ public abstract class AbstractBlock extends Block
 
 	public abstract void initData();
 
+	@Override
 	public abstract void initRecipes();
 
 	public void addInfo(int metadata, NBTTagCompound nbt, List infoList){};
