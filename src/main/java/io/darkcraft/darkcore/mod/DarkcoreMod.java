@@ -9,6 +9,7 @@ import io.darkcraft.darkcore.mod.config.ConfigHandlerFactory;
 import io.darkcraft.darkcore.mod.handlers.ChunkLoadingHandler;
 import io.darkcraft.darkcore.mod.handlers.CommandHandler;
 import io.darkcraft.darkcore.mod.handlers.EffectHandler;
+import io.darkcraft.darkcore.mod.handlers.RecipeHandler;
 import io.darkcraft.darkcore.mod.handlers.WeatherWatchingHandler;
 import io.darkcraft.darkcore.mod.handlers.packets.EntityDataStorePacketHandler;
 import io.darkcraft.darkcore.mod.handlers.packets.EntityPacketHandler;
@@ -39,6 +40,7 @@ import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerAboutToStartEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
@@ -130,6 +132,12 @@ public class DarkcoreMod implements IConfigHandlerMod
 		MinecraftForge.EVENT_BUS.register(eh);
 		FMLCommonHandler.instance().bus().register(eh);
 		proxy.init();
+	}
+
+	@EventHandler
+	public void postInit(FMLPostInitializationEvent ev)
+	{
+		RecipeHandler.registerAllRecipes();
 	}
 
 	@EventHandler
