@@ -28,7 +28,7 @@ public abstract class AbstractObjRenderer extends AbstractBlockRenderer
 
 		Tessellator tessellator = Tessellator.instance;
 
-		if(handleLighting())
+		if(handleLighting() && (w != null))
 		{
 			float brightness = w.getBlockLightValue(x, y, z);
 			int l = w.getLightBrightnessForSkyBlocks(x, y, z, 0);
