@@ -6,6 +6,7 @@ import io.darkcraft.darkcore.mod.multiblock.IMultiBlockStructure;
 import io.darkcraft.darkcore.mod.multiblock.RenderBlockAccess;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
@@ -18,6 +19,8 @@ import org.lwjgl.opengl.GL11;
 public class RenderHelper
 {
 	private static RenderBlocks rb = new RenderBlocks();
+	private static FontRenderer fr;
+
 	public static void bindTexture(ResourceLocation rl)
 	{
 		Minecraft.getMinecraft().renderEngine.bindTexture(rl);
@@ -99,5 +102,11 @@ public class RenderHelper
 			}
 		}
 		GL11.glPopMatrix();
+	}
+
+	public static FontRenderer getFontRenderer()
+	{
+		if(fr == null) fr = Minecraft.getMinecraft().fontRenderer;
+		return fr;
 	}
 }
