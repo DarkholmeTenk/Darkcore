@@ -1,6 +1,7 @@
 package io.darkcraft.darkcore.mod.helpers;
 
 import io.darkcraft.darkcore.mod.datastore.SimpleCoordStore;
+import io.darkcraft.darkcore.mod.multiblock.BlockState;
 import io.darkcraft.darkcore.mod.multiblock.IBlockState;
 import io.darkcraft.darkcore.mod.multiblock.IMultiBlockCore;
 import io.darkcraft.darkcore.mod.multiblock.IMultiBlockPart;
@@ -159,5 +160,29 @@ public class MultiBlockHelper
 			if (te.equals(core)) return true;
 		}
 		return false;
+	}
+
+	public static IMultiBlockStructure getSingleBlockStructure(Block b)
+	{
+		return new SingleBlockStructure(b);
+	}
+
+	private static class SingleBlockStructure implements IMultiBlockStructure
+	{
+		private final Block b;
+		private final IBlockState[][][] s;
+		public SingleBlockStructure(Block _b)
+		{
+			b = _b;
+			s = new IBlockState[][][]{{{new BlockState(b)}}};
+		}
+		@Override
+		public IBlockState[][][] getStructureDefinition(){return s;}
+		@Override
+		public int getCoreX(){return 0;}
+		@Override
+		public int getCoreY(){return 0;}
+		@Override
+		public int getCoreZ(){return 0;}
 	}
 }
