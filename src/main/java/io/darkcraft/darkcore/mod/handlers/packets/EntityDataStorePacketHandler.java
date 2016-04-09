@@ -110,9 +110,21 @@ public class EntityDataStorePacketHandler implements IDataPacketHandler
 			for(String s : knownStores)
 			{
 				IExtendedEntityProperties p = opl.getExtendedProperties(s);
+				IExtendedEntityProperties p2 = pl.getExtendedProperties(s);
 				System.out.println("Attempting to clone:" + s);
 				if((p instanceof AbstractEntityDataStore) && (!e.wasDeath || ((AbstractEntityDataStore)p).shouldPersistDeaths()))
-					pl.registerExtendedProperties(s, p);
+				{
+					if(p2 == null)
+					{
+						pl.registerExtendedProperties(s, p);
+					}
+					else
+					{
+						NBTTagCompound nbt = new NBTTagCompound();
+						p.saveNBTData(nbt);
+						p2.loadNBTData(nbt);
+					}
+				}
 			}
 		}
 	}
