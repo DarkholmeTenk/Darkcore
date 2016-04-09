@@ -110,7 +110,8 @@ public class EntityDataStorePacketHandler implements IDataPacketHandler
 			for(String s : knownStores)
 			{
 				IExtendedEntityProperties p = opl.getExtendedProperties(s);
-				if((p instanceof AbstractEntityDataStore) && ((AbstractEntityDataStore)p).shouldPersistDeaths())
+				System.out.println("Attempting to clone:" + s);
+				if((p instanceof AbstractEntityDataStore) && (!e.wasDeath || ((AbstractEntityDataStore)p).shouldPersistDeaths()))
 					pl.registerExtendedProperties(s, p);
 			}
 		}
