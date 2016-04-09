@@ -24,6 +24,12 @@ public class EntityEffectStore extends AbstractEntityDataStore
 		super(ent, disc);
 	}
 
+	@Override
+	public boolean shouldPersistDeaths()
+	{
+		return false;
+	}
+
 	public void tick()
 	{
 		if((getEntity() == null) || getEntity().isDead) return;

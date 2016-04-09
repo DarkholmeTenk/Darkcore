@@ -19,6 +19,11 @@ public abstract class AbstractEntityDataStore implements IExtendedEntityProperti
 		entity = new WeakReference(ent);
 	}
 
+	public boolean shouldPersistDeaths()
+	{
+		return true;
+	}
+
 	public EntityLivingBase getEntity()
 	{
 		if(entity == null) return null;
@@ -36,14 +41,14 @@ public abstract class AbstractEntityDataStore implements IExtendedEntityProperti
 	}
 
 	@Override
-	public final void saveNBTData(NBTTagCompound nbt)
+	public void saveNBTData(NBTTagCompound nbt)
 	{
 		writeToNBT(nbt);
 		writeTransmittable(nbt);
 	}
 
 	@Override
-	public final void loadNBTData(NBTTagCompound nbt)
+	public void loadNBTData(NBTTagCompound nbt)
 	{
 		readFromNBT(nbt);
 		readTransmittable(nbt);

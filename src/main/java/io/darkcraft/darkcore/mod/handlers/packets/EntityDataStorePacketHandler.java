@@ -1,5 +1,6 @@
 package io.darkcraft.darkcore.mod.handlers.packets;
 
+import gnu.trove.set.hash.THashSet;
 import io.darkcraft.darkcore.mod.DarkcoreMod;
 import io.darkcraft.darkcore.mod.abstracts.AbstractEntityDataStore;
 import io.darkcraft.darkcore.mod.helpers.ServerHelper;
@@ -10,14 +11,17 @@ import io.darkcraft.darkcore.mod.network.DataPacket;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
+import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IExtendedEntityProperties;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
@@ -27,6 +31,16 @@ import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 
 public class EntityDataStorePacketHandler implements IDataPacketHandler
 {
+	private static Set<String> knownStores = new THashSet();
+
+	public static void addEffectType(String s)
+	{
+		synchronized(knownStores)
+		{
+			knownStores.add(s);
+		}
+	}
+
 	{
 		FMLCommonHandler.instance().bus().register(this);
 	}
@@ -82,6 +96,22 @@ public class EntityDataStorePacketHandler implements IDataPacketHandler
 				toReadd.add(aeds);
 		}
 		queue.addAll(toReadd);
+	}
+
+	@SubscribeEvent
+	public void onClonePlayer(PlayerEvent.Clone e)
+	{
+		EntityPlayer opl = e.original;
+		EntityPlayer pl = e.entityPlayer;
+		synchronized(knownStores)
+		{
+			for(String s : knownStores)
+			{
+				IExtendedEntityProperties p = opl.getExtendedProperties(s);
+				if((p instanceof AbstractEntityDataStore) && ((AbstractEntityDataStore)p).shouldPersistDeaths())
+					pl.registerExtendedProperties(s, p);
+			}
+		}
 	}
 
 	@Override
