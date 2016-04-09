@@ -21,6 +21,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IExtendedEntityProperties;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -33,7 +34,7 @@ public class EntityDataStorePacketHandler implements IDataPacketHandler
 {
 	private static Set<String> knownStores = new THashSet();
 
-	public static void addEffectType(String s)
+	public static void addStoreType(String s)
 	{
 		synchronized(knownStores)
 		{
@@ -43,6 +44,7 @@ public class EntityDataStorePacketHandler implements IDataPacketHandler
 
 	{
 		FMLCommonHandler.instance().bus().register(this);
+		MinecraftForge.EVENT_BUS.register(this);
 	}
 
 	public static final String disc = "core.aeds";

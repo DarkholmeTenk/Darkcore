@@ -17,6 +17,7 @@ public abstract class AbstractEntityDataStore implements IExtendedEntityProperti
 	{
 		id = _id;
 		entity = new WeakReference(ent);
+		EntityDataStorePacketHandler.addStoreType(id);
 	}
 
 	public boolean shouldPersistDeaths()
