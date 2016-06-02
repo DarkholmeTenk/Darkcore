@@ -1,19 +1,29 @@
 package io.darkcraft.darkcore.mod.handlers.packets;
 
-import gnu.trove.set.hash.THashSet;
-import io.darkcraft.darkcore.mod.DarkcoreMod;
-import io.darkcraft.darkcore.mod.abstracts.AbstractEntityDataStore;
-import io.darkcraft.darkcore.mod.helpers.ServerHelper;
-import io.darkcraft.darkcore.mod.helpers.WorldHelper;
-import io.darkcraft.darkcore.mod.interfaces.IDataPacketHandler;
-import io.darkcraft.darkcore.mod.network.DataPacket;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import com.google.common.collect.HashMultimap;
+
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerRespawnEvent;
+import cpw.mods.fml.common.gameevent.TickEvent;
+import cpw.mods.fml.common.gameevent.TickEvent.Phase;
+import cpw.mods.fml.common.gameevent.TickEvent.Type;
+import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
+import gnu.trove.set.hash.THashSet;
+import io.darkcraft.darkcore.mod.DarkcoreMod;
+import io.darkcraft.darkcore.mod.abstracts.AbstractEntityDataStore;
+import io.darkcraft.darkcore.mod.datastore.Pair;
+import io.darkcraft.darkcore.mod.helpers.PlayerHelper;
+import io.darkcraft.darkcore.mod.helpers.ServerHelper;
+import io.darkcraft.darkcore.mod.helpers.WorldHelper;
+import io.darkcraft.darkcore.mod.interfaces.IDataPacketHandler;
+import io.darkcraft.darkcore.mod.network.DataPacket;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -23,12 +33,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.IExtendedEntityProperties;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerEvent;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.TickEvent;
-import cpw.mods.fml.common.gameevent.TickEvent.Phase;
-import cpw.mods.fml.common.gameevent.TickEvent.Type;
-import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 
 public class EntityDataStorePacketHandler implements IDataPacketHandler
 {
@@ -125,6 +129,37 @@ public class EntityDataStorePacketHandler implements IDataPacketHandler
 						p2.loadNBTData(nbt);
 					}
 				}
+			}
+		}
+	}
+
+	public static final HashMultimap<String,Pair<String,AbstractEntityDataStore>> dimTransMap = HashMultimap.create();
+	@SubscribeEvent
+	public void onRespawn(PlayerRespawnEvent e)
+	{
+		EntityPlayer pl = e.player;
+		if(pl == null) return;
+		String un = PlayerHelper.getUsername(pl);
+		Set<Pair<String,AbstractEntityDataStore>> stores = dimTransMap.removeAll(un);
+		for(Pair<String,AbstractEntityDataStore> store : stores)
+		{
+			pl.registerExtendedProperties(store.a, store.b);
+		}
+	}
+
+	@SubscribeEvent
+	public void onDimTransfer(cpw.mods.fml.common.gameevent.PlayerEvent.PlayerChangedDimensionEvent e)
+	{
+		EntityPlayer p = e.player;
+		if(p == null) return;
+		String un = PlayerHelper.getUsername(p);
+		for(String s : knownStores)
+		{
+			IExtendedEntityProperties prop = p.getExtendedProperties(s);
+			if(prop instanceof AbstractEntityDataStore)
+			{
+				dimTransMap.put(un, new Pair(s,prop));
+				queueUpdate((AbstractEntityDataStore) prop);
 			}
 		}
 	}
