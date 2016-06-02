@@ -247,4 +247,11 @@ public class SimpleCoordStore
 	{
 		return AxisAlignedBB.getBoundingBox(x, y, z, x+1, y+h, z+1);
 	}
+
+	public boolean isLoaded()
+	{
+		World w = getWorldObj();
+		if(w == null) return false;
+		return w.getChunkProvider().chunkExists(x >> 4, z >> 4);
+	}
 }
