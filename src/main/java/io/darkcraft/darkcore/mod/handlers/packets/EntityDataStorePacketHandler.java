@@ -58,6 +58,7 @@ public class EntityDataStorePacketHandler implements IDataPacketHandler
 	public static void queueUpdate(AbstractEntityDataStore aeds)
 	{
 		if((aeds == null) || (aeds.getEntity() == null) || ServerHelper.isClient()) return;
+		if(!(aeds.notifyArea() || (aeds.getEntity() instanceof EntityPlayer))) return;
 		queue.add(aeds);
 	}
 
@@ -98,7 +99,7 @@ public class EntityDataStorePacketHandler implements IDataPacketHandler
 		while((aeds = queue.poll()) != null)
 		{
 			if(aeds.getEntity() == null) continue;
-			if(sendUpdate(aeds))
+			if(aeds.sendUpdate())
 				toReadd.add(aeds);
 		}
 		queue.addAll(toReadd);

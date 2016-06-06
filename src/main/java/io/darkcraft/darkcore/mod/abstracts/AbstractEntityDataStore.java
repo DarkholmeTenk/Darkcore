@@ -1,9 +1,8 @@
 package io.darkcraft.darkcore.mod.abstracts;
 
-import io.darkcraft.darkcore.mod.handlers.packets.EntityDataStorePacketHandler;
-
 import java.lang.ref.WeakReference;
 
+import io.darkcraft.darkcore.mod.handlers.packets.EntityDataStorePacketHandler;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.IExtendedEntityProperties;
@@ -36,9 +35,9 @@ public abstract class AbstractEntityDataStore implements IExtendedEntityProperti
 		EntityDataStorePacketHandler.queueUpdate(this);
 	}
 
-	public void sendUpdate()
+	public boolean sendUpdate()
 	{
-		EntityDataStorePacketHandler.sendUpdate(this);
+		return EntityDataStorePacketHandler.sendUpdate(this);
 	}
 
 	@Override
