@@ -17,13 +17,16 @@ buildscript {
 
 apply plugin: 'forge'
 
-version = "0.41"
+version = "0.42"
 group= "io.darkcraft.darkcore" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "darkcore"
 
 minecraft {
     version = "1.7.10-10.13.3.1403-1.7.10"
     runDir = "eclipse"
+    
+	replace "@version@", project.version
+	replaceIn "DarkcoreMod.java"
 }
 
 dependencies {
