@@ -1,5 +1,9 @@
 package io.darkcraft.darkcore.mod.helpers;
 
+import org.lwjgl.Sys;
+import org.lwjgl.opengl.GL11;
+
+import io.darkcraft.darkcore.mod.datastore.Colour;
 import io.darkcraft.darkcore.mod.datastore.UVStore;
 import io.darkcraft.darkcore.mod.multiblock.IBlockState;
 import io.darkcraft.darkcore.mod.multiblock.IMultiBlockStructure;
@@ -13,11 +17,10 @@ import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 
-import org.lwjgl.Sys;
-import org.lwjgl.opengl.GL11;
-
 public class RenderHelper
 {
+	public static final Colour white = new Colour(1,1,1);
+	public static final Colour black = new Colour(0,0,0);
 	private static RenderBlocks rb = new RenderBlocks();
 	private static FontRenderer fr;
 
@@ -51,6 +54,12 @@ public class RenderHelper
 		if(draw)
 			tess.draw();
 	}
+
+	public static void colour(Colour c)
+	{
+		GL11.glColor4f(c.r, c.g, c.b, c.a);
+	}
+	public static void resetColour(){ colour(white); }
 
 	public static long getTime()
 	{
