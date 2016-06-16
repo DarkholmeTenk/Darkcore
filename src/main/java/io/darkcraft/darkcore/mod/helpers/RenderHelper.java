@@ -55,6 +55,50 @@ public class RenderHelper
 			tess.draw();
 	}
 
+	private static UVStore uvf(UVStore[] uvs, int i)
+	{
+		if((uvs == null) || (uvs.length == 0)) return UVStore.defaultUV;
+		return uvs[i % uvs.length];
+	}
+
+	public static void cube(float x, float y, float z, float X, float Y, float Z, boolean draw, UVStore... uv)
+	{
+		Tessellator tess = Tessellator.instance;
+		if(draw)
+			tess.startDrawingQuads();
+		GL11.glEnable(GL11.GL_CULL_FACE);
+		tess.addVertexWithUV(X, y, z, uvf(uv,0).U, uvf(uv,0).v);
+		tess.addVertexWithUV(X, y, Z, uvf(uv,0).U, uvf(uv,0).V);
+		tess.addVertexWithUV(x, y, Z, uvf(uv,0).u, uvf(uv,0).V);
+		tess.addVertexWithUV(x, y, z, uvf(uv,0).u, uvf(uv,0).v);
+		tess.addVertexWithUV(x, Y, z, uvf(uv,1).u, uvf(uv,1).v);
+		tess.addVertexWithUV(x, Y, Z, uvf(uv,1).u, uvf(uv,1).V);
+		tess.addVertexWithUV(X, Y, Z, uvf(uv,1).U, uvf(uv,1).V);
+		tess.addVertexWithUV(X, Y, z, uvf(uv,1).U, uvf(uv,1).v);
+
+		tess.addVertexWithUV(x, y, z, uvf(uv,2).u, uvf(uv,2).v);
+		tess.addVertexWithUV(x, Y, z, uvf(uv,2).u, uvf(uv,2).V);
+		tess.addVertexWithUV(X, Y, z, uvf(uv,2).U, uvf(uv,2).V);
+		tess.addVertexWithUV(X, y, z, uvf(uv,2).U, uvf(uv,2).v);
+		tess.addVertexWithUV(X, y, Z, uvf(uv,3).U, uvf(uv,3).v);
+		tess.addVertexWithUV(X, Y, Z, uvf(uv,3).U, uvf(uv,3).V);
+		tess.addVertexWithUV(x, Y, Z, uvf(uv,3).u, uvf(uv,3).V);
+		tess.addVertexWithUV(x, y, Z, uvf(uv,3).u, uvf(uv,3).v);
+
+		tess.addVertexWithUV(x, y, z, uvf(uv,4).u, uvf(uv,4).v);
+		tess.addVertexWithUV(x, y, Z, uvf(uv,4).u, uvf(uv,4).V);
+		tess.addVertexWithUV(x, Y, Z, uvf(uv,4).U, uvf(uv,4).V);
+		tess.addVertexWithUV(x, Y, z, uvf(uv,4).U, uvf(uv,4).v);
+		tess.addVertexWithUV(X, Y, z, uvf(uv,5).U, uvf(uv,5).v);
+		tess.addVertexWithUV(X, Y, Z, uvf(uv,5).U, uvf(uv,5).V);
+		tess.addVertexWithUV(X, y, Z, uvf(uv,5).u, uvf(uv,5).V);
+		tess.addVertexWithUV(X, y, z, uvf(uv,5).u, uvf(uv,5).v);
+
+
+		if(draw)
+			tess.draw();
+	}
+
 	public static void colour(Colour c)
 	{
 		GL11.glColor4f(c.r, c.g, c.b, c.a);
