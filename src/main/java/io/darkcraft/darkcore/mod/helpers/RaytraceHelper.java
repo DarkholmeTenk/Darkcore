@@ -13,6 +13,7 @@ import net.minecraft.world.World;
 public class RaytraceHelper
 {
 	private static final double defaultExpansion = 0.3;
+	private static final Entity[] emptyArr = {};
 
 	public static MovingObjectPosition rayIntersectEntity(Entity ent, Vec3 origin, Vec3 end)
 	{
@@ -74,6 +75,11 @@ public class RaytraceHelper
 		return mop;
 	}
 
+	public static MovingObjectPosition rayTrace(Entity tracer, Vec3 end, boolean liquids, Class<? extends Entity> entClass)
+	{
+		return rayTrace(tracer,end,liquids,entClass,emptyArr);
+	}
+
 	public static MovingObjectPosition rayTrace(Entity tracer, double dist, boolean liquids, Class<? extends Entity> entClass, Entity... skip)
 	{
 		Vec3 end = tracer.getLookVec();
@@ -85,9 +91,19 @@ public class RaytraceHelper
 		return rayTrace(tracer,end,liquids, entClass, skip);
 	}
 
+	public static MovingObjectPosition rayTrace(Entity tracer, double dist, boolean liquids, Class<? extends Entity> entClass)
+	{
+		return rayTrace(tracer, dist, liquids, entClass, emptyArr);
+	}
+
 	public static MovingObjectPosition rayTrace(Entity tracer, boolean liquids, Class<? extends Entity> entClass, Entity... skip)
 	{
 		Vec3 end = Vec3.createVectorHelper(tracer.posX+tracer.motionX, tracer.posY+tracer.motionY, tracer.posZ+tracer.motionZ);
 		return rayTrace(tracer,end,liquids, entClass, skip);
+	}
+
+	public static MovingObjectPosition rayTrace(Entity tracer, boolean liquids, Class<? extends Entity> entClass)
+	{
+		return rayTrace(tracer,liquids,entClass,emptyArr);
 	}
 }
