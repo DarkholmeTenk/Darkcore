@@ -1,5 +1,10 @@
 package io.darkcraft.darkcore.mod.abstracts;
 
+import java.util.List;
+
+import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import io.darkcraft.darkcore.mod.DarkcoreMod;
 import io.darkcraft.darkcore.mod.config.ConfigFile;
 import io.darkcraft.darkcore.mod.datastore.SimpleCoordStore;
@@ -15,9 +20,6 @@ import io.darkcraft.darkcore.mod.interfaces.IColorableBlock;
 import io.darkcraft.darkcore.mod.interfaces.IExplodable;
 import io.darkcraft.darkcore.mod.interfaces.IRecipeContainer;
 import io.darkcraft.darkcore.mod.multiblock.BlockState;
-
-import java.util.List;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
@@ -36,9 +38,6 @@ import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
-import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * Performs a variety of functions to do with the creation of new blocks, the allocation of IIcons, coloring, etc.<br>
@@ -345,6 +344,12 @@ public abstract class AbstractBlock extends Block implements IRecipeContainer
 	{
 		return renderIcon;
 	}
+
+	@Override
+	public boolean renderAsNormalBlock()
+    {
+		return renderIcon;
+    }
 
 	@Override
 	public boolean shouldSideBeRendered(IBlockAccess w, int x, int y, int z, int s)
