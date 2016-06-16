@@ -37,7 +37,7 @@ public class RaytraceHelper
 		return AxisAlignedBB.getBoundingBox(mx,my,mz,mX,mY,mZ);
 	}
 
-	public static MovingObjectPosition rayTrace(Entity tracer, Vec3 end, boolean liquids, Class<? extends Entity> entClass)
+	public static MovingObjectPosition rayTrace(Entity tracer, Vec3 end, boolean liquids, Class<? extends Entity> entClass, Entity... skip)
 	{
 		Vec3 start = Vec3.createVectorHelper(tracer.posX, tracer.posY, tracer.posZ);
 		if(ServerHelper.isServer() && (tracer instanceof EntityPlayer))
@@ -52,8 +52,10 @@ public class RaytraceHelper
 			end = mop.hitVec;
 		}
 		List entityList = w.getEntitiesWithinAABBExcludingEntity(tracer, getAABB(start, end).expand(0.8, 0.8, 0.8));
+		oLoop:
 		for(Object o : entityList)
 		{
+			for(Entity e : skip) if(o == e) continue oLoop;
 			if(!(o instanceof Entity)) continue;
 			Entity e = (Entity) o;
 			if(!e.canBeCollidedWith()) continue;
@@ -72,7 +74,7 @@ public class RaytraceHelper
 		return mop;
 	}
 
-	public static MovingObjectPosition rayTrace(Entity tracer, double dist, boolean liquids, Class<? extends Entity> entClass)
+	public static MovingObjectPosition rayTrace(Entity tracer, double dist, boolean liquids, Class<? extends Entity> entClass, Entity... skip)
 	{
 		Vec3 end = tracer.getLookVec();
 		if(dist != 1)
@@ -80,12 +82,12 @@ public class RaytraceHelper
 			double dsq = dist * dist;
 			end = Vec3.createVectorHelper(end.xCoord*dsq, end.yCoord*dsq, end.zCoord*dsq);
 		}
-		return rayTrace(tracer,end,liquids, entClass);
+		return rayTrace(tracer,end,liquids, entClass, skip);
 	}
 
-	public static MovingObjectPosition rayTrace(Entity tracer, boolean liquids, Class<? extends Entity> entClass)
+	public static MovingObjectPosition rayTrace(Entity tracer, boolean liquids, Class<? extends Entity> entClass, Entity... skip)
 	{
 		Vec3 end = Vec3.createVectorHelper(tracer.posX+tracer.motionX, tracer.posY+tracer.motionY, tracer.posZ+tracer.motionZ);
-		return rayTrace(tracer,end,liquids, entClass);
+		return rayTrace(tracer,end,liquids, entClass, skip);
 	}
 }
