@@ -1,10 +1,11 @@
 package io.darkcraft.darkcore.mod.helpers;
 
-import io.darkcraft.darkcore.mod.datastore.SimpleDoubleCoordStore;
-
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
+
+import io.darkcraft.darkcore.mod.datastore.SimpleDoubleCoordStore;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public class MathHelper
 {
@@ -126,4 +127,31 @@ public class MathHelper
 			return String.format("%02d:%02d:%02d", hl,ml,seconds);
 		}
 	}
+
+	public static void reverseObjArray(Object[] arr, int start, int end)
+	{
+		int l = end - start;
+		end--;
+		for(int i = 0; i < (l/2); i++)
+		{
+			Object t = arr[start+i];
+			arr[start+i] = arr[end-i];
+			arr[end-i] = t;
+		}
+	}
+
+	public static void shiftObjArray(Object[] arr, int left)
+	{
+		reverseObjArray(arr,0,left);
+		reverseObjArray(arr,left,arr.length);
+		reverseObjArray(arr,0,arr.length);
+	}
+
+	public static void shiftObjArrayR(Object[] arr, int right)
+	{
+		int x = arr.length - right;
+		shiftObjArray(arr,x);
+	}
+
+	public static final ForgeDirection[] horizontal = new ForgeDirection[]{ForgeDirection.NORTH,ForgeDirection.EAST,ForgeDirection.SOUTH,ForgeDirection.WEST};
 }
