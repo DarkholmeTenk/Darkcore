@@ -68,9 +68,14 @@ public class SimpleCoordStore
 
 	public SimpleCoordStore getNearby(ForgeDirection dir)
 	{
-		int oX = dir.offsetX;
-		int oY = dir.offsetY;
-		int oZ = dir.offsetZ;
+		return getNearby(dir,1);
+	}
+
+	public SimpleCoordStore getNearby(ForgeDirection dir, int distance)
+	{
+		int oX = dir.offsetX * distance;
+		int oY = dir.offsetY * distance;
+		int oZ = dir.offsetZ * distance;
 		return new SimpleCoordStore(world, x + oX, y + oY, z + oZ);
 	}
 
