@@ -85,9 +85,10 @@ public class RaytraceHelper
 		Vec3 end = tracer.getLookVec();
 		if(dist != 1)
 		{
-			double dsq = dist * dist;
+			double dsq = dist;
 			end = Vec3.createVectorHelper(end.xCoord*dsq, end.yCoord*dsq, end.zCoord*dsq);
 		}
+		end = end.addVector(tracer.posX, tracer.posY + tracer.getEyeHeight(), tracer.posZ);
 		return rayTrace(tracer,end,liquids, entClass, skip);
 	}
 

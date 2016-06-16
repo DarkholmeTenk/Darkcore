@@ -53,7 +53,7 @@ import net.minecraftforge.common.MinecraftForge;
  * @author dark
  *
  */
-@Mod(modid = "darkcore", version = "@version@")
+@Mod(modid = "darkcore", version = "0.42")
 public class DarkcoreMod implements IConfigHandlerMod
 {
 	@SidedProxy(clientSide = "io.darkcraft.darkcore.mod.proxy.ClientProxy", serverSide = "io.darkcraft.darkcore.mod.proxy.CommonProxy")
