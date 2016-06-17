@@ -1,5 +1,8 @@
 package io.darkcraft.darkcore.mod.abstracts;
 
+import org.lwjgl.Sys;
+import org.lwjgl.opengl.GL11;
+
 import io.darkcraft.darkcore.mod.helpers.RenderHelper;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -10,9 +13,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.client.IItemRenderer;
-
-import org.lwjgl.Sys;
-import org.lwjgl.opengl.GL11;
 
 public abstract class AbstractBlockRenderer extends TileEntitySpecialRenderer implements IItemRenderer
 {
@@ -59,6 +59,7 @@ public abstract class AbstractBlockRenderer extends TileEntitySpecialRenderer im
 			int l2 = l >> 16;
 			tessellator.setColorOpaque_F(b, b, b);
 			OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, l1, l2);
+			GL11.glEnable(GL11.GL_NORMALIZE);
 		}
 		/* Note that true tile entity coordinates (tileEntity.xCoord, etc) do not match to render coordinates (d, etc) that are calculated as [true coordinates] - [player coordinates (camera coordinates)] */
 		renderBlock(tessellator, tileEntity, x, y, z);
