@@ -144,7 +144,8 @@ public class EntityDataStorePacketHandler implements IDataPacketHandler
 		Set<Pair<String,AbstractEntityDataStore>> stores = dimTransMap.removeAll(un);
 		for(Pair<String,AbstractEntityDataStore> store : stores)
 		{
-			pl.registerExtendedProperties(store.a, store.b);
+			if(pl.getExtendedProperties(store.a) == null)
+				pl.registerExtendedProperties(store.a, store.b);
 		}
 	}
 
