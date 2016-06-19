@@ -80,6 +80,7 @@ public class DarkcoreMod implements IConfigHandlerMod
 	public static boolean							splitTime			= true;
 	public static Random							r					= new Random();
 	public static AbstractItem						uniqueSword;
+	public static boolean							inited				= false;
 
 	public static void refreshConfigs()
 	{
@@ -130,12 +131,14 @@ public class DarkcoreMod implements IConfigHandlerMod
 		MinecraftForge.EVENT_BUS.register(eh);
 		FMLCommonHandler.instance().bus().register(eh);
 		proxy.init();
+		inited = true;
 	}
 
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent ev)
 	{
 		RecipeHandler.registerAllRecipes();
+		proxy.postInit();
 	}
 
 	@EventHandler

@@ -1,5 +1,9 @@
 package io.darkcraft.darkcore.mod.abstracts;
 
+import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import io.darkcraft.darkcore.mod.DarkcoreMod;
 import io.darkcraft.darkcore.mod.datastore.SimpleCoordStore;
 import io.darkcraft.darkcore.mod.datastore.SimpleDoubleCoordStore;
 import io.darkcraft.darkcore.mod.handlers.packets.PreciseRightClickHandler;
@@ -10,6 +14,7 @@ import io.darkcraft.darkcore.mod.interfaces.IActivatablePrecise;
 import io.darkcraft.darkcore.mod.interfaces.IBlockUpdateDetector;
 import io.darkcraft.darkcore.mod.interfaces.IExplodable;
 import io.darkcraft.darkcore.mod.multiblock.IMultiBlockPart;
+import io.darkcraft.darkcore.mod.proxy.ClientProxy;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.entity.player.EntityPlayer;
@@ -51,6 +56,16 @@ public abstract class AbstractBlockContainer extends AbstractBlock implements IT
 		super(visible, sm);
 		isBlockContainer = true;
 		dropWithData = _dropWithData;
+	}
+
+	@Override
+	public AbstractBlock register()
+	{
+		super.register();
+		GameRegistry.registerTileEntity(getTEClass(), getUnlocalizedName());
+		if (DarkcoreMod.proxy instanceof ClientProxy)
+			((ClientProxy)DarkcoreMod.proxy).registerClientBlock(this);
+		return this;
 	}
 
 	@Override
@@ -155,4 +170,11 @@ public abstract class AbstractBlockContainer extends AbstractBlock implements IT
 			((IExplodable)te).explode(scs, explosion);
 		}
 	}
+
+
+	@SideOnly(Side.CLIENT)
+	public AbstractBlockRenderer getRenderer(){ return null; }
+
+	@SideOnly(Side.CLIENT)
+	public boolean useRendererForItem() { return true; }
 }

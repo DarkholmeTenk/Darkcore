@@ -134,8 +134,6 @@ public abstract class AbstractBlock extends Block implements IRecipeContainer
 			GameRegistry.registerBlock(this, aib, getUnlocalizedName());
 		else
 			GameRegistry.registerBlock(this, getUnlocalizedName());
-		if (this instanceof AbstractBlockContainer) GameRegistry.registerTileEntity(((AbstractBlockContainer) this).getTEClass(), this.getUnlocalizedName());
-
 		return this;
 	}
 

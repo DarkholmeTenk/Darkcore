@@ -14,4 +14,8 @@ public class CommonProxy
 	{
 		return WorldHelper.getWorldServer(id);
 	}
+
+	public void postInit()
+	{
+	}
 }

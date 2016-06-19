@@ -59,6 +59,10 @@ public abstract class AbstractBlockRenderer extends TileEntitySpecialRenderer im
 			int l2 = l >> 16;
 			tessellator.setColorOpaque_F(b, b, b);
 			OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, l1, l2);
+			//if((x==155) && (z == 210) && (Math.random() < 0.05))
+			//	System.out.format("%6.1f - %5d - %5s%n", b,l1,l2);
+			//GL11.glEnable(GL11.GL_AUTO_NORMAL);
+			//GL11.glDisable(GL11.light);
 			GL11.glEnable(GL11.GL_NORMALIZE);
 		}
 		/* Note that true tile entity coordinates (tileEntity.xCoord, etc) do not match to render coordinates (d, etc) that are calculated as [true coordinates] - [player coordinates (camera coordinates)] */

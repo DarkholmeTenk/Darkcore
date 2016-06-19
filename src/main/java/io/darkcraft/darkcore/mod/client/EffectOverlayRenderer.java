@@ -1,5 +1,10 @@
 package io.darkcraft.darkcore.mod.client;
 
+import java.util.Collection;
+
+import org.lwjgl.opengl.GL11;
+
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import io.darkcraft.darkcore.mod.DarkcoreMod;
 import io.darkcraft.darkcore.mod.abstracts.effects.AbstractEffect;
 import io.darkcraft.darkcore.mod.config.ConfigFile;
@@ -7,9 +12,6 @@ import io.darkcraft.darkcore.mod.datastore.UVStore;
 import io.darkcraft.darkcore.mod.handlers.EffectHandler;
 import io.darkcraft.darkcore.mod.helpers.RenderHelper;
 import io.darkcraft.darkcore.mod.impl.EntityEffectStore;
-
-import java.util.Collection;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
@@ -18,10 +20,6 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
-
-import org.lwjgl.opengl.GL11;
-
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class EffectOverlayRenderer  extends Gui
 {
@@ -117,7 +115,7 @@ public class EffectOverlayRenderer  extends Gui
 		int y = i / 5;
 		GL11.glColor3f(1, 1, 1);
 		face(x*xo,y*yo,is,is,uv.u,uv.v,uv.U,uv.V);
-		fr.drawString(getDuration(effect), x * xo, (y * yo)+is+5, 0);
+		fr.drawString(getDuration(effect), x * xo, (y * yo)+is+5, 0xffffff,true);
 		GL11.glPopMatrix();
 	}
 

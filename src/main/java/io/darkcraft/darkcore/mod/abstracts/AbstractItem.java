@@ -1,26 +1,28 @@
 package io.darkcraft.darkcore.mod.abstracts;
 
+import java.util.List;
+
+import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import io.darkcraft.darkcore.mod.DarkcoreMod;
 import io.darkcraft.darkcore.mod.handlers.RecipeHandler;
 import io.darkcraft.darkcore.mod.interfaces.IRecipeContainer;
-
-import java.util.List;
-
+import io.darkcraft.darkcore.mod.proxy.ClientProxy;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
-import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.client.IItemRenderer;
 
 public abstract class AbstractItem extends Item implements IRecipeContainer
 {
 	private IIcon			iconBuffer;
 	private String			unlocalizedFragment;
 	private final String	modName;
+	private boolean			registerIcons = true;
 
 	private String[]		subNames	= null;
 	private IIcon[]			subIcons	= null;
@@ -35,10 +37,15 @@ public abstract class AbstractItem extends Item implements IRecipeContainer
 
 	public AbstractItem register()
 	{
+		if(getRenderer() != null)
+			registerIcons = false;
 		GameRegistry.registerItem(this, getUnlocalizedName());
+		if(DarkcoreMod.proxy instanceof ClientProxy)
+			((ClientProxy)DarkcoreMod.proxy).registerClientItem(this);
 		return this;
 	}
 
+	@Override
 	public abstract void initRecipes();
 
 	public void setSubNames(String... _subNames)
@@ -90,6 +97,7 @@ public abstract class AbstractItem extends Item implements IRecipeContainer
 	@Override
 	public void registerIcons(IIconRegister ir)
 	{
+		if(!registerIcons) return;
 		String[] subNames = getSubNamesForIcons();
 		if (DarkcoreMod.debugText) System.out.println("[TAI]Registering icon " + unlocalizedFragment);
 		if (subNames != null)
@@ -140,5 +148,8 @@ public abstract class AbstractItem extends Item implements IRecipeContainer
 		super.addInformation(is, player, infoList, par4);
 		addInfo(is, player, infoList);
 	}
+
+	@SideOnly(Side.CLIENT)
+	public IItemRenderer getRenderer() { return null; }
 
 }
