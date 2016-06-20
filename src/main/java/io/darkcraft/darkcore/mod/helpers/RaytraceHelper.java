@@ -38,6 +38,16 @@ public class RaytraceHelper
 		return AxisAlignedBB.getBoundingBox(mx,my,mz,mX,mY,mZ);
 	}
 
+	public static Vec3 getEndPosition(Entity tracer, int dist)
+	{
+		Vec3 end = tracer.getLookVec();
+		if(dist != 1)
+		{
+			end = Vec3.createVectorHelper(end.xCoord*dist, end.yCoord*dist, end.zCoord*dist);
+		}
+		return end.addVector(tracer.posX, tracer.posY + tracer.getEyeHeight(), tracer.posZ);
+	}
+
 	public static MovingObjectPosition rayTrace(Entity tracer, Vec3 end, boolean liquids, Class<? extends Entity> entClass, Entity... skip)
 	{
 		Vec3 start = Vec3.createVectorHelper(tracer.posX, tracer.posY, tracer.posZ);
