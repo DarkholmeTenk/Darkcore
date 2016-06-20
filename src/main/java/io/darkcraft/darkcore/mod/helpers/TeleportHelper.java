@@ -126,7 +126,7 @@ public class TeleportHelper
 			((EntityLivingBase) ent).motionY = 0;
 			((EntityLivingBase) ent).motionZ = 0;
 			((EntityLivingBase) ent).velocityChanged = true;
-			((EntityLivingBase) ent).setPositionAndRotation(x, y, z, (float) rot, 0F);
+			((EntityLivingBase) ent).setPositionAndRotation(x, y, z, (float) rot, ent.rotationPitch);
 			((EntityLivingBase) ent).setPositionAndUpdate(x, y, z);
 		}
 	}
@@ -138,7 +138,7 @@ public class TeleportHelper
 	 */
 	public static void teleportEntity(Entity ent, SimpleDoubleCoordStore pos)
 	{
-		teleportEntity(ent,pos,0);
+		teleportEntity(ent,pos,WorldHelper.getWorldID(ent) == pos.world ? ent.rotationYaw : 0);
 	}
 
 	/**
