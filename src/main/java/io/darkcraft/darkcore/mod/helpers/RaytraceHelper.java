@@ -17,13 +17,15 @@ public class RaytraceHelper
 
 	public static MovingObjectPosition rayIntersectEntity(Entity ent, Vec3 origin, Vec3 end)
 	{
-		return rayIntersectEntity(ent, origin, end, defaultExpansion);
+		return rayIntersectEntity(ent, origin, end, 0);
 	}
 
 	public static MovingObjectPosition rayIntersectEntity(Entity ent, Vec3 origin, Vec3 end, double expansion)
 	{
-		AxisAlignedBB aabb = ent.boundingBox.expand(expansion, expansion, expansion);
+		AxisAlignedBB aabb = ent.boundingBox.expand(expansion+ent.width, expansion +ent.ySize, expansion+ent.width);
 		//aabb = aabb.addCoord(ent.posX, ent.posY, ent.posZ);
+		if(aabb.isVecInside(origin) || aabb.isVecInside(end))
+			return new MovingObjectPosition(ent,end);
 		return aabb.calculateIntercept(origin, end);
 	}
 
