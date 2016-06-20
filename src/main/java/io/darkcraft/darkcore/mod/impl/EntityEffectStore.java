@@ -1,14 +1,13 @@
 package io.darkcraft.darkcore.mod.impl;
 
-import io.darkcraft.darkcore.mod.abstracts.AbstractEntityDataStore;
-import io.darkcraft.darkcore.mod.abstracts.effects.AbstractEffect;
-import io.darkcraft.darkcore.mod.handlers.EffectHandler;
-
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
+import io.darkcraft.darkcore.mod.abstracts.AbstractEntityDataStore;
+import io.darkcraft.darkcore.mod.abstracts.effects.AbstractEffect;
+import io.darkcraft.darkcore.mod.handlers.EffectHandler;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.nbt.NBTTagCompound;
@@ -17,11 +16,13 @@ import net.minecraft.world.World;
 public class EntityEffectStore extends AbstractEntityDataStore
 {
 	public static final String disc = "dcEff";
+	public final boolean client;
 	private HashMap<String,AbstractEffect> effects = new HashMap<String,AbstractEffect>();
 
 	public EntityEffectStore(EntityLivingBase ent)
 	{
 		super(ent, disc);
+		client = ent.worldObj.isRemote;
 	}
 
 	@Override
