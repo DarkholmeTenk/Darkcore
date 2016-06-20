@@ -132,6 +132,11 @@ public class SimpleDoubleCoordStore
 		return new SimpleCoordStore(world, _x, _y, _z);
 	}
 
+	public SimpleDoubleCoordStore translate(double _x, double _y, double _z)
+	{
+		return new SimpleDoubleCoordStore(world,x+_x,y+_y,z+_z);
+	}
+
 	/**
 	 * returns an AABB centred around this coord store with lengths 2r in each direction.
 	 *
