@@ -1,8 +1,10 @@
 package io.darkcraft.darkcore.mod.datastore;
 
+import io.darkcraft.darkcore.mod.helpers.MathHelper;
 import io.darkcraft.darkcore.mod.helpers.WorldHelper;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
@@ -77,6 +79,24 @@ public class SimpleCoordStore
 		int oY = dir.offsetY * distance;
 		int oZ = dir.offsetZ * distance;
 		return new SimpleCoordStore(world, x + oX, y + oY, z + oZ);
+	}
+
+	public static SimpleCoordStore[] getTouching(SimpleDoubleCoordStore pos, boolean includeCeilHeight)
+	{
+		SimpleCoordStore[] slots = new SimpleCoordStore[includeCeilHeight ? 8 : 4];
+		int w = pos.world;
+		slots[0] = new SimpleCoordStore(w, MathHelper.floor(pos.x), MathHelper.floor(pos.y), MathHelper.floor(pos.z));
+		slots[1] = new SimpleCoordStore(w, MathHelper.floor(pos.x), MathHelper.floor(pos.y), MathHelper.ceil(pos.z));
+		slots[2] = new SimpleCoordStore(w, MathHelper.ceil(pos.x), MathHelper.floor(pos.y), MathHelper.ceil(pos.z));
+		slots[3] = new SimpleCoordStore(w, MathHelper.ceil(pos.x), MathHelper.floor(pos.y), MathHelper.floor(pos.z));
+		if(includeCeilHeight)
+		{
+			slots[4] = new SimpleCoordStore(w, MathHelper.floor(pos.x), MathHelper.ceil(pos.y), MathHelper.floor(pos.z));
+			slots[5] = new SimpleCoordStore(w, MathHelper.floor(pos.x), MathHelper.ceil(pos.y), MathHelper.ceil(pos.z));
+			slots[6] = new SimpleCoordStore(w, MathHelper.ceil(pos.x), MathHelper.ceil(pos.y), MathHelper.ceil(pos.z));
+			slots[7] = new SimpleCoordStore(w, MathHelper.ceil(pos.x), MathHelper.ceil(pos.y), MathHelper.floor(pos.z));
+		}
+		return slots;
 	}
 
 	public World getWorldObj()
@@ -179,7 +199,7 @@ public class SimpleCoordStore
 	public Block getBlock()
 	{
 		World w = getWorldObj();
-		if (w != null) if (!w.isAirBlock(x, y, z)) return w.getBlock(x, y, z);
+		if (w != null) if (!(w.getBlock(x, y, z) == Blocks.air)) return w.getBlock(x, y, z);
 		return null;
 	}
 
