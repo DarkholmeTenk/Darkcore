@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import io.darkcraft.darkcore.mod.datastore.SimpleDoubleCoordStore;
+import net.minecraft.util.Vec3;
 import net.minecraftforge.common.util.ForgeDirection;
 
 public class MathHelper
@@ -151,6 +152,13 @@ public class MathHelper
 	{
 		int x = arr.length - right;
 		shiftObjArray(arr,x);
+	}
+
+	public static Vec3 getVecBetween(SimpleDoubleCoordStore from, SimpleDoubleCoordStore to)
+	{
+		if((from == null) || (to == null)) return null;
+		if(from.world != to.world) return null;
+		return Vec3.createVectorHelper(to.x-from.x,to.y-from.y,to.z-from.z);
 	}
 
 	public static final ForgeDirection[] horizontal = new ForgeDirection[]{ForgeDirection.NORTH,ForgeDirection.EAST,ForgeDirection.SOUTH,ForgeDirection.WEST};
