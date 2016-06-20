@@ -103,6 +103,11 @@ public class SimpleDoubleCoordStore
 		return distance(new SimpleDoubleCoordStore(e));
 	}
 
+	public double distance(Entity e)
+	{
+		return distance(new SimpleDoubleCoordStore(e));
+	}
+
 	public World getWorldObj()
 	{
 		return WorldHelper.getWorld(world);
