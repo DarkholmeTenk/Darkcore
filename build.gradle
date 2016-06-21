@@ -21,6 +21,9 @@ version = "0.42"
 group= "io.darkcraft.darkcore" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "darkcore"
 
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
 minecraft {
     version = "1.7.10-10.13.3.1403-1.7.10"
     runDir = "eclipse"
