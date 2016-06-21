@@ -30,6 +30,11 @@ public class MathHelper
 		return sin(degrees + 90);
 	}
 
+	public static float interpolate(float a, float b, float mix)
+	{
+		return (a * mix) + (b * (1-mix));
+	}
+
 	/**
 	 * Clamps an integer value so that min <= value <= max
 	 */
