@@ -22,7 +22,10 @@ public class EntityEffectStore extends AbstractEntityDataStore
 	public EntityEffectStore(EntityLivingBase ent)
 	{
 		super(ent, disc);
-		client = ent.worldObj.isRemote;
+		if((ent == null) || (ent.worldObj == null))
+			client = false;
+		else
+			client = ent.worldObj.isRemote;
 	}
 
 	@Override
