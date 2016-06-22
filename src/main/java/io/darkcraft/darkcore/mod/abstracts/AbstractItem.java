@@ -37,8 +37,9 @@ public abstract class AbstractItem extends Item implements IRecipeContainer
 
 	public AbstractItem register()
 	{
-		if(getRenderer() != null)
-			registerIcons = false;
+		if(DarkcoreMod.proxy instanceof ClientProxy)
+			if(getRenderer() != null)
+				registerIcons = false;
 		GameRegistry.registerItem(this, getUnlocalizedName());
 		if(DarkcoreMod.proxy instanceof ClientProxy)
 			((ClientProxy)DarkcoreMod.proxy).registerClientItem(this);
