@@ -171,7 +171,7 @@ public abstract class AbstractBlockContainer extends AbstractBlock implements IT
 
 
 	@SideOnly(Side.CLIENT)
-	public AbstractBlockRenderer getRenderer(){ return null; }
+	public Object getRenderer(){ return null; }
 
 	@SideOnly(Side.CLIENT)
 	public boolean useRendererForItem() { return true; }

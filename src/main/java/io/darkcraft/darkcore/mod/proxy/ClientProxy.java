@@ -74,7 +74,7 @@ public class ClientProxy extends CommonProxy
 
 	public void registerClientBlock(AbstractBlockContainer b)
 	{
-		AbstractBlockRenderer abr = b.getRenderer();
+		AbstractBlockRenderer abr = (AbstractBlockRenderer) b.getRenderer();
 		if(abr == null) return;
 		if(DarkcoreMod.inited)
 			registerCBR(b,abr);
