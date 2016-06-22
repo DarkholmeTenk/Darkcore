@@ -76,6 +76,7 @@ public class ClientProxy extends CommonProxy
 	{
 		AbstractBlockRenderer abr = (AbstractBlockRenderer) b.getRenderer();
 		if(abr == null) return;
+		System.out.println("DC Registering block renderer - " + b.getUnlocalizedName());
 		if(DarkcoreMod.inited)
 			registerCBR(b,abr);
 		else
