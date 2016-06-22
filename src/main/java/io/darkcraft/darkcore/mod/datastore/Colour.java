@@ -2,6 +2,8 @@ package io.darkcraft.darkcore.mod.datastore;
 
 public class Colour
 {
+	public final static Colour white = new Colour(1,1,1);
+	public final static Colour black = new Colour(1,1,1);
 	public final float r;
 	public final float g;
 	public final float b;
