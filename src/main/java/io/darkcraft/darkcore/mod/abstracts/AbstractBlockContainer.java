@@ -14,7 +14,6 @@ import io.darkcraft.darkcore.mod.interfaces.IActivatablePrecise;
 import io.darkcraft.darkcore.mod.interfaces.IBlockUpdateDetector;
 import io.darkcraft.darkcore.mod.interfaces.IExplodable;
 import io.darkcraft.darkcore.mod.multiblock.IMultiBlockPart;
-import io.darkcraft.darkcore.mod.proxy.ClientProxy;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.entity.player.EntityPlayer;
@@ -63,8 +62,7 @@ public abstract class AbstractBlockContainer extends AbstractBlock implements IT
 	{
 		super.register();
 		GameRegistry.registerTileEntity(getTEClass(), getUnlocalizedName());
-		if (DarkcoreMod.proxy instanceof ClientProxy)
-			((ClientProxy)DarkcoreMod.proxy).registerClientBlock(this);
+		DarkcoreMod.proxy.register(this);
 		return this;
 	}
 

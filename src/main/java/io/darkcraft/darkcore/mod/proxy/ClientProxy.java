@@ -106,4 +106,15 @@ public class ClientProxy extends CommonProxy
 			Thread.dumpStack();
 		return null;
 	}
+
+	public void register(AbstractBlockContainer b)
+	{
+		registerClientBlock(b);
+	}
+
+	@Override
+	public void register(AbstractItem i)
+	{
+		registerClientItem(i);
+	}
 }

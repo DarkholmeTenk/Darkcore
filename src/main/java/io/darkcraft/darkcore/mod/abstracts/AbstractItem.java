@@ -8,7 +8,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 import io.darkcraft.darkcore.mod.DarkcoreMod;
 import io.darkcraft.darkcore.mod.handlers.RecipeHandler;
 import io.darkcraft.darkcore.mod.interfaces.IRecipeContainer;
-import io.darkcraft.darkcore.mod.proxy.ClientProxy;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -22,7 +21,7 @@ public abstract class AbstractItem extends Item implements IRecipeContainer
 	private IIcon			iconBuffer;
 	private String			unlocalizedFragment;
 	private final String	modName;
-	private boolean			registerIcons = true;
+	public boolean			registerIcons = true;
 
 	private String[]		subNames	= null;
 	private IIcon[]			subIcons	= null;
@@ -37,12 +36,8 @@ public abstract class AbstractItem extends Item implements IRecipeContainer
 
 	public AbstractItem register()
 	{
-		if(DarkcoreMod.proxy instanceof ClientProxy)
-			if(getRenderer() != null)
-				registerIcons = false;
 		GameRegistry.registerItem(this, getUnlocalizedName());
-		if(DarkcoreMod.proxy instanceof ClientProxy)
-			((ClientProxy)DarkcoreMod.proxy).registerClientItem(this);
+		DarkcoreMod.proxy.register(this);
 		return this;
 	}
 
