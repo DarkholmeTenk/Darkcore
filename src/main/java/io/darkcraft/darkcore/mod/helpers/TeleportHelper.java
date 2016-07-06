@@ -42,6 +42,7 @@ public class TeleportHelper
 		if (ent instanceof EntityPlayerMP)
 		{
 			EntityPlayerMP pl = (EntityPlayerMP) ent;
+			pl.setSneaking(false);
 			float xp = pl.experience;
 			int xpT = pl.experienceTotal;
 			int xpL = pl.experienceLevel;
@@ -109,7 +110,6 @@ public class TeleportHelper
 	{
 		if(ent instanceof IBossDisplayData)
 			return;
-		System.out.println("[TTH]Teleport request: " + worldID + " > " + x + "," + y + "," + z);
 		MinecraftServer serv = MinecraftServer.getServer();
 		if (ServerHelper.isServer() && (serv != null) && (ent instanceof EntityLivingBase))
 		{
