@@ -54,7 +54,7 @@ public class RaytraceHelper
 	public static MovingObjectPosition rayTraceBlocks(World w, Vec3 s, Vec3 e, boolean l)
 	{
 		Vec3 s2 = Vec3.createVectorHelper(s.xCoord, s.yCoord, s.zCoord);
-		Vec3 e2 = Vec3.createVectorHelper(s.xCoord, s.yCoord, s.zCoord);
+		Vec3 e2 = Vec3.createVectorHelper(e.xCoord, e.yCoord, e.zCoord);
 		return w.rayTraceBlocks(s2, e2, l);
 	}
 
