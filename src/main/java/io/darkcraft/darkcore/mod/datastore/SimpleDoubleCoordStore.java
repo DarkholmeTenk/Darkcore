@@ -224,6 +224,11 @@ public class SimpleDoubleCoordStore
 		nbt.setDouble("z", z);
 	}
 
+	public void writeToNBT(NBTTagCompound nbt, String id)
+	{
+		nbt.setTag(id, writeToNBT());
+	}
+
 	public static SimpleDoubleCoordStore readFromNBT(NBTTagCompound nbt)
 	{
 		if (!(nbt.hasKey("w") && nbt.hasKey("x") && nbt.hasKey("y") && nbt.hasKey("z"))) return null;
