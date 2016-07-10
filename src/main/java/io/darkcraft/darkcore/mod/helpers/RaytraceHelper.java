@@ -22,11 +22,12 @@ public class RaytraceHelper
 
 	public static MovingObjectPosition rayIntersectEntity(Entity ent, Vec3 origin, Vec3 end, double expansion)
 	{
-		AxisAlignedBB aabb = ent.boundingBox.expand(expansion+ent.width, expansion +ent.ySize, expansion+ent.width);
+		AxisAlignedBB aabb = ent.boundingBox.expand(expansion, expansion, expansion);
 		//aabb = aabb.addCoord(ent.posX, ent.posY, ent.posZ);
 		if(aabb.isVecInside(origin) || aabb.isVecInside(end))
 			return new MovingObjectPosition(ent,end);
-		return aabb.calculateIntercept(origin, end);
+		MovingObjectPosition mop = aabb.calculateIntercept(origin, end);
+		return mop;
 	}
 
 	public static AxisAlignedBB getAABB(Vec3 s, Vec3 e)
@@ -50,6 +51,13 @@ public class RaytraceHelper
 		return end.addVector(tracer.posX, tracer.posY + tracer.getEyeHeight(), tracer.posZ);
 	}
 
+	public static MovingObjectPosition rayTraceBlocks(World w, Vec3 s, Vec3 e, boolean l)
+	{
+		Vec3 s2 = Vec3.createVectorHelper(s.xCoord, s.yCoord, s.zCoord);
+		Vec3 e2 = Vec3.createVectorHelper(s.xCoord, s.yCoord, s.zCoord);
+		return w.rayTraceBlocks(s2, e2, l);
+	}
+
 	public static MovingObjectPosition rayTrace(Entity tracer, Vec3 end, boolean liquids, Class<? extends Entity> entClass, Entity... skip)
 	{
 		Vec3 start = Vec3.createVectorHelper(tracer.posX, tracer.posY, tracer.posZ);
@@ -57,7 +65,7 @@ public class RaytraceHelper
 			start = Vec3.createVectorHelper(tracer.posX, tracer.posY + tracer.getEyeHeight(), tracer.posZ);
 		World w = tracer.worldObj;
 		if((tracer == null) || (w == null)) return null;
-		MovingObjectPosition mop = w.rayTraceBlocks(start, end, liquids);
+		MovingObjectPosition mop = rayTraceBlocks(w, start, end, liquids);
 		double dist = Double.MAX_VALUE;
 		if(mop != null)
 		{
