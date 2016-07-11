@@ -14,6 +14,7 @@ public class PotionHelper
 		Potion[] nullArr = new Potion[0];
 		for(Field f : Potion.class.getDeclaredFields())
 		{
+			if(f.getType().isInstance(nullArr))
 			{
 				potionField = f;
 				break;
