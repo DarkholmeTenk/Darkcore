@@ -73,6 +73,7 @@ public class EntityDataStorePacketHandler implements IDataPacketHandler
 		if(ServerHelper.isClient()) return false;
 		EntityLivingBase ent = aeds.getEntity();
 		if((ent == null) || ent.isDead) return false;
+		if(ent.ticksExisted < 5) return true;
 		NBTTagCompound nbt = new NBTTagCompound();
 		aeds.writeTransmittable(nbt);
 		if(nbt.hasNoTags()) return false;
