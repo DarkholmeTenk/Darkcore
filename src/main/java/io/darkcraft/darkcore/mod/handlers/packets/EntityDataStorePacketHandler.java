@@ -36,6 +36,7 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 
 public class EntityDataStorePacketHandler implements IDataPacketHandler
 {
+	private static int tt = 0;
 	private static Set<String> knownStores = new THashSet();
 
 	public static void addStoreType(String s)
@@ -94,6 +95,7 @@ public class EntityDataStorePacketHandler implements IDataPacketHandler
 	public void tickHandler(TickEvent.ServerTickEvent tick)
 	{
 		if((tick.phase != Phase.START) || (tick.type != Type.SERVER)) return;
+		if(((tt++) % 5) != 0) return;
 		AbstractEntityDataStore aeds;
 		List<AbstractEntityDataStore> toReadd = new ArrayList();
 		while((aeds = queue.poll()) != null)
