@@ -58,49 +58,56 @@ public class RaytraceHelper
 		return w.rayTraceBlocks(s2, e2, l);
 	}
 
-	public static MovingObjectPosition rayTrace(Entity tracer, Vec3 end, boolean liquids, Class<? extends Entity> entClass, Entity... skip)
+	public static MovingObjectPosition rayTrace(Entity tracer, Vec3 end, boolean liquids, Class<? extends Entity> entClass, boolean doBlocks, boolean doEnts, Entity... skip)
 	{
 		Vec3 start = Vec3.createVectorHelper(tracer.posX, tracer.posY, tracer.posZ);
 		if(ServerHelper.isServer() && (tracer instanceof EntityPlayer))
 			start = Vec3.createVectorHelper(tracer.posX, tracer.posY + tracer.getEyeHeight(), tracer.posZ);
 		World w = tracer.worldObj;
 		if((tracer == null) || (w == null)) return null;
-		MovingObjectPosition mop = rayTraceBlocks(w, start, end, liquids);
+		MovingObjectPosition mop = null;
 		double dist = Double.MAX_VALUE;
-		if(mop != null)
+		if(doBlocks)
 		{
-			dist = start.distanceTo(mop.hitVec);
-			end = mop.hitVec;
-		}
-		List entityList = w.getEntitiesWithinAABBExcludingEntity(tracer, getAABB(start, end).expand(0.8, 0.8, 0.8));
-		oLoop:
-		for(Object o : entityList)
-		{
-			for(Entity e : skip) if(o == e) continue oLoop;
-			if(!(o instanceof Entity)) continue;
-			Entity e = (Entity) o;
-			if(!e.canBeCollidedWith()) continue;
-			if((entClass != null) && !entClass.isInstance(e)) continue;
-			MovingObjectPosition entityMop = rayIntersectEntity(e, start, end);
-			if(entityMop == null) continue;
-			entityMop.entityHit = e;
-			entityMop.typeOfHit = MovingObjectType.ENTITY;
-			double entDist = start.distanceTo(entityMop.hitVec);
-			if(entDist < dist)
+			mop = rayTraceBlocks(w, start, end, liquids);
+			if(mop != null)
 			{
-				mop = entityMop;
-				dist = entDist;
+				dist = start.distanceTo(mop.hitVec);
+				end = mop.hitVec;
+			}
+		}
+		if(doEnts)
+		{
+			List entityList = w.getEntitiesWithinAABBExcludingEntity(tracer, getAABB(start, end).expand(0.8, 0.8, 0.8));
+			oLoop:
+			for(Object o : entityList)
+			{
+				for(Entity e : skip) if(o == e) continue oLoop;
+				if(!(o instanceof Entity)) continue;
+				Entity e = (Entity) o;
+				if(!e.canBeCollidedWith()) continue;
+				if((entClass != null) && !entClass.isInstance(e)) continue;
+				MovingObjectPosition entityMop = rayIntersectEntity(e, start, end);
+				if(entityMop == null) continue;
+				entityMop.entityHit = e;
+				entityMop.typeOfHit = MovingObjectType.ENTITY;
+				double entDist = start.distanceTo(entityMop.hitVec);
+				if(entDist < dist)
+				{
+					mop = entityMop;
+					dist = entDist;
+				}
 			}
 		}
 		return mop;
 	}
 
-	public static MovingObjectPosition rayTrace(Entity tracer, Vec3 end, boolean liquids, Class<? extends Entity> entClass)
+	public static MovingObjectPosition rayTrace(Entity tracer, Vec3 end, boolean liquids, Class<? extends Entity> entClass, boolean blocks, boolean ents)
 	{
-		return rayTrace(tracer,end,liquids,entClass,emptyArr);
+		return rayTrace(tracer,end,liquids,entClass,blocks,ents, emptyArr);
 	}
 
-	public static MovingObjectPosition rayTrace(Entity tracer, double dist, boolean liquids, Class<? extends Entity> entClass, Entity... skip)
+	public static MovingObjectPosition rayTrace(Entity tracer, double dist, boolean liquids, Class<? extends Entity> entClass, boolean blocks, boolean ents, Entity... skip)
 	{
 		Vec3 end = tracer.getLookVec();
 		if(dist != 1)
@@ -109,22 +116,22 @@ public class RaytraceHelper
 			end = Vec3.createVectorHelper(end.xCoord*dsq, end.yCoord*dsq, end.zCoord*dsq);
 		}
 		end = end.addVector(tracer.posX, tracer.posY + tracer.getEyeHeight(), tracer.posZ);
-		return rayTrace(tracer,end,liquids, entClass, skip);
+		return rayTrace(tracer,end,liquids, entClass, blocks, ents, skip);
 	}
 
-	public static MovingObjectPosition rayTrace(Entity tracer, double dist, boolean liquids, Class<? extends Entity> entClass)
+	public static MovingObjectPosition rayTrace(Entity tracer, double dist, boolean liquids, Class<? extends Entity> entClass, boolean blocks, boolean ents)
 	{
-		return rayTrace(tracer, dist, liquids, entClass, emptyArr);
+		return rayTrace(tracer, dist, liquids, entClass, blocks, ents, emptyArr);
 	}
 
-	public static MovingObjectPosition rayTrace(Entity tracer, boolean liquids, Class<? extends Entity> entClass, Entity... skip)
+	public static MovingObjectPosition rayTrace(Entity tracer, boolean liquids, Class<? extends Entity> entClass, boolean blocks, boolean ents, Entity... skip)
 	{
 		Vec3 end = Vec3.createVectorHelper(tracer.posX+tracer.motionX, tracer.posY+tracer.motionY, tracer.posZ+tracer.motionZ);
-		return rayTrace(tracer,end,liquids, entClass, skip);
+		return rayTrace(tracer,end,liquids, entClass, blocks, ents, skip);
 	}
 
-	public static MovingObjectPosition rayTrace(Entity tracer, boolean liquids, Class<? extends Entity> entClass)
+	public static MovingObjectPosition rayTrace(Entity tracer, boolean liquids, Class<? extends Entity> entClass, boolean blocks, boolean ents)
 	{
-		return rayTrace(tracer,liquids,entClass,emptyArr);
+		return rayTrace(tracer,liquids,entClass,blocks,ents,emptyArr);
 	}
 }
