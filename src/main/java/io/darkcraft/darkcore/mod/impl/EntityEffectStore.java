@@ -7,6 +7,7 @@ import java.util.Map.Entry;
 
 import io.darkcraft.darkcore.mod.abstracts.AbstractEntityDataStore;
 import io.darkcraft.darkcore.mod.abstracts.effects.AbstractEffect;
+import io.darkcraft.darkcore.mod.abstracts.effects.StackedEffect;
 import io.darkcraft.darkcore.mod.handlers.EffectHandler;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -62,6 +63,11 @@ public class EntityEffectStore extends AbstractEntityDataStore
 		return false;
 	}
 
+	/**
+	 * If the effect you want is stackable, this may return a StackedEffect
+	 * @param id
+	 * @return
+	 */
 	public AbstractEffect getEffect(String id)
 	{
 		return effects.get(id);
@@ -74,8 +80,22 @@ public class EntityEffectStore extends AbstractEntityDataStore
 
 	public void addEffect(AbstractEffect effect)
 	{
-		effects.put(effect.id, effect);
-		effect.effectAdded();
+		String id = effect instanceof StackedEffect ? ((StackedEffect)effect).subID : effect.id;
+		AbstractEffect old = effects.get(id);
+		if(effect.canStack && (old != null))
+		{
+			if(effect instanceof StackedEffect)
+				throw new RuntimeException("Cannot add two stacked effects!");
+			if(old instanceof StackedEffect)
+				effects.put(id, StackedEffect.addEffect((StackedEffect) old, effect));
+			else
+				effects.put(id, new StackedEffect(old, effect));
+		}
+		else
+		{
+			effects.put(id, effect);
+			effect.effectAdded();
+		}
 		if(shouldBeWatched())
 			EffectHandler.addWatchedStore(this);
 		queueUpdate();

@@ -1,9 +1,8 @@
 package io.darkcraft.darkcore.mod.abstracts.effects;
 
-import io.darkcraft.darkcore.mod.datastore.UVStore;
-
 import java.lang.ref.WeakReference;
 
+import io.darkcraft.darkcore.mod.datastore.UVStore;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
@@ -16,7 +15,8 @@ public abstract class AbstractEffect
 	public final boolean doesTick;
 	public final int tickFreq;
 	public final int duration;
-	private int tt = -1;
+	public boolean canStack = false;
+	int tt = -1;
 
 	public AbstractEffect(String _id, EntityLivingBase ent, int duration)
 	{

@@ -12,6 +12,7 @@ import cpw.mods.fml.common.gameevent.TickEvent.Phase;
 import cpw.mods.fml.common.gameevent.TickEvent.Type;
 import io.darkcraft.darkcore.mod.abstracts.effects.AbstractEffect;
 import io.darkcraft.darkcore.mod.abstracts.effects.IEffectFactory;
+import io.darkcraft.darkcore.mod.abstracts.effects.StackedEffect;
 import io.darkcraft.darkcore.mod.helpers.ServerHelper;
 import io.darkcraft.darkcore.mod.impl.EntityEffectStore;
 import net.minecraft.entity.Entity;
@@ -30,10 +31,31 @@ public class EffectHandler
 		factories.add(factory);
 	}
 
+	private static AbstractEffect getStackedEffect(EntityLivingBase ent, NBTTagCompound nbt)
+	{
+		int num = nbt.getInteger("numSubs");
+		if(num == 0) return null;
+		AbstractEffect[] subs = new AbstractEffect[num];
+		for(int i = 0; i < num; i++)
+		{
+			NBTTagCompound subNBT = nbt.getCompoundTag("sub"+i);
+			AbstractEffect e = getEffect(ent, subNBT);
+			if(e == null) return null;
+			if(num == 1)
+				return e;
+			subs[i] = e;
+		}
+		StackedEffect se = new StackedEffect(subs);
+		se.read(nbt);
+		return se;
+	}
+
 	public static AbstractEffect getEffect(EntityLivingBase ent, NBTTagCompound nbt)
 	{
 		String id = nbt.getString("id");
 		if((id == null) || id.isEmpty()) return null;
+		if(StackedEffect.stackId.equals(id))
+			return getStackedEffect(ent, nbt);
 		for(IEffectFactory fact : factories)
 		{
 			AbstractEffect effect = fact.createEffect(ent, id, nbt);
