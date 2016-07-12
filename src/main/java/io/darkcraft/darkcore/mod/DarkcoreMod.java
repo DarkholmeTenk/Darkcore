@@ -81,7 +81,9 @@ public class DarkcoreMod implements IConfigHandlerMod
 	public static boolean							splitTime			= true;
 	public static Random							r					= new Random();
 	public static AbstractItem						uniqueSword;
+	public static boolean							preInited			= false;
 	public static boolean							inited				= false;
+	public static boolean							postInited			= false;
 
 	public static void refreshConfigs()
 	{
@@ -115,6 +117,7 @@ public class DarkcoreMod implements IConfigHandlerMod
 		packetHandler.registerHandler(PreciseRightClickHandler.disc, new PreciseRightClickHandler());
 		DarkcoreMod.packetHandler.registerHandler(WorldDataStoreHandler.disc, new WorldDataStoreHandler());
 		uniqueSword = new UniqueSwordItem().register();
+		preInited = true;
 	}
 
 	@EventHandler
@@ -140,6 +143,7 @@ public class DarkcoreMod implements IConfigHandlerMod
 	{
 		RecipeHandler.registerAllRecipes();
 		proxy.postInit();
+		postInited = true;
 	}
 
 	@EventHandler
