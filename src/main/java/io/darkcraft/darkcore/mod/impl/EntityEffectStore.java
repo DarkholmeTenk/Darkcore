@@ -93,6 +93,11 @@ public class EntityEffectStore extends AbstractEntityDataStore
 		}
 		else
 		{
+			if(old != null)
+			{
+				effect = old.combine(effect);
+				old.effectRemoved();
+			}
 			effects.put(id, effect);
 			effect.effectAdded();
 		}
@@ -135,6 +140,8 @@ public class EntityEffectStore extends AbstractEntityDataStore
 			eff.write(effTag);
 			nbt.setTag("eff"+(i++), effTag);
 		}
+		if(i == 0)
+			nbt.setBoolean("empty", true);
 	}
 
 	@Override

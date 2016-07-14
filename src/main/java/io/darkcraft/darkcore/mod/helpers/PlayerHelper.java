@@ -1,12 +1,15 @@
 package io.darkcraft.darkcore.mod.helpers;
 
-import io.darkcraft.darkcore.mod.abstracts.AbstractWorldDataStore;
-
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+import com.mojang.authlib.GameProfile;
+
+import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
+import io.darkcraft.darkcore.mod.abstracts.AbstractWorldDataStore;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -15,10 +18,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.world.World;
-
-import com.mojang.authlib.GameProfile;
-
-import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 
 public class PlayerHelper
 {
@@ -117,6 +116,12 @@ public class PlayerHelper
 	public static String[] getAllUsernames()
 	{
 		return ServerHelper.getServer().getAllUsernames();
+	}
+
+	public static List<EntityPlayer> getAllPlayers()
+	{
+		if(ServerHelper.isClient()) return null;
+		return ServerHelper.getConfigManager().playerEntityList;
 	}
 
 	public static Team getTeam(EntityLivingBase ent)

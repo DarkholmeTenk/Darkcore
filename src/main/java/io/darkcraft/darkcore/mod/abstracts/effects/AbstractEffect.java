@@ -51,6 +51,11 @@ public abstract class AbstractEffect
 			apply();
 	}
 
+	public AbstractEffect combine(AbstractEffect newEffect)
+	{
+		return newEffect;
+	}
+
 	/**
 	 * Called when the effect is added to an entity (including when that entity is created (e.g. when a player logs in or the chunk loads))
 	 */

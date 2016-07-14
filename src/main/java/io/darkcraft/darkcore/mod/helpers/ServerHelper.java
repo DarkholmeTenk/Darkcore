@@ -7,6 +7,10 @@ import java.io.OutputStream;
 import java.util.List;
 import java.util.zip.ZipException;
 
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.gameevent.TickEvent;
+import cpw.mods.fml.common.gameevent.TickEvent.Type;
+import cpw.mods.fml.relauncher.Side;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -16,8 +20,6 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.ServerConfigurationManager;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.relauncher.Side;
 
 public class ServerHelper
 {
@@ -31,6 +33,13 @@ public class ServerHelper
 	public static boolean isClient()
 	{
 		return FMLCommonHandler.instance().getEffectiveSide().equals(Side.CLIENT);
+	}
+
+	public static boolean correctSide(TickEvent.Type t)
+	{
+		if((t == Type.CLIENT) && ServerHelper.isClient()) return true;
+		if((t == Type.SERVER) && ServerHelper.isClient()) return true;
+		return false;
 	}
 
 	public static boolean isIntegratedClient()
@@ -244,5 +253,4 @@ public class ServerHelper
 		c.appendText(string);
 		pl.addChatMessage(c);
 	}
-
 }
