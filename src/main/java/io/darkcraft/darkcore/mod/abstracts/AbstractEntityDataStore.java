@@ -1,21 +1,24 @@
 package io.darkcraft.darkcore.mod.abstracts;
 
-import java.lang.ref.WeakReference;
-
+import io.darkcraft.darkcore.mod.handlers.entcontainer.EntityContainerHandler;
+import io.darkcraft.darkcore.mod.handlers.entcontainer.IEntityContainer;
 import io.darkcraft.darkcore.mod.handlers.packets.EntityDataStorePacketHandler;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.IExtendedEntityProperties;
 
-public abstract class AbstractEntityDataStore implements IExtendedEntityProperties
+public abstract class AbstractEntityDataStore<E extends EntityLivingBase> implements IExtendedEntityProperties
 {
 	public final String id;
-	private final WeakReference<EntityLivingBase> entity;
+	private IEntityContainer entity;
+	private E temp;
 
-	public AbstractEntityDataStore(EntityLivingBase ent, String _id)
+	public AbstractEntityDataStore(E ent, String _id)
 	{
 		id = _id;
-		entity = new WeakReference(ent);
+		entity = EntityContainerHandler.getContainer(ent);
+		if(entity == null)
+			temp = ent;
 		EntityDataStorePacketHandler.addStoreType(id);
 	}
 
@@ -24,10 +27,18 @@ public abstract class AbstractEntityDataStore implements IExtendedEntityProperti
 		return true;
 	}
 
-	public EntityLivingBase getEntity()
+	public E getEntity()
 	{
-		if(entity == null) return null;
-		return entity.get();
+		if(entity == null)
+		{
+			entity = EntityContainerHandler.getContainer(temp);
+			if(entity == null)
+				return temp;
+			else
+				temp = null;
+		}
+		EntityLivingBase e = entity.getEntity();
+		return (E) e;
 	}
 
 	public void queueUpdate()

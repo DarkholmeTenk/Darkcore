@@ -1,10 +1,25 @@
 package io.darkcraft.darkcore.mod.helpers;
 
+import java.util.UUID;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
 public class NBTHelper
 {
+	public static void writeUUIDToNBT(UUID uuid, NBTTagCompound nbt, String id)
+	{
+		nbt.setLong(id+".m", uuid.getMostSignificantBits());
+		nbt.setLong(id+".l", uuid.getLeastSignificantBits());
+	}
+
+	public static UUID readUUIDFromNBT(NBTTagCompound nbt, String id)
+	{
+		long m = nbt.getLong(id+".m");
+		long l = nbt.getLong(id+".l");
+		return new UUID(m, l);
+	}
+
 	public static void writeItemsToNBT(ItemStack[] items, NBTTagCompound nbt)
 	{
 		writeItemsToNBT(items, 0, items.length, nbt);

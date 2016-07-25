@@ -8,8 +8,12 @@ import java.util.UUID;
 
 import com.mojang.authlib.GameProfile;
 
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.PlayerEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
+import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
 import io.darkcraft.darkcore.mod.abstracts.AbstractWorldDataStore;
+import io.darkcraft.darkcore.mod.handlers.entcontainer.EntityContainerHandler;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -21,6 +25,14 @@ import net.minecraft.world.World;
 
 public class PlayerHelper
 {
+	public static EntityPlayerMP getCurrentPlayer(EntityPlayerMP pl)
+	{
+		if(!pl.isDead) return pl;
+		EntityPlayerMP np = getPlayer(getUsername(pl));
+		if((np.playerNetServerHandler == null) || (np.playerNetServerHandler.netManager == null)) return null;
+		return np;
+	}
+
 	public static EntityPlayerMP getPlayer(String username)
 	{
 		return ServerHelper.getPlayer(username);
@@ -29,6 +41,11 @@ public class PlayerHelper
 	public static String getUsername(EntityPlayer player)
 	{
 		return ServerHelper.getUsername(player);
+	}
+
+	public static String getUsername(UUID uuid)
+	{
+		return store.getUsername(uuid);
 	}
 
 	public static PlayerHelper		i			= new PlayerHelper();
@@ -48,8 +65,9 @@ public class PlayerHelper
 	public static UUID getUUID(EntityPlayer pl)
 	{
 		GameProfile profile = pl.getGameProfile();
-		UUID uuid = profile.getId();
-		return uuid;
+		if(profile != null)
+			return profile.getId();
+		return null;
 	}
 
 	public static UUID getUUID(String un)
@@ -102,15 +120,6 @@ public class PlayerHelper
 	public static void registerJoinItem(ItemStack is)
 	{
 		joinStacks.add(is);
-	}
-
-	public void playerSpawn(PlayerLoggedInEvent event)
-	{
-		EntityPlayer player = event.player;
-		if(!getStore().uuidMap.containsKey(getUUID(player)))
-			for(ItemStack is : joinStacks)
-				WorldHelper.giveItemStack(player, is.copy());
-		getStore().addUser(player);
 	}
 
 	public static String[] getAllUsernames()
@@ -186,6 +195,7 @@ public class PlayerHelper
 			try
 			{
 				UUID uuid = ent.getGameProfile().getId();
+				EntityContainerHandler.getContainer(ent);
 				String name = ServerHelper.getUsername(ent);
 				String prev = null;
 				synchronized (uuidMap)
@@ -269,6 +279,23 @@ public class PlayerHelper
 			nbt.setBoolean("swen", swordsEnabled);
 		}
 
+	}
+
+	@SubscribeEvent
+	public void playerSpawn(PlayerLoggedInEvent event)
+	{
+		EntityPlayer player = event.player;
+		if(!getStore().uuidMap.containsKey(getUUID(player)))
+			for(ItemStack is : joinStacks)
+				WorldHelper.giveItemStack(player, is.copy());
+		getStore().addUser(player);
+	}
+
+	@SubscribeEvent
+	public void playerChangeEntity(PlayerEvent ev)
+	{
+		if(ev instanceof PlayerLoggedOutEvent) return;
+		EntityContainerHandler.getContainer(ev.player);
 	}
 
 	public static void reset()
