@@ -12,6 +12,7 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
+import cpw.mods.fml.common.network.handshake.NetworkDispatcher;
 import io.darkcraft.darkcore.mod.abstracts.AbstractWorldDataStore;
 import io.darkcraft.darkcore.mod.handlers.entcontainer.EntityContainerHandler;
 import net.minecraft.entity.EntityLivingBase;
@@ -46,6 +47,19 @@ public class PlayerHelper
 	public static String getUsername(UUID uuid)
 	{
 		return store.getUsername(uuid);
+	}
+
+	public static boolean validForNetwork(EntityPlayerMP pl)
+	{
+		try
+		{
+			pl.playerNetServerHandler.netManager.channel().attr(NetworkDispatcher.FML_DISPATCHER).get();
+		}
+		catch(NullPointerException e)
+		{
+			return false;
+		}
+		return true;
 	}
 
 	public static PlayerHelper		i			= new PlayerHelper();
