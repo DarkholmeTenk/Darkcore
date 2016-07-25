@@ -29,7 +29,7 @@ public class PlayerHelper
 	{
 		if(!pl.isDead) return pl;
 		EntityPlayerMP np = getPlayer(getUsername(pl));
-		if((np.playerNetServerHandler == null) || (np.playerNetServerHandler.netManager == null)) return null;
+		if((np == null) || (np.playerNetServerHandler == null) || (np.playerNetServerHandler.netManager == null)) return null;
 		return np;
 	}
 
