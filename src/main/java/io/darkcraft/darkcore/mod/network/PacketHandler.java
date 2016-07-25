@@ -1,16 +1,15 @@
 package io.darkcraft.darkcore.mod.network;
 
-import io.darkcraft.darkcore.mod.DarkcoreMod;
-import io.darkcraft.darkcore.mod.interfaces.IDataPacketHandler;
-
 import java.util.HashMap;
 
-import net.minecraft.nbt.NBTTagCompound;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.network.FMLNetworkEvent.ClientCustomPacketEvent;
 import cpw.mods.fml.common.network.FMLNetworkEvent.CustomPacketEvent;
 import cpw.mods.fml.common.network.FMLNetworkEvent.ServerCustomPacketEvent;
 import cpw.mods.fml.common.network.internal.FMLProxyPacket;
+import io.darkcraft.darkcore.mod.DarkcoreMod;
+import io.darkcraft.darkcore.mod.interfaces.IDataPacketHandler;
+import net.minecraft.nbt.NBTTagCompound;
 
 public class PacketHandler
 {
@@ -28,7 +27,6 @@ public class PacketHandler
 		handleCustomPacket(event);
 	}
 
-	@SubscribeEvent
 	public void handleCustomPacket(CustomPacketEvent event)
 	{
 		if (DarkcoreMod.debugText) System.out.println("Packet received!");
