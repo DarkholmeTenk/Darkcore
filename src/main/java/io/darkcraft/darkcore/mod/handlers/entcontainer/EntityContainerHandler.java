@@ -12,12 +12,13 @@ import io.darkcraft.darkcore.mod.helpers.ServerHelper;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.util.FakePlayer;
 
 public class EntityContainerHandler
 {
 	public static IEntityContainer getContainer(EntityLivingBase ent)
 	{
-		if(ent instanceof EntityPlayer)
+		if((ent instanceof EntityPlayer) && !(ent instanceof FakePlayer))
 		{
 			UUID uuid = PlayerHelper.getUUID((EntityPlayer)ent);
 			PlayerContainer pc;
