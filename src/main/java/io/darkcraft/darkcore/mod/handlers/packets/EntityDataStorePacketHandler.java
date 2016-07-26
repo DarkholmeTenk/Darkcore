@@ -60,6 +60,7 @@ public class EntityDataStorePacketHandler implements IDataPacketHandler
 	{
 		if((aeds == null) || (aeds.getEntity() == null) || ServerHelper.isClient()) return;
 		if(!(aeds.notifyArea() || (aeds.getEntity() instanceof EntityPlayer))) return;
+		if(DarkcoreMod.debugText) System.err.println("DC AEDS - Update queued - " + aeds.id);
 		queue.add(aeds);
 	}
 
@@ -73,7 +74,11 @@ public class EntityDataStorePacketHandler implements IDataPacketHandler
 		if(ServerHelper.isClient()) return false;
 		EntityLivingBase ent = aeds.getEntity();
 		if((ent == null) || ent.isDead) return false;
-		if(ent.ticksExisted < 5) return true;
+		if(ent.ticksExisted < 5)
+		{
+			if(DarkcoreMod.debugText) System.err.println("DC AEDS - Update delayed - Youngent " + aeds.id);
+			return true;
+		}
 		NBTTagCompound nbt = new NBTTagCompound();
 		aeds.writeTransmittable(nbt);
 		if(nbt.hasNoTags()) return false;
@@ -86,7 +91,12 @@ public class EntityDataStorePacketHandler implements IDataPacketHandler
 		else if(ent instanceof EntityPlayerMP)
 		{
 			EntityPlayerMP pl = (EntityPlayerMP)ent;
-			if((pl.playerNetServerHandler == null) || (pl.playerNetServerHandler.netManager == null)) return true;
+			if(!PlayerHelper.validForNetwork(pl))
+			{
+				if(DarkcoreMod.debugText) System.err.println("DC AEDS - Update delayed - Nonetwork - " + aeds.id);
+				return true;
+			}
+			if(DarkcoreMod.debugText) System.err.println("DC AEDS - Update sent - " + aeds.id);
 			DarkcoreMod.networkChannel.sendTo(dp, pl);
 		}
 		return false;
@@ -178,6 +188,7 @@ public class EntityDataStorePacketHandler implements IDataPacketHandler
 			int eid = data.getInteger("entID");
 			Entity e = w.getEntityByID(eid);
 			String aid = data.getString("aedsID");
+			if(DarkcoreMod.debugText) System.err.println("AEDS Rec - " + aid);
 			if(e instanceof EntityLivingBase)
 			{
 				IExtendedEntityProperties ieep = e.getExtendedProperties(aid);
