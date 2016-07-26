@@ -80,6 +80,15 @@ public class PlayerHelper
 		GameProfile profile = pl.getGameProfile();
 		if(profile != null)
 			return profile.getId();
+		else
+		{
+			NBTTagCompound plNbt = pl.getEntityData();
+			if(plNbt == null) return null;
+			long least = plNbt.getLong("UUIDLeast");
+			long most = plNbt.getLong("UUIDMost");
+			if((least != 0) && (most != 0))
+				return new UUID(most,least);
+		}
 		return null;
 	}
 

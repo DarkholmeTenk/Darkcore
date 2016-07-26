@@ -79,4 +79,10 @@ public class EntityContainerHandler
 		pcCacheSer = CacheBuilder.newBuilder().build(loader);
 		pcCacheCli = CacheBuilder.newBuilder().build(loader);
 	}
+
+	public static void clear()
+	{
+		pcCacheSer.invalidateAll();
+		pcCacheCli.invalidateAll();
+	}
 }

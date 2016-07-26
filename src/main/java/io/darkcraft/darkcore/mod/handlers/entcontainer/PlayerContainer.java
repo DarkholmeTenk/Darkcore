@@ -55,8 +55,6 @@ public final class PlayerContainer implements IEntityContainer<EntityPlayer>
 	protected void setEntity(EntityPlayer pl)
 	{
 		if(!equals(pl)) throw new RuntimeException("Setting wrong player");
-		if(pl.isDead) return;
-		if((currentPl != null) && (pl instanceof EntityPlayerMP) && !PlayerHelper.validForNetwork((EntityPlayerMP) pl)) return;
 		currentPl = new WeakReference(pl);
 	}
 

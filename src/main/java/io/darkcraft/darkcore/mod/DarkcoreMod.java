@@ -29,6 +29,7 @@ import io.darkcraft.darkcore.mod.handlers.DelayedItemHandler;
 import io.darkcraft.darkcore.mod.handlers.EffectHandler;
 import io.darkcraft.darkcore.mod.handlers.RecipeHandler;
 import io.darkcraft.darkcore.mod.handlers.WeatherWatchingHandler;
+import io.darkcraft.darkcore.mod.handlers.entcontainer.EntityContainerHandler;
 import io.darkcraft.darkcore.mod.handlers.packets.EntityDataStorePacketHandler;
 import io.darkcraft.darkcore.mod.handlers.packets.EntityPacketHandler;
 import io.darkcraft.darkcore.mod.handlers.packets.MessagePacketHandler;
@@ -149,6 +150,7 @@ public class DarkcoreMod implements IConfigHandlerMod
 	@EventHandler
 	public void preServerStarting(FMLServerAboutToStartEvent ev)
 	{
+		EntityContainerHandler.clear();
 		WorldHelper.clearWorldNameMap();
 		WorldDataStoreHandler.clear();
 		DelayedItemHandler.clear();
