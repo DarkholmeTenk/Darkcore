@@ -73,10 +73,14 @@ public class EntityDataStorePacketHandler implements IDataPacketHandler
 	{
 		if(ServerHelper.isClient()) return false;
 		EntityLivingBase ent = aeds.getEntity();
-		if((ent == null) || ent.isDead) return false;
+		if((ent == null) || ent.isDead)
+		{
+			if(DarkcoreMod.debugText) System.err.println("DC AEDS - Update cancelled - Noent " + (ent == null)+ " - " + aeds.id);
+			return false;
+		}
 		if(ent.ticksExisted < 5)
 		{
-			if(DarkcoreMod.debugText) System.err.println("DC AEDS - Update delayed - Youngent " + aeds.id);
+			if(DarkcoreMod.debugText && (ent instanceof EntityPlayer)) System.err.println("DC AEDS - Update delayed - Youngent " + aeds.id);
 			return true;
 		}
 		NBTTagCompound nbt = new NBTTagCompound();
@@ -111,7 +115,11 @@ public class EntityDataStorePacketHandler implements IDataPacketHandler
 		List<AbstractEntityDataStore> toReadd = new ArrayList();
 		while((aeds = queue.poll()) != null)
 		{
-			if(aeds.getEntity() == null) continue;
+			if(aeds.getEntity() == null)
+			{
+				if(DarkcoreMod.debugText) System.err.println("DC AEDS - Update Removed - Noent " + aeds.id);
+				continue;
+			}
 			if(aeds.sendUpdate())
 				toReadd.add(aeds);
 		}
