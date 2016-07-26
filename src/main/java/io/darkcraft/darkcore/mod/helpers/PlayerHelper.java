@@ -9,9 +9,7 @@ import java.util.UUID;
 import com.mojang.authlib.GameProfile;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.PlayerEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
-import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
 import cpw.mods.fml.common.network.handshake.NetworkDispatcher;
 import io.darkcraft.darkcore.mod.abstracts.AbstractWorldDataStore;
 import io.darkcraft.darkcore.mod.handlers.entcontainer.EntityContainerHandler;
@@ -51,6 +49,7 @@ public class PlayerHelper
 
 	public static boolean validForNetwork(EntityPlayerMP pl)
 	{
+		if(pl.isDead) return false;
 		try
 		{
 			pl.playerNetServerHandler.netManager.channel().attr(NetworkDispatcher.FML_DISPATCHER).get();
@@ -303,13 +302,6 @@ public class PlayerHelper
 			for(ItemStack is : joinStacks)
 				WorldHelper.giveItemStack(player, is.copy());
 		getStore().addUser(player);
-	}
-
-	@SubscribeEvent
-	public void playerChangeEntity(PlayerEvent ev)
-	{
-		if(ev instanceof PlayerLoggedOutEvent) return;
-		EntityContainerHandler.getContainer(ev.player);
 	}
 
 	public static void reset()
