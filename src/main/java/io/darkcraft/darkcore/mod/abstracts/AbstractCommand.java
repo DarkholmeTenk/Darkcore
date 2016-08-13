@@ -22,14 +22,6 @@ public abstract class AbstractCommand implements ICommand
 {
 	private static List<String> emptyList = new ArrayList<String>();
 
-	@Override
-	public int compareTo(Object arg0)
-	{
-		if(arg0 instanceof ICommand)
-			return getCommandName().compareTo(((ICommand)arg0).getCommandName());
-		return 0;
-	}
-
 	@SuppressWarnings("rawtypes")
 	@Override
 	public List getCommandAliases()
