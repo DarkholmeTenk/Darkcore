@@ -25,6 +25,8 @@ public abstract class AbstractCommand implements ICommand
 	@Override
 	public int compareTo(Object arg0)
 	{
+		if(arg0 instanceof ICommand)
+			return getCommandName().compareTo(((ICommand)arg0).getCommandName());
 		return 0;
 	}
 
