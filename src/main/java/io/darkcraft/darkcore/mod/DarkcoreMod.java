@@ -54,7 +54,7 @@ import net.minecraftforge.common.MinecraftForge;
  * When creating a mod using DarkCore, if that mod implements new blocks/items, you should call {@link #registerCreativeTab(String, CreativeTabs)} before instantiating your items
  * @author dark
  */
-@Mod(modid = "darkcore", version = "0.42")
+@Mod(modid = "darkcore", version = "0.43")
 public class DarkcoreMod implements IConfigHandlerMod
 {
 	@SidedProxy(clientSide = "io.darkcraft.darkcore.mod.proxy.ClientProxy", serverSide = "io.darkcraft.darkcore.mod.proxy.CommonProxy")
