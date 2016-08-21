@@ -1,4 +1,4 @@
-package io.darkcraft.darkcore.mod.handlers.entcontainer;
+package io.darkcraft.darkcore.mod.handlers.containers;
 
 import java.lang.ref.WeakReference;
 import java.util.UUID;

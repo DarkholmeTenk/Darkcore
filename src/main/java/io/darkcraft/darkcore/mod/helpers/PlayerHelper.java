@@ -12,7 +12,7 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 import cpw.mods.fml.common.network.handshake.NetworkDispatcher;
 import io.darkcraft.darkcore.mod.abstracts.AbstractWorldDataStore;
-import io.darkcraft.darkcore.mod.handlers.entcontainer.EntityContainerHandler;
+import io.darkcraft.darkcore.mod.handlers.containers.EntityContainerHandler;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;

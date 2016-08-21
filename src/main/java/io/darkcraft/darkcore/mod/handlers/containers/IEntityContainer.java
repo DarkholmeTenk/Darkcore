@@ -1,4 +1,4 @@
-package io.darkcraft.darkcore.mod.handlers.entcontainer;
+package io.darkcraft.darkcore.mod.handlers.containers;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.nbt.NBTTagCompound;

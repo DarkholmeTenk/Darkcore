@@ -32,6 +32,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IExtendedEntityProperties;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 
 public class EntityDataStorePacketHandler implements IDataPacketHandler
@@ -92,7 +93,7 @@ public class EntityDataStorePacketHandler implements IDataPacketHandler
 		DataPacket dp = new DataPacket(nbt,disc);
 		if(aeds.notifyArea())
 			DarkcoreMod.networkChannel.sendToAllAround(dp, new TargetPoint(WorldHelper.getWorldID(ent),ent.posX,ent.posY,ent.posZ,120));
-		else if(ent instanceof EntityPlayerMP)
+		else if((ent instanceof EntityPlayerMP) && !(ent instanceof FakePlayer))
 		{
 			EntityPlayerMP pl = (EntityPlayerMP)ent;
 			if(!PlayerHelper.validForNetwork(pl))

@@ -1,7 +1,7 @@
 package io.darkcraft.darkcore.mod.abstracts;
 
-import io.darkcraft.darkcore.mod.handlers.entcontainer.EntityContainerHandler;
-import io.darkcraft.darkcore.mod.handlers.entcontainer.IEntityContainer;
+import io.darkcraft.darkcore.mod.handlers.containers.EntityContainerHandler;
+import io.darkcraft.darkcore.mod.handlers.containers.IEntityContainer;
 import io.darkcraft.darkcore.mod.handlers.packets.EntityDataStorePacketHandler;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.nbt.NBTTagCompound;
