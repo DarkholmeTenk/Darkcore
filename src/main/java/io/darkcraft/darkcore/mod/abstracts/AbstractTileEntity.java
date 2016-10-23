@@ -1,5 +1,8 @@
 package io.darkcraft.darkcore.mod.abstracts;
 
+import java.util.List;
+import java.util.Random;
+
 import io.darkcraft.darkcore.mod.DarkcoreMod;
 import io.darkcraft.darkcore.mod.config.CType;
 import io.darkcraft.darkcore.mod.config.ConfigFile;
@@ -10,10 +13,8 @@ import io.darkcraft.darkcore.mod.helpers.ServerHelper;
 import io.darkcraft.darkcore.mod.helpers.WorldHelper;
 import io.darkcraft.darkcore.mod.interfaces.IChunkLoader;
 import io.darkcraft.darkcore.mod.multiblock.IMultiBlockCore;
-
-import java.util.Random;
-
 import net.minecraft.block.Block;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
@@ -214,4 +215,6 @@ public abstract class AbstractTileEntity extends TileEntity
 		super.writeToNBT(nbt);
 		writeTransmittable(nbt);
 	}
+
+	public void addDrops(List<ItemStack> items){}
 }

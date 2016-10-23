@@ -9,9 +9,11 @@ import net.minecraft.world.World;
 
 public abstract class AbstractObjRenderer extends AbstractBlockRenderer
 {
+	public static float ptt;
 	@Override
 	public void renderTileEntityAt(TileEntity tileEntity, double d0, double d1, double d2, float f)
 	{
+		ptt = f;
 		if(fr == null)
 			fr = func_147498_b();
 		GL11.glPushMatrix();

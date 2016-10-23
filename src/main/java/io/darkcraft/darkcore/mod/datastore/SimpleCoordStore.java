@@ -279,4 +279,9 @@ public class SimpleCoordStore
 		if(w == null) return false;
 		return w.getChunkProvider().chunkExists(x >> 4, z >> 4);
 	}
+
+	public SimpleCoordStore translate(int _x, int _y, int _z)
+	{
+		return new SimpleCoordStore(world, x+_x, y+_y, z+_z);
+	}
 }

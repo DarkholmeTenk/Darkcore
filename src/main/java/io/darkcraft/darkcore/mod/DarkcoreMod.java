@@ -54,7 +54,7 @@ import net.minecraftforge.common.MinecraftForge;
  * When creating a mod using DarkCore, if that mod implements new blocks/items, you should call {@link #registerCreativeTab(String, CreativeTabs)} before instantiating your items
  * @author dark
  */
-@Mod(modid = "darkcore", version = "0.43")
+@Mod(modid = "darkcore", version = "0.45")
 public class DarkcoreMod implements IConfigHandlerMod
 {
 	@SidedProxy(clientSide = "io.darkcraft.darkcore.mod.proxy.ClientProxy", serverSide = "io.darkcraft.darkcore.mod.proxy.CommonProxy")
@@ -76,7 +76,7 @@ public class DarkcoreMod implements IConfigHandlerMod
 	private static String[]							repostMessages		= {
 			"DarkCore: If you have downloaded this mod from anywhere using an ad-wall or other method of gaining money from this mod then that site is breaking this mod's license.", "Please download from official sources",
 			"You can disable this message in the DarkCore config file", "" };
-	public static HashSet<String>					bannedSounds		= new HashSet<String>();
+	public static HashSet<String>					bannedSounds		= new HashSet<>();
 	public static int								chunkLoadCheckTime	= 200;
 	public static boolean							reloadNullTicket	= true;
 	public static boolean							splitTime			= true;

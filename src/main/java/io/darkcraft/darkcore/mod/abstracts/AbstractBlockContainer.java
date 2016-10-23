@@ -1,5 +1,8 @@
 package io.darkcraft.darkcore.mod.abstracts;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -77,6 +80,14 @@ public abstract class AbstractBlockContainer extends AbstractBlock implements IT
 	{
 		TileEntity te = w.getTileEntity(x, y, z);
 		if (te instanceof IMultiBlockPart) ((IMultiBlockPart) te).recheckCore();
+		if (te instanceof AbstractTileEntity)
+		{
+			List<ItemStack> items = new ArrayList();
+			((AbstractTileEntity) te).addDrops(items);
+			SimpleDoubleCoordStore pos = new SimpleCoordStore(w,x,y,z).getCenter();
+			for(ItemStack is : items)
+				WorldHelper.dropItemStack(is, pos);
+		}
 		super.breakBlock(w, x, y, z, par5, par6);
 		w.removeTileEntity(x, y, z);
 	}
@@ -131,14 +142,29 @@ public abstract class AbstractBlockContainer extends AbstractBlock implements IT
 			}
 			if (captureDrops.get())
 			{
+				List<ItemStack> items = capturedDrops.get();
 				capturedDrops.get().add(is);
+				TileEntity te = w.getTileEntity(x, y, z);
+				if(te instanceof AbstractTileEntity)
+					((AbstractTileEntity)te).addDrops(items);
 				return;
 			}
-			float f = 0.7F;
-			double d0 = (w.rand.nextFloat() * f) + ((1.0F - f) * 0.5D);
-			double d1 = (w.rand.nextFloat() * f) + ((1.0F - f) * 0.5D);
-			double d2 = (w.rand.nextFloat() * f) + ((1.0F - f) * 0.5D);
-			WorldHelper.dropItemStack(is, new SimpleDoubleCoordStore(w, x + d0, y + d1, z + d2));
+			else
+			{
+				List<ItemStack> items = new ArrayList<ItemStack>();
+				items.add(is);
+				TileEntity te = w.getTileEntity(x, y, z);
+				if(te instanceof AbstractTileEntity)
+					((AbstractTileEntity)te).addDrops(items);
+				for(ItemStack nis : items)
+				{
+					float f = 0.7F;
+					double d0 = (w.rand.nextFloat() * f) + ((1.0F - f) * 0.5D);
+					double d1 = (w.rand.nextFloat() * f) + ((1.0F - f) * 0.5D);
+					double d2 = (w.rand.nextFloat() * f) + ((1.0F - f) * 0.5D);
+					WorldHelper.dropItemStack(nis, new SimpleDoubleCoordStore(w, x + d0, y + d1, z + d2));
+				}
+			}
 		}
 	}
 
@@ -175,4 +201,14 @@ public abstract class AbstractBlockContainer extends AbstractBlock implements IT
 
 	@SideOnly(Side.CLIENT)
 	public boolean useRendererForItem() { return true; }
+
+	@Override
+	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune)
+    {
+		ArrayList<ItemStack> items = super.getDrops(world, x, y, z, metadata, fortune);
+		TileEntity te = world.getTileEntity(x, y, z);
+		if(te instanceof AbstractTileEntity)
+			((AbstractTileEntity) te).addDrops(items);
+		return items;
+    }
 }

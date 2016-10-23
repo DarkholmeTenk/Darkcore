@@ -1,12 +1,13 @@
 package io.darkcraft.darkcore.mod.helpers;
 
-import io.darkcraft.darkcore.mod.DarkcoreMod;
-import io.darkcraft.darkcore.mod.abstracts.AbstractWorldDataStore;
-import io.darkcraft.darkcore.mod.datastore.SimpleDoubleCoordStore;
-
 import java.util.HashMap;
 import java.util.Map.Entry;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import io.darkcraft.darkcore.mod.DarkcoreMod;
+import io.darkcraft.darkcore.mod.abstracts.AbstractWorldDataStore;
+import io.darkcraft.darkcore.mod.datastore.SimpleDoubleCoordStore;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFire;
 import net.minecraft.client.Minecraft;
@@ -14,15 +15,15 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.oredict.OreDictionary;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class WorldHelper
 {
@@ -112,6 +113,11 @@ public class WorldHelper
 		if(ServerHelper.isClient())
 			return getWorldID(getCW());
 		return 0;
+	}
+
+	public static World getClientWorld()
+	{
+		return getCW();
 	}
 
 	/**
@@ -209,19 +215,26 @@ public class WorldHelper
 		w.spawnEntityInWorld(ie);
 	}
 
+	public static ItemStack transferItemStack(ItemStack is, IInventory dest)
+	{
+		return transferItemStack(is, dest, ForgeDirection.UNKNOWN);
+	}
+
 	/**
 	 * Puts is into dest
 	 * @param is the itemstack to put
 	 * @param dest the IInventory to put it into
 	 * @return any remaining items which could not be transferred, or null if transfer was completely successful
 	 */
-	public static ItemStack transferItemStack(ItemStack is, IInventory dest)
+	public static ItemStack transferItemStack(ItemStack is, IInventory dest, ForgeDirection side)
 	{
+		int ord = side.ordinal();
 		int size = dest.getSizeInventory();
 		ItemStack remaining = is.copy();
 		for (int i = 0; (i < size) && (remaining.stackSize > 0); i++)
 		{
-			if (dest.isItemValidForSlot(i, remaining))
+			boolean canIns = dest instanceof ISidedInventory ? ((ISidedInventory)dest).canInsertItem(i, is, ord) : dest.isItemValidForSlot(i, remaining);
+			if (canIns)
 			{
 				ItemStack inSlot = dest.getStackInSlot(i);
 				if (inSlot == null)
@@ -234,6 +247,8 @@ public class WorldHelper
 					int am = Math.min(remaining.stackSize, inSlot.getMaxStackSize() - inSlot.stackSize);
 					inSlot.stackSize += am;
 					remaining.stackSize -= am;
+					if(remaining.stackSize == 0)
+						return null;
 				}
 			}
 		}
