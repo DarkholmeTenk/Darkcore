@@ -1,12 +1,11 @@
 package io.darkcraft.darkcore.mod.impl.command;
 
-import io.darkcraft.darkcore.mod.DarkcoreMod;
-import io.darkcraft.darkcore.mod.abstracts.AbstractCommandNew;
-import io.darkcraft.darkcore.mod.datastore.SimpleCoordStore;
-
 import java.util.List;
 import java.util.Set;
 
+import io.darkcraft.darkcore.mod.DarkcoreMod;
+import io.darkcraft.darkcore.mod.abstracts.AbstractCommandNew;
+import io.darkcraft.darkcore.mod.datastore.SimpleCoordStore;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.tileentity.TileEntity;
 

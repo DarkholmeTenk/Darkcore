@@ -1,18 +1,16 @@
 package io.darkcraft.darkcore.mod.helpers;
 
+import java.util.HashSet;
+
 import io.darkcraft.darkcore.mod.datastore.SimpleCoordStore;
 import io.darkcraft.darkcore.mod.multiblock.BlockState;
 import io.darkcraft.darkcore.mod.multiblock.IBlockState;
 import io.darkcraft.darkcore.mod.multiblock.IMultiBlockCore;
 import io.darkcraft.darkcore.mod.multiblock.IMultiBlockPart;
 import io.darkcraft.darkcore.mod.multiblock.IMultiBlockStructure;
-
-import java.util.HashSet;
-
 import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
 
 public class MultiBlockHelper
 {

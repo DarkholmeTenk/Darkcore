@@ -1,22 +1,21 @@
 package io.darkcraft.darkcore.mod.handlers;
 
-import io.darkcraft.darkcore.mod.events.LightningEvent;
-import io.darkcraft.darkcore.mod.helpers.ServerHelper;
-
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.WeakHashMap;
 
-import net.minecraft.entity.effect.EntityLightningBolt;
-import net.minecraft.world.World;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.EntityEvent.EntityConstructing;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.Phase;
 import cpw.mods.fml.relauncher.Side;
+import io.darkcraft.darkcore.mod.events.LightningEvent;
+import io.darkcraft.darkcore.mod.helpers.ServerHelper;
+import net.minecraft.entity.effect.EntityLightningBolt;
+import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.EntityEvent.EntityConstructing;
 
 public class WeatherWatchingHandler
 {

@@ -1,10 +1,9 @@
 package io.darkcraft.darkcore.mod.impl.command;
 
-import io.darkcraft.darkcore.mod.abstracts.AbstractCommandNew;
-import io.darkcraft.darkcore.mod.impl.UniqueSwordItem;
-
 import java.util.List;
 
+import io.darkcraft.darkcore.mod.abstracts.AbstractCommandNew;
+import io.darkcraft.darkcore.mod.impl.UniqueSwordItem;
 import net.minecraft.command.ICommandSender;
 
 public class DebugCommand extends AbstractCommandNew

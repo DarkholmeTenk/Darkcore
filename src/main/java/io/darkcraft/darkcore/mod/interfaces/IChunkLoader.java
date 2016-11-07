@@ -1,7 +1,6 @@
 package io.darkcraft.darkcore.mod.interfaces;
 
 import io.darkcraft.darkcore.mod.datastore.SimpleCoordStore;
-import net.minecraft.world.ChunkCoordIntPair;
 
 /**
  * Implement on your {@linkplain io.darkcraft.darkcore.mod.abstracts.AbstractTileEntity AbstractTileEntity} to add chunkloading functionality

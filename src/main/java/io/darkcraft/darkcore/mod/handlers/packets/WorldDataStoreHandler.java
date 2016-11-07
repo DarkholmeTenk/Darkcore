@@ -1,12 +1,11 @@
 package io.darkcraft.darkcore.mod.handlers.packets;
 
+import java.util.HashMap;
+
 import io.darkcraft.darkcore.mod.abstracts.AbstractWorldDataStore;
 import io.darkcraft.darkcore.mod.datastore.Pair;
 import io.darkcraft.darkcore.mod.helpers.ServerHelper;
 import io.darkcraft.darkcore.mod.interfaces.IDataPacketHandler;
-
-import java.util.HashMap;
-
 import net.minecraft.nbt.NBTTagCompound;
 
 public class WorldDataStoreHandler implements IDataPacketHandler

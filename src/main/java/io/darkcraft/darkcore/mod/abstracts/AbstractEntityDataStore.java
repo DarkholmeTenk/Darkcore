@@ -5,7 +5,6 @@ import io.darkcraft.darkcore.mod.handlers.containers.IEntityContainer;
 import io.darkcraft.darkcore.mod.handlers.packets.EntityDataStorePacketHandler;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.IExtendedEntityProperties;
 
 public abstract class AbstractEntityDataStore<E extends EntityLivingBase> implements IExtendedEntityProperties
 {

@@ -6,7 +6,6 @@ import io.darkcraft.darkcore.mod.handlers.packets.MessagePacketHandler;
 import io.darkcraft.darkcore.mod.network.DataPacket;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.FakePlayer;
 

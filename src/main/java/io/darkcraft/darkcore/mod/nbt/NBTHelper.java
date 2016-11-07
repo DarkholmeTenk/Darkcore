@@ -49,6 +49,7 @@ public class NBTHelper
 		return mapperTable.contains(c, type);
 	}
 
+	@SuppressWarnings("unchecked")
 	public static <T> Mapper<T> getMapper(Class<T> c, SerialisableType type)
 	{
 		if(c.isPrimitive())
@@ -68,7 +69,7 @@ public class NBTHelper
 				mapper = GeneratedMapper.getMapper(c, type);
 				if(mapper == null)
 				{
-					Class p = c.getSuperclass();
+					Class<?> p = c.getSuperclass();
 					while(p != null)
 					{
 						Mapper m = getMapper(p, type);

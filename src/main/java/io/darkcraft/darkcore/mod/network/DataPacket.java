@@ -1,15 +1,14 @@
 package io.darkcraft.darkcore.mod.network;
 
+import java.io.IOException;
+
 import io.darkcraft.darkcore.mod.helpers.ServerHelper;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.ByteBufOutputStream;
 import io.netty.buffer.Unpooled;
-
-import java.io.IOException;
-
 import net.minecraft.nbt.NBTTagCompound;
-import cpw.mods.fml.common.network.internal.FMLProxyPacket;
+import net.minecraftforge.fml.common.network.internal.FMLProxyPacket;
 
 public class DataPacket extends FMLProxyPacket
 {

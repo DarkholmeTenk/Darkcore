@@ -1,15 +1,13 @@
 package io.darkcraft.darkcore.mod.abstracts;
 
-import io.darkcraft.darkcore.mod.DarkcoreMod;
-import io.darkcraft.darkcore.mod.helpers.ServerHelper;
-
 import java.util.ArrayList;
 import java.util.List;
 
+import io.darkcraft.darkcore.mod.DarkcoreMod;
+import io.darkcraft.darkcore.mod.helpers.ServerHelper;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ChatComponentText;
 
 /**
  * Commands should be registered by calling {@linkplain io.darkcraft.darkcore.mod.handlers.CommandHandler#registerCommand(AbstractCommand) CommandHandler.registerCommand(AbstractCommand)}<br>

@@ -1,9 +1,9 @@
 package io.darkcraft.darkcore.mod.config;
 
-import io.darkcraft.darkcore.mod.interfaces.IConfigHandlerMod;
-
 import java.io.File;
 import java.util.HashMap;
+
+import io.darkcraft.darkcore.mod.interfaces.IConfigHandlerMod;
 
 public class ConfigHandlerFactory
 {
