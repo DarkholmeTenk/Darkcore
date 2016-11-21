@@ -12,7 +12,6 @@ import java.util.HashSet;
 import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
 
 public class MultiBlockHelper
 {
@@ -60,7 +59,7 @@ public class MultiBlockHelper
 						{
 							return false;
 						}
-						TileEntity te = w.getTileEntity(xToCheck, yToCheck, zToCheck);
+						TileEntity te = w.getBlockTileEntity(xToCheck, yToCheck, zToCheck);
 						if(te instanceof IMultiBlockPart)
 							partSet.add((IMultiBlockPart) te);
 					}
@@ -154,7 +153,7 @@ public class MultiBlockHelper
 		int x = scs.x;
 		int y = scs.y;
 		int z = scs.z;
-		TileEntity te = w.getTileEntity(x, y, z);
+		TileEntity te = w.getBlockTileEntity(x, y, z);
 		if (te instanceof IMultiBlockCore)
 		{
 			if (te.equals(core)) return true;

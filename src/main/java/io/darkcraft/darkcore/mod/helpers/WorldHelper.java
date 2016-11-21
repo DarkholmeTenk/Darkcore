@@ -22,7 +22,6 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
-import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.oredict.OreDictionary;
 
 public class WorldHelper
@@ -260,7 +259,7 @@ public class WorldHelper
 	{
 		if(w == null)
 			return false;
-		Block b = w.getBlock(x, y, z);
+		Block b = Block.blocksList[w.getBlockId(x, y, z)];
 		if (b == null) return w.isAirBlock(x, y, z);
 		Boolean valid = w.isAirBlock(x, y, z) || b.isFoliage(w, x, y, z) || b.isReplaceable(w, x, y, z) || (b instanceof BlockFire);
 		if (valid) return valid;

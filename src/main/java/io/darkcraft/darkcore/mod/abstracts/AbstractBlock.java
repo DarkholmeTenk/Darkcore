@@ -21,26 +21,24 @@ import io.darkcraft.darkcore.mod.interfaces.IExplodable;
 import io.darkcraft.darkcore.mod.interfaces.IRecipeContainer;
 import io.darkcraft.darkcore.mod.multiblock.BlockState;
 import net.minecraft.block.Block;
-import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.IIcon;
+import net.minecraft.util.Icon;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
 
 /**
- * Performs a variety of functions to do with the creation of new blocks, the allocation of IIcons, coloring, etc.<br>
+ * Performs a variety of functions to do with the creation of new blocks, the allocation of Icons, coloring, etc.<br>
  *
  * Constructor should just contain a call to super with the mod id in or alternatively either a {@link net.minecraft.block.material.Material} or a boolean (true if render,false if no render) followed by the mod id.<br>
  *
@@ -52,11 +50,11 @@ import net.minecraftforge.oredict.OreDictionary;
  */
 public abstract class AbstractBlock extends Block implements IRecipeContainer
 {
-	private IIcon				iconBuffer			= null;
+	private Icon				iconBuffer			= null;
 	private String				unlocalizedFragment	= "";
 	private String[]			subNames			= null;
-	private IIcon[]				subIcons			= null;
-	protected static IIcon		blankIcon			= null;
+	private Icon[]				subIcons			= null;
+	protected static Icon		blankIcon			= null;
 	private boolean				renderIcon;
 	private String				sm;
 	public static int[]			colorArray			= new int[] { 1973019, 11743532, 3887386, 10583369, 2437522, 8073150, 2651799, 11250603, 4408131, 14188952, 4312372, 14602026, 6719955, 12801229, 15435844, 15790320 };
@@ -85,7 +83,7 @@ public abstract class AbstractBlock extends Block implements IRecipeContainer
 		initData();
 		renderIcon = render;
 		if (this instanceof IColorableBlock)
-			setSubNames(ItemDye.field_150923_a);
+			setSubNames(ItemDye.dyeColorNames);
 		else if (subNames == null) setIconArray(1);
 		opaque = isOpaqueCube();
         lightOpacity = isOpaqueCube() ? 255 : 0;
@@ -180,7 +178,7 @@ public abstract class AbstractBlock extends Block implements IRecipeContainer
 
 	public void setIconArray(int names, int suffixes)
 	{
-		subIcons = new IIcon[names * suffixes];
+		subIcons = new Icon[names * suffixes];
 	}
 
 	public String[] getIconSuffix(int damage)
@@ -223,11 +221,9 @@ public abstract class AbstractBlock extends Block implements IRecipeContainer
 	/**
 	 * Should be called during {@link #initData()} with an unlocalized name for your block
 	 */
-	@Override
-	public Block setBlockName(String par1Str)
+	public void setBlockName(String par1Str)
 	{
 		unlocalizedFragment = par1Str;
-		return super.setBlockName(par1Str);
 	}
 
 	@Override
@@ -243,7 +239,7 @@ public abstract class AbstractBlock extends Block implements IRecipeContainer
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	public void getSubBlocks(Item itemID, CreativeTabs tab, List itemList)
+	public void getSubBlocks(int itemID, CreativeTabs tab, List itemList)
 	{
 		int numItems;
 		if (this instanceof IColorableBlock)
@@ -270,26 +266,26 @@ public abstract class AbstractBlock extends Block implements IRecipeContainer
 	}
 
 	@Override
-	public boolean canCreatureSpawn(EnumCreatureType type, IBlockAccess world, int x, int y, int z)
+	public boolean canCreatureSpawn(EnumCreatureType type, World world, int x, int y, int z)
 	{
 		return false;
 	}
 
 	@Override
-	public boolean canEntityDestroy(IBlockAccess world, int x, int y, int z, Entity entity)
+	public boolean canEntityDestroy(World world, int x, int y, int z, Entity entity)
 	{
 		return false;
 	}
 
 	@Override
-	public boolean canBeReplacedByLeaves(IBlockAccess world, int x, int y, int z)
+	public boolean canBeReplacedByLeaves(World world, int x, int y, int z)
 	{
 		return false;
 	}
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void registerBlockIcons(IIconRegister register)
+	public void registerIcons(IconRegister register)
 	{
 		if (blankIcon == null) blankIcon = register.registerIcon(sm + ":blank");
 		if (!renderIcon) return;
@@ -387,7 +383,7 @@ public abstract class AbstractBlock extends Block implements IRecipeContainer
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public IIcon getIcon(int side, int metadata)
+	public Icon getIcon(int side, int metadata)
 	{
 		if (!renderIcon) return blankIcon;
 		int suffixCount = getIconSuffixes();
@@ -427,7 +423,7 @@ public abstract class AbstractBlock extends Block implements IRecipeContainer
 	@Override
 	public void onPostBlockPlaced(World w, int x, int y, int z, int m)
 	{
-		w.scheduleBlockUpdate(x, y, z, this, 1);
+		w.scheduleBlockUpdate(x, y, z, this.blockID, 1);
 	}
 
 	@Override
@@ -442,13 +438,6 @@ public abstract class AbstractBlock extends Block implements IRecipeContainer
 		if (!(this instanceof IColorableBlock)) return super.colorMultiplier(w, x, y, z);
 		int m = w.getBlockMetadata(x, y, z);
 		return colorArray[m];
-	}
-
-	@Override
-	public MapColor getMapColor(int p_149728_1_)
-	{
-		if (!(this instanceof IColorableBlock)) return super.getMapColor(p_149728_1_);
-		return MapColor.getMapColorForBlockColored(p_149728_1_);
 	}
 
 	protected boolean colorBlock(World w, int x, int y, int z, EntityPlayer pl, IBlockIteratorCondition cond, ItemStack is, int color, int depth)
@@ -475,7 +464,7 @@ public abstract class AbstractBlock extends Block implements IRecipeContainer
 	@Override
 	public boolean onBlockActivated(World w, int x, int y, int z, EntityPlayer pl, int s, float i, float j, float k)
 	{
-		Block b = w.getBlock(x, y, z);
+		Block b = Block.blocksList[w.getBlockId(x, y, z)];
 		if((b != this) && !(b instanceof SimulacrumBlock)) return false;
 		if((b instanceof SimulacrumBlock) && (((SimulacrumBlock)b).sim != this)) return false;
 		if (pl == null) return false;
@@ -504,7 +493,7 @@ public abstract class AbstractBlock extends Block implements IRecipeContainer
 					return false;
 				for(ItemStack id : OreDictionary.getOres(OreDictionary.getOreName(oreDictIDs[0])))
 				{
-					if(OreDictionary.itemMatches(new ItemStack(Items.dye, 1, 32767), id, false))
+					if(OreDictionary.itemMatches(new ItemStack(Item.dyePowder, 1, 32767), id, false))
 						return colorBlock(w, x, y, z, pl, ibic, is, id.getItemDamage(), 0);
 				}
 			}

@@ -59,7 +59,7 @@ public class BlockState implements IBlockState
 	@Override
 	public boolean equals(World w, int x, int y, int z)
 	{
-		Block block = w.getBlock(x, y, z);
+		Block block = Block.blocksList[w.getBlockId(x, y, z)];
 		int meta = w.getBlockMetadata(x, y, z);
 		return equals(block,meta);
 	}

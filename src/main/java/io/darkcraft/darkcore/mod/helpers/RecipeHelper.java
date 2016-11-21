@@ -2,7 +2,6 @@ package io.darkcraft.darkcore.mod.helpers;
 
 import java.util.Map;
 
-import gnu.trove.map.hash.THashMap;
 import io.darkcraft.darkcore.mod.datastore.Pair;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;

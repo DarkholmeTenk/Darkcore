@@ -51,8 +51,8 @@ public class PreciseRightClickHandler implements IDataPacketHandler
 			float i = data.getFloat("i");
 			float j = data.getFloat("j");
 			float k = data.getFloat("k");
-			Block b = w.getBlock(x, y, z);
-			TileEntity te = w.getTileEntity(x, y, z);
+			Block b = Block.blocksList[w.getBlockId(x, y, z)];
+			TileEntity te = w.getBlockTileEntity(x, y, z);
 			if(!((b instanceof IActivatablePrecise) || (te instanceof IActivatablePrecise))) return;
 			if(b instanceof IActivatablePrecise) ((IActivatablePrecise)b).activate(pl, s, x+Math.max(i,0.9999f), y+Math.max(j,0.9999f), z+Math.max(k,0.9999f));
 			if(te instanceof IActivatablePrecise) ((IActivatablePrecise)te).activate(pl, s, i,j,k);

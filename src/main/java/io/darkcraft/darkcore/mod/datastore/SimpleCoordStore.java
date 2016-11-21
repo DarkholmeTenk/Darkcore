@@ -4,7 +4,6 @@ import io.darkcraft.darkcore.mod.helpers.MathHelper;
 import io.darkcraft.darkcore.mod.helpers.WorldHelper;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
@@ -12,7 +11,6 @@ import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
 
 public class SimpleCoordStore
 {
@@ -192,14 +190,14 @@ public class SimpleCoordStore
 	public TileEntity getTileEntity()
 	{
 		World w = getWorldObj();
-		if (w != null) return w.getTileEntity(x, y, z);
+		if (w != null) return w.getBlockTileEntity(x, y, z);
 		return null;
 	}
 
 	public Block getBlock()
 	{
 		World w = getWorldObj();
-		if (w != null) if (!(w.getBlock(x, y, z) == Blocks.air)) return w.getBlock(x, y, z);
+		if (w != null) if (!(Block.blocksList[w.getBlockId(x, y, z)] == Blocks.air)) return Block.blocksList[w.getBlockId(x, y, z)];
 		return null;
 	}
 

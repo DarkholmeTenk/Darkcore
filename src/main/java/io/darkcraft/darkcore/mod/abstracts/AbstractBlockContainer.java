@@ -76,9 +76,9 @@ public abstract class AbstractBlockContainer extends AbstractBlock implements IT
 	}
 
 	@Override
-	public void breakBlock(World w, int x, int y, int z, Block par5, int par6)
+	public void breakBlock(World w, int x, int y, int z, int par5, int par6)
 	{
-		TileEntity te = w.getTileEntity(x, y, z);
+		TileEntity te = w.getBlockTileEntity(x, y, z);
 		if (te instanceof IMultiBlockPart) ((IMultiBlockPart) te).recheckCore();
 		if (te instanceof AbstractTileEntity)
 		{
@@ -89,14 +89,14 @@ public abstract class AbstractBlockContainer extends AbstractBlock implements IT
 				WorldHelper.dropItemStack(is, pos);
 		}
 		super.breakBlock(w, x, y, z, par5, par6);
-		w.removeTileEntity(x, y, z);
+		w.removeBlockTileEntity(x, y, z);
 	}
 
 	@Override
 	public boolean onBlockEventReceived(World par1World, int par2, int par3, int par4, int par5, int par6)
 	{
 		super.onBlockEventReceived(par1World, par2, par3, par4, par5, par6);
-		TileEntity tileentity = par1World.getTileEntity(par2, par3, par4);
+		TileEntity tileentity = par1World.getBlockTileEntity(par2, par3, par4);
 		return tileentity != null ? tileentity.receiveClientEvent(par5, par6) : false;
 	}
 
@@ -109,7 +109,7 @@ public abstract class AbstractBlockContainer extends AbstractBlock implements IT
 	{
 		if (super.onBlockActivated(w, x, y, z, pl, s, i, j, k)) return true;
 		if (this instanceof IActivatable) if (((IActivatable) this).activate(pl, s)) return true;
-		TileEntity te = w.getTileEntity(x, y, z);
+		TileEntity te = w.getBlockTileEntity(x, y, z);
 		if ((te instanceof IActivatable) && ((IActivatable) te).activate(pl, s)) return true;
 		if (te instanceof IActivatablePrecise)
 		{
@@ -124,11 +124,11 @@ public abstract class AbstractBlockContainer extends AbstractBlock implements IT
 	protected void dropBlockAsItem(World w, int x, int y, int z, ItemStack is)
 	{
 		// do not drop items while restoring blockstates, prevents item dupe
-		if (ServerHelper.isServer() && w.getGameRules().getGameRuleBooleanValue("doTileDrops") && !w.restoringBlockSnapshots)
+		if (ServerHelper.isServer() && w.getGameRules().getGameRuleBooleanValue("doTileDrops"))
 		{
 			if (dropWithData)
 			{
-				TileEntity te = w.getTileEntity(x, y, z);
+				TileEntity te = w.getBlockTileEntity(x, y, z);
 				if (te != null)
 				{
 					NBTTagCompound nbt;
@@ -144,7 +144,7 @@ public abstract class AbstractBlockContainer extends AbstractBlock implements IT
 			{
 				List<ItemStack> items = capturedDrops.get();
 				capturedDrops.get().add(is);
-				TileEntity te = w.getTileEntity(x, y, z);
+				TileEntity te = w.getBlockTileEntity(x, y, z);
 				if(te instanceof AbstractTileEntity)
 					((AbstractTileEntity)te).addDrops(items);
 				return;
@@ -153,7 +153,7 @@ public abstract class AbstractBlockContainer extends AbstractBlock implements IT
 			{
 				List<ItemStack> items = new ArrayList<ItemStack>();
 				items.add(is);
-				TileEntity te = w.getTileEntity(x, y, z);
+				TileEntity te = w.getBlockTileEntity(x, y, z);
 				if(te instanceof AbstractTileEntity)
 					((AbstractTileEntity)te).addDrops(items);
 				for(ItemStack nis : items)
@@ -169,12 +169,13 @@ public abstract class AbstractBlockContainer extends AbstractBlock implements IT
 	}
 
 	@Override
-	public void onNeighborBlockChange(World w, int x, int y, int z, Block neighbourBlockID)
+	public void onNeighborBlockChange(World w, int x, int y, int z, int neighbourBlockID)
 	{
-		TileEntity te = w.getTileEntity(x, y, z);
+		TileEntity te = w.getBlockTileEntity(x, y, z);
+		Block b = Block.blocksList[neighbourBlockID];
 		if ((te != null) && (te instanceof IBlockUpdateDetector))
 		{
-			((IBlockUpdateDetector) te).blockUpdated(neighbourBlockID);
+			((IBlockUpdateDetector) te).blockUpdated(b);
 		}
 	}
 
@@ -187,7 +188,7 @@ public abstract class AbstractBlockContainer extends AbstractBlock implements IT
 	public void onBlockExploded(World world, int x, int y, int z, Explosion explosion)
 	{
 		super.onBlockExploded(world, x, y, z, explosion);
-		TileEntity te = world.getTileEntity(x, y, z);
+		TileEntity te = world.getBlockTileEntity(x, y, z);
 		if(te instanceof IExplodable)
 		{
 			SimpleCoordStore scs = new SimpleCoordStore(world, x, y, z);
@@ -203,10 +204,10 @@ public abstract class AbstractBlockContainer extends AbstractBlock implements IT
 	public boolean useRendererForItem() { return true; }
 
 	@Override
-	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune)
+	public ArrayList<ItemStack> getBlockDropped(World world, int x, int y, int z, int metadata, int fortune)
     {
-		ArrayList<ItemStack> items = super.getDrops(world, x, y, z, metadata, fortune);
-		TileEntity te = world.getTileEntity(x, y, z);
+		ArrayList<ItemStack> items = super.getBlockDropped(world, x, y, z, metadata, fortune);
+		TileEntity te = world.getBlockTileEntity(x, y, z);
 		if(te instanceof AbstractTileEntity)
 			((AbstractTileEntity) te).addDrops(items);
 		return items;

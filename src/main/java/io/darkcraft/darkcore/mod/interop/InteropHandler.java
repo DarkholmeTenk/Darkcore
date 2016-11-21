@@ -3,7 +3,6 @@ package io.darkcraft.darkcore.mod.interop;
 import java.util.Set;
 
 import cpw.mods.fml.common.Loader;
-import gnu.trove.set.hash.THashSet;
 import io.darkcraft.darkcore.mod.DarkcoreMod;
 
 public class InteropHandler

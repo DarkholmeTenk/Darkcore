@@ -12,7 +12,6 @@ import io.darkcraft.darkcore.mod.helpers.ServerHelper;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.util.FakePlayer;
 
 public class EntityContainerHandler
 {

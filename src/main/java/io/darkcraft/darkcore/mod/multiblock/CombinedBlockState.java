@@ -24,7 +24,7 @@ public class CombinedBlockState implements IBlockState
 	@Override
 	public boolean equals(World w, int x, int y, int z)
 	{
-		Block b = w.getBlock(x, y, z);
+		Block b = Block.blocksList[w.getBlockId(x, y, z)];
 		int m = w.getBlockMetadata(x, y, z);
 		return equals(b,m);
 	}

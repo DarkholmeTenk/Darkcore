@@ -24,9 +24,6 @@ import net.minecraftforge.event.world.WorldEvent;
 
 import com.google.common.collect.ImmutableSet;
 
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.TickEvent;
-import cpw.mods.fml.common.gameevent.TickEvent.ServerTickEvent;
 import cpw.mods.fml.relauncher.Side;
 
 public class ChunkLoadingHandler implements LoadingCallback

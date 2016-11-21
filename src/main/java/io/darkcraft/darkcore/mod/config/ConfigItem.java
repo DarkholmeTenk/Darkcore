@@ -82,6 +82,7 @@ public class ConfigItem
 		return id.hashCode();
 	}
 
+	@Override
 	public boolean equals(Object o)
 	{
 		if (o instanceof ConfigItem) return id.equals(((ConfigItem) o).getID());

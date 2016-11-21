@@ -1,6 +1,5 @@
 package io.darkcraft.darkcore.mod.handlers;
 
-import gnu.trove.set.hash.THashSet;
 import io.darkcraft.darkcore.mod.interfaces.IRecipeContainer;
 
 public class RecipeHandler

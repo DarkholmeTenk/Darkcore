@@ -8,8 +8,6 @@ import java.util.Iterator;
 import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import net.minecraftforge.common.util.ForgeDirection;
-
 public class BlockIterator implements Iterator<SimpleCoordStore>
 {
 	public static final IBlockIteratorCondition	sameIncMeta	= new SameIncMetaCondition();

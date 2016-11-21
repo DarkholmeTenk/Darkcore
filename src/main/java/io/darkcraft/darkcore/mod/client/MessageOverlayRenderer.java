@@ -21,8 +21,6 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 
 import org.lwjgl.opengl.GL11;
 
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-
 public class MessageOverlayRenderer extends Gui
 {
 	public static MessageOverlayRenderer i = new MessageOverlayRenderer();
