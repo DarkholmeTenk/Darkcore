@@ -1,19 +1,19 @@
 package io.darkcraft.darkcore.mod.handlers;
 
-import io.darkcraft.darkcore.mod.events.LightningEvent;
-import io.darkcraft.darkcore.mod.helpers.ServerHelper;
-
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.WeakHashMap;
 
+import cpw.mods.fml.relauncher.Side;
+import io.darkcraft.darkcore.mod.events.LightningEvent;
+import io.darkcraft.darkcore.mod.helpers.ServerHelper;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.EntityEvent.EntityConstructing;
-import cpw.mods.fml.relauncher.Side;
 
 public class WeatherWatchingHandler
 {
@@ -44,7 +44,7 @@ public class WeatherWatchingHandler
 		return retVal;
 	}
 
-	@SubscribeEvent
+	@ForgeSubscribe
 	public void handleTick(TickEvent event)
 	{
 		if((event.side == Side.SERVER) && (event.phase == Phase.END))
@@ -61,7 +61,7 @@ public class WeatherWatchingHandler
 		}
 	}
 
-	@SubscribeEvent
+	@ForgeSubscribe
 	public void entityConstruct(EntityConstructing event)
 	{
 		if(ServerHelper.isServer())

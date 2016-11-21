@@ -6,6 +6,7 @@ import java.util.Set;
 
 import io.darkcraft.darkcore.mod.datastore.SimpleDoubleCoordStore;
 import net.minecraft.util.Vec3;
+import net.minecraftforge.common.ForgeDirection;
 
 public class MathHelper
 {

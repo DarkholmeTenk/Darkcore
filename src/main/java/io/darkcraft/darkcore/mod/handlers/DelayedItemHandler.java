@@ -10,6 +10,7 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import io.darkcraft.darkcore.mod.helpers.WorldHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.event.ForgeSubscribe;
 
 public class DelayedItemHandler
 {
@@ -18,7 +19,7 @@ public class DelayedItemHandler
 		FMLCommonHandler.instance().bus().register(new DelayedItemHandler());
 	}
 
-	@SubscribeEvent
+	@ForgeSubscribe
 	public void handleTicks(ServerTickEvent tick)
 	{
 		if(tick.phase != Phase.END) return;

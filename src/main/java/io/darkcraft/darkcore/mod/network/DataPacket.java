@@ -1,8 +1,8 @@
 package io.darkcraft.darkcore.mod.network;
 
-import io.darkcraft.darkcore.mod.helpers.ServerHelper;
 import java.io.IOException;
 
+import io.darkcraft.darkcore.mod.helpers.ServerHelper;
 import net.minecraft.nbt.NBTTagCompound;
 
 public class DataPacket extends FMLProxyPacket

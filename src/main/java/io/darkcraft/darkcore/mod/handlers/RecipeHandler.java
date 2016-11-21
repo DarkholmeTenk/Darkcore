@@ -5,7 +5,7 @@ import io.darkcraft.darkcore.mod.interfaces.IRecipeContainer;
 public class RecipeHandler
 {
 	private static boolean done = false;
-	private static THashSet<IRecipeContainer> recipeContainers = new THashSet();
+	private static HashSet<IRecipeContainer> recipeContainers = new HashSet();
 	public static void addRecipeContainer(IRecipeContainer rec)
 	{
 		if(done)

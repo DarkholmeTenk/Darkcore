@@ -1,12 +1,13 @@
 package io.darkcraft.darkcore.mod.helpers;
 
-import io.darkcraft.darkcore.mod.datastore.SimpleCoordStore;
-import io.darkcraft.darkcore.mod.interfaces.IBlockIteratorCondition;
-
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
+
+import io.darkcraft.darkcore.mod.datastore.SimpleCoordStore;
+import io.darkcraft.darkcore.mod.interfaces.IBlockIteratorCondition;
+import net.minecraftforge.common.ForgeDirection;
 
 public class BlockIterator implements Iterator<SimpleCoordStore>
 {

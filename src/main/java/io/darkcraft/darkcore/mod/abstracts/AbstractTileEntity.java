@@ -16,10 +16,12 @@ import io.darkcraft.darkcore.mod.multiblock.IMultiBlockCore;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.packet.Packet;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.ServerConfigurationManager;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeDirection;
 
 public abstract class AbstractTileEntity extends TileEntity
 {
@@ -71,11 +73,11 @@ public abstract class AbstractTileEntity extends TileEntity
 
 	public void updateNeighbours()
 	{
-		Block b = worldObj.getBlock(xCoord, yCoord, zCoord);
+		Block b = Block.blocksList[worldObj.getBlockId(xCoord, yCoord, zCoord)];
 		for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS)
 		{
-			Block d = worldObj.getBlock(xCoord + dir.offsetX, yCoord + dir.offsetY, zCoord + dir.offsetZ);
-			if (d != null) d.onNeighborBlockChange(worldObj, xCoord + dir.offsetX, yCoord + dir.offsetY, zCoord + dir.offsetZ, b);
+			Block d = Block.blocksList[worldObj.getBlockId(xCoord + dir.offsetX, yCoord + dir.offsetY, zCoord + dir.offsetZ)];
+			if (d != null) d.onNeighborBlockChange(worldObj, xCoord + dir.offsetX, yCoord + dir.offsetY, zCoord + dir.offsetZ, b.blockID);
 		}
 	}
 

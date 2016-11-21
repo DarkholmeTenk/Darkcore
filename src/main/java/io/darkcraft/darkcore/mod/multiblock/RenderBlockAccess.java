@@ -5,6 +5,7 @@ import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraftforge.common.ForgeDirection;
 
 public class RenderBlockAccess implements IBlockAccess
 {

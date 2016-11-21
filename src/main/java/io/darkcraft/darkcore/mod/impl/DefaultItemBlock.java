@@ -1,10 +1,9 @@
 package io.darkcraft.darkcore.mod.impl;
 
-import io.darkcraft.darkcore.mod.abstracts.AbstractBlock;
-import io.darkcraft.darkcore.mod.abstracts.AbstractItemBlock;
-
 import java.util.List;
 
+import io.darkcraft.darkcore.mod.abstracts.AbstractBlock;
+import io.darkcraft.darkcore.mod.abstracts.AbstractItemBlock;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;

@@ -1,5 +1,7 @@
 package io.darkcraft.darkcore.mod.impl;
 
+import org.lwjgl.opengl.GL11;
+
 import io.darkcraft.darkcore.mod.DarkcoreMod;
 import io.darkcraft.darkcore.mod.helpers.ServerHelper;
 import net.minecraft.client.Minecraft;
@@ -9,8 +11,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.IItemRenderer;
 import net.minecraftforge.client.model.AdvancedModelLoader;
 import net.minecraftforge.client.model.IModelCustom;
-
-import org.lwjgl.opengl.GL11;
 
 public class UniqueSwordRenderer implements IItemRenderer
 {

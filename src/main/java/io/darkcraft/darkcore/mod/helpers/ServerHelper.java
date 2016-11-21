@@ -141,7 +141,7 @@ public class ServerHelper
 	public static void sendString(EntityPlayer pl, ChatComponentText message)
 	{
 		if(pl == null) return;
-		pl.addChatMessage(message);
+		pl.sendChatToPlayer(message);
 	}
 
 	/**
@@ -248,6 +248,6 @@ public class ServerHelper
 		c.getChatStyle().setStrikethrough(strikeThrough);
 		c.getChatStyle().setUnderlined(underLined);
 		c.appendText(string);
-		pl.addChatMessage(c);
+		pl.sendChatToPlayer(c);
 	}
 }

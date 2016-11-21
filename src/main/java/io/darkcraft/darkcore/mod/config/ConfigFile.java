@@ -1,7 +1,5 @@
 package io.darkcraft.darkcore.mod.config;
 
-import io.darkcraft.darkcore.mod.exception.MalformedConfigException;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -12,6 +10,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
+
+import io.darkcraft.darkcore.mod.exception.MalformedConfigException;
 
 public class ConfigFile
 {

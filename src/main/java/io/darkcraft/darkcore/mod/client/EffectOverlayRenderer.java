@@ -19,6 +19,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
+import net.minecraftforge.event.ForgeSubscribe;
 
 public class EffectOverlayRenderer  extends Gui
 {
@@ -41,7 +42,7 @@ public class EffectOverlayRenderer  extends Gui
 	public static EffectOverlayRenderer i = new EffectOverlayRenderer();
 	private FontRenderer fr;
 
-	@SubscribeEvent
+	@ForgeSubscribe
 	public void handlerEvent(RenderGameOverlayEvent event)
 	{
 		if(event.isCanceled() || (event.type != ElementType.HOTBAR)) return;

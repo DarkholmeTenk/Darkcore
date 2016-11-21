@@ -14,7 +14,6 @@ import io.darkcraft.darkcore.mod.client.MessageOverlayRenderer;
 import io.darkcraft.darkcore.mod.helpers.WorldHelper;
 import io.darkcraft.darkcore.mod.impl.UniqueSwordRenderer;
 import net.minecraft.client.Minecraft;
-import net.minecraft.item.Item;
 import net.minecraft.world.World;
 import net.minecraftforge.client.IItemRenderer;
 import net.minecraftforge.client.MinecraftForgeClient;
@@ -28,7 +27,7 @@ public class ClientProxy extends CommonProxy
 	private void registerIR(AbstractItem i, IItemRenderer r)
 	{
 		if((i == null) || (r == null)) return;
-		MinecraftForgeClient.registerItemRenderer(i,r);
+		MinecraftForgeClient.registerItemRenderer(i.itemID,r);
 	}
 
 	private void registerCBR(AbstractBlockContainer b, AbstractBlockRenderer r)
@@ -36,7 +35,7 @@ public class ClientProxy extends CommonProxy
 		if((b == null) || (r == null)) return;
 		ClientRegistry.bindTileEntitySpecialRenderer(b.getTEClass(), r);
 		if(b.useRendererForItem())
-			MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(b),r);
+			MinecraftForgeClient.registerItemRenderer(b.blockID,r);
 	}
 
 	private void registerClientRenderers()
@@ -86,7 +85,7 @@ public class ClientProxy extends CommonProxy
 	@Override
 	public void init()
 	{
-		MinecraftForgeClient.registerItemRenderer(DarkcoreMod.uniqueSword, new UniqueSwordRenderer());
+		MinecraftForgeClient.registerItemRenderer(DarkcoreMod.uniqueSword.itemID, new UniqueSwordRenderer());
 		MinecraftForge.EVENT_BUS.register(MessageOverlayRenderer.i);
 		MinecraftForge.EVENT_BUS.register(EffectOverlayRenderer.i);
 		EffectOverlayRenderer.refreshConfigs();

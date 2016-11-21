@@ -1,14 +1,15 @@
 package io.darkcraft.darkcore.mod.client;
 
-import io.darkcraft.darkcore.mod.DarkcoreMod;
-import io.darkcraft.darkcore.mod.datastore.UVStore;
-import io.darkcraft.darkcore.mod.helpers.MathHelper;
-import io.darkcraft.darkcore.mod.helpers.RenderHelper;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.lwjgl.opengl.GL11;
+
+import io.darkcraft.darkcore.mod.DarkcoreMod;
+import io.darkcraft.darkcore.mod.datastore.UVStore;
+import io.darkcraft.darkcore.mod.helpers.MathHelper;
+import io.darkcraft.darkcore.mod.helpers.RenderHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
@@ -18,8 +19,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
-
-import org.lwjgl.opengl.GL11;
+import net.minecraftforge.event.ForgeSubscribe;
 
 public class MessageOverlayRenderer extends Gui
 {
@@ -81,7 +81,7 @@ public class MessageOverlayRenderer extends Gui
 	int th = h >> 2;
 	int mh = h >> 1;
 
-	@SubscribeEvent
+	@ForgeSubscribe
 	public void handlerEvent(RenderGameOverlayEvent event)
 	{
 		if(event.isCanceled() || (event.type != ElementType.CHAT)) return;

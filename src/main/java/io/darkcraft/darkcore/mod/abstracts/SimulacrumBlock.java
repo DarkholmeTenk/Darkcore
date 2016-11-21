@@ -1,14 +1,16 @@
 package io.darkcraft.darkcore.mod.abstracts;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import io.darkcraft.darkcore.mod.interfaces.IBlockIteratorCondition;
 import io.darkcraft.darkcore.mod.interfaces.IColorableBlock;
 import net.minecraft.block.Block;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Icon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class SimulacrumBlock extends AbstractBlock
 {
@@ -42,14 +44,14 @@ public class SimulacrumBlock extends AbstractBlock
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public IIcon getIcon(int side, int metadata)
+	public Icon getIcon(int side, int metadata)
 	{
 		return sim.getIcon(side, metadata);
 	}
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void registerBlockIcons(IIconRegister register)
+	public void registerBlockIcons(IconRegister register)
 	{
 	}
 

@@ -1,5 +1,6 @@
 package io.darkcraft.darkcore.mod.interop;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import cpw.mods.fml.common.Loader;
@@ -7,7 +8,7 @@ import io.darkcraft.darkcore.mod.DarkcoreMod;
 
 public class InteropHandler
 {
-	private static Set<InteropInstance> instances = new THashSet<InteropInstance>();
+	private static Set<InteropInstance> instances = new HashSet<InteropInstance>();
 
 	public static void register(InteropInstance instance)
 	{

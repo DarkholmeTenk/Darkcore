@@ -1,5 +1,7 @@
 package io.darkcraft.darkcore.mod.impl.command;
 
+import java.util.List;
+
 import io.darkcraft.darkcore.mod.DarkcoreMod;
 import io.darkcraft.darkcore.mod.abstracts.AbstractCommandNew;
 import io.darkcraft.darkcore.mod.helpers.MessageHelper;
@@ -7,9 +9,6 @@ import io.darkcraft.darkcore.mod.helpers.PlayerHelper;
 import io.darkcraft.darkcore.mod.helpers.ServerHelper;
 import io.darkcraft.darkcore.mod.helpers.WorldHelper;
 import io.darkcraft.darkcore.mod.impl.UniqueSwordItem;
-
-import java.util.List;
-
 import net.minecraft.command.ICommandSender;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.player.EntityPlayer;

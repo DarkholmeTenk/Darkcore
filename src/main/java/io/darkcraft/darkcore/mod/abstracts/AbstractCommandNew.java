@@ -1,12 +1,11 @@
 package io.darkcraft.darkcore.mod.abstracts;
 
-import io.darkcraft.darkcore.mod.helpers.PlayerHelper;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
+import io.darkcraft.darkcore.mod.helpers.PlayerHelper;
 import net.minecraft.command.ICommandSender;
 
 /**

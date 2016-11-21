@@ -11,7 +11,7 @@ import net.minecraft.item.crafting.FurnaceRecipes;
 
 public class RecipeHelper
 {
-	private static Map<Pair<Block,Integer>,Pair<Block,Integer>> blockSmeltMap = new THashMap();
+	private static Map<Pair<Block,Integer>,Pair<Block,Integer>> blockSmeltMap = new HashMap();
 
 	private static Pair<Block,Integer> addBlockSmelt(Pair<Block, Integer> in, Pair<Block, Integer> out)
 	{

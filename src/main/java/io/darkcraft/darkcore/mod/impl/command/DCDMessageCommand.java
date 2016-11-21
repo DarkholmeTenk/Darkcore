@@ -1,12 +1,11 @@
 package io.darkcraft.darkcore.mod.impl.command;
 
+import java.util.List;
+
 import io.darkcraft.darkcore.mod.abstracts.AbstractCommandNew;
 import io.darkcraft.darkcore.mod.handlers.packets.MessagePacketHandler;
 import io.darkcraft.darkcore.mod.helpers.MathHelper;
 import io.darkcraft.darkcore.mod.helpers.MessageHelper;
-
-import java.util.List;
-
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.ResourceLocation;
 

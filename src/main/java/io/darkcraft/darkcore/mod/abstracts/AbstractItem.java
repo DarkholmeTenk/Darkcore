@@ -8,21 +8,23 @@ import cpw.mods.fml.relauncher.SideOnly;
 import io.darkcraft.darkcore.mod.DarkcoreMod;
 import io.darkcraft.darkcore.mod.handlers.RecipeHandler;
 import io.darkcraft.darkcore.mod.interfaces.IRecipeContainer;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Icon;
 import net.minecraftforge.client.IItemRenderer;
 
 public abstract class AbstractItem extends Item implements IRecipeContainer
 {
-	private IIcon			iconBuffer;
+	private Icon			iconBuffer;
 	private String			unlocalizedFragment;
 	private final String	modName;
 	public boolean			registerIcons = true;
 
 	private String[]		subNames	= null;
-	private IIcon[]			subIcons	= null;
+	private Icon[]			subIcons	= null;
 
 	public AbstractItem(String mod)
 	{
@@ -89,14 +91,14 @@ public abstract class AbstractItem extends Item implements IRecipeContainer
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void registerIcons(IIconRegister ir)
+	public void registerIcons(IconRegister ir)
 	{
 		if(!registerIcons) return;
 		String[] subNames = getSubNamesForIcons();
 		if (DarkcoreMod.debugText) System.out.println("[TAI]Registering icon " + unlocalizedFragment);
 		if (subNames != null)
 		{
-			subIcons = new IIcon[subNames.length];
+			subIcons = new Icon[subNames.length];
 			for (int i = 0; i < subNames.length; i++)
 				subIcons[i] = ir.registerIcon(modName + ":" + unlocalizedFragment + "." + subNames[i]);
 		}
@@ -106,7 +108,7 @@ public abstract class AbstractItem extends Item implements IRecipeContainer
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public IIcon getIconFromDamage(int damage)
+	public Icon getIconFromDamage(int damage)
 	{
 		String[] subNames = getSubNamesForIcons();
 		if (subNames == null)
@@ -117,7 +119,7 @@ public abstract class AbstractItem extends Item implements IRecipeContainer
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	public void getSubItems(Item par1, CreativeTabs par2CreativeTabs, List list)
+	public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List list)
 	{
 		String[] subNames = getSubNamesForNEI();
 		if (subNames == null)

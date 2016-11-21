@@ -1,18 +1,20 @@
 package io.darkcraft.darkcore.mod.handlers;
 
-import io.darkcraft.darkcore.mod.DarkcoreMod;
-import io.darkcraft.darkcore.mod.abstracts.AbstractTileEntity;
-import io.darkcraft.darkcore.mod.datastore.SimpleCoordStore;
-import io.darkcraft.darkcore.mod.helpers.ServerHelper;
-import io.darkcraft.darkcore.mod.helpers.WorldHelper;
-import io.darkcraft.darkcore.mod.interfaces.IChunkLoader;
-
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import com.google.common.collect.ImmutableSet;
+
+import cpw.mods.fml.relauncher.Side;
+import io.darkcraft.darkcore.mod.DarkcoreMod;
+import io.darkcraft.darkcore.mod.abstracts.AbstractTileEntity;
+import io.darkcraft.darkcore.mod.datastore.SimpleCoordStore;
+import io.darkcraft.darkcore.mod.helpers.ServerHelper;
+import io.darkcraft.darkcore.mod.helpers.WorldHelper;
+import io.darkcraft.darkcore.mod.interfaces.IChunkLoader;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.ChunkCoordIntPair;
@@ -20,11 +22,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.ForgeChunkManager.LoadingCallback;
 import net.minecraftforge.common.ForgeChunkManager.Ticket;
+import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.world.WorldEvent;
-
-import com.google.common.collect.ImmutableSet;
-
-import cpw.mods.fml.relauncher.Side;
 
 public class ChunkLoadingHandler implements LoadingCallback
 {
@@ -217,7 +216,7 @@ public class ChunkLoadingHandler implements LoadingCallback
 		removeBadTickets();
 	}
 
-	@SubscribeEvent
+	@ForgeSubscribe
 	public void handleTick(ServerTickEvent event)
 	{
 		// TardisOutput.print("TCLM", "Server tick");
@@ -235,7 +234,7 @@ public class ChunkLoadingHandler implements LoadingCallback
 		ticked = true;
 	}
 
-	@SubscribeEvent
+	@ForgeSubscribe
 	public void handleWorldUnload(WorldEvent.Unload unloadEvent)
 	{
 		if(ServerHelper.isClient()) return;

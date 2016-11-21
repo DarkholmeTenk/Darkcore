@@ -1,11 +1,10 @@
 package io.darkcraft.darkcore.mod.handlers;
 
-import io.darkcraft.darkcore.mod.DarkcoreMod;
-import io.darkcraft.darkcore.mod.abstracts.AbstractCommand;
-
 import java.util.ArrayList;
 
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
+import io.darkcraft.darkcore.mod.DarkcoreMod;
+import io.darkcraft.darkcore.mod.abstracts.AbstractCommand;
 
 public class CommandHandler
 {

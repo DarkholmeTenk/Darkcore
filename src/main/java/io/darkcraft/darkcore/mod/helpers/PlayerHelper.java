@@ -16,6 +16,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.world.World;
+import net.minecraftforge.event.ForgeSubscribe;
 
 public class PlayerHelper
 {
@@ -298,7 +299,7 @@ public class PlayerHelper
 
 	}
 
-	@SubscribeEvent
+	@ForgeSubscribe
 	public void playerSpawn(PlayerLoggedInEvent event)
 	{
 		EntityPlayer player = event.player;

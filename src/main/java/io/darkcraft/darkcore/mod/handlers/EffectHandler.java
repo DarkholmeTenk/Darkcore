@@ -15,6 +15,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.IExtendedEntityProperties;
+import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.EntityEvent.EntityConstructing;
 
 public class EffectHandler
@@ -83,7 +84,7 @@ public class EffectHandler
 		return (EntityEffectStore) store;
 	}
 
-	@SubscribeEvent
+	@ForgeSubscribe
 	public void entConstructEvent(EntityConstructing event)
 	{
 		Entity ent = event.entity;
@@ -91,7 +92,7 @@ public class EffectHandler
 			ent.registerExtendedProperties("dcEff", new EntityEffectStore((EntityLivingBase) ent));
 	}
 
-	@SubscribeEvent
+	@ForgeSubscribe
 	public void entTickEvent(TickEvent tick)
 	{
 		if((ServerHelper.isClient() && (tick.type != Type.CLIENT)) || (ServerHelper.isServer() && (tick.type != Type.SERVER))) return;

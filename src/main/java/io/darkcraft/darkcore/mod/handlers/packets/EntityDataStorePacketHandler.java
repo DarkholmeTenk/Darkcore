@@ -23,14 +23,16 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import net.minecraftforge.common.FakePlayer;
 import net.minecraftforge.common.IExtendedEntityProperties;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 
 public class EntityDataStorePacketHandler implements IDataPacketHandler
 {
 	private static int tt = 0;
-	private static Set<String> knownStores = new THashSet();
+	private static Set<String> knownStores = new HashSet();
 
 	public static void addStoreType(String s)
 	{
@@ -99,7 +101,7 @@ public class EntityDataStorePacketHandler implements IDataPacketHandler
 		return false;
 	}
 
-	@SubscribeEvent
+	@ForgeSubscribe
 	public void tickHandler(TickEvent.ServerTickEvent tick)
 	{
 		if((tick.phase != Phase.START) || (tick.type != Type.SERVER)) return;
@@ -119,7 +121,7 @@ public class EntityDataStorePacketHandler implements IDataPacketHandler
 		queue.addAll(toReadd);
 	}
 
-	@SubscribeEvent
+	@ForgeSubscribe
 	public void onClonePlayer(PlayerEvent.Clone e)
 	{
 		EntityPlayer opl = e.original;
@@ -149,7 +151,7 @@ public class EntityDataStorePacketHandler implements IDataPacketHandler
 	}
 
 	public static final HashMultimap<String,Pair<String,AbstractEntityDataStore>> dimTransMap = HashMultimap.create();
-	@SubscribeEvent
+	@ForgeSubscribe
 	public void onRespawn(PlayerRespawnEvent e)
 	{
 		EntityPlayer pl = e.player;
@@ -163,7 +165,7 @@ public class EntityDataStorePacketHandler implements IDataPacketHandler
 		}
 	}
 
-	@SubscribeEvent
+	@ForgeSubscribe
 	public void onDimTransfer(cpw.mods.fml.common.gameevent.PlayerEvent.PlayerChangedDimensionEvent e)
 	{
 		EntityPlayer p = e.player;

@@ -1,12 +1,13 @@
 package io.darkcraft.darkcore.mod.impl;
 
+import java.util.HashMap;
+
+import com.google.common.collect.Multimap;
+
 import io.darkcraft.darkcore.mod.DarkcoreMod;
 import io.darkcraft.darkcore.mod.abstracts.AbstractItem;
 import io.darkcraft.darkcore.mod.helpers.PlayerHelper;
 import io.darkcraft.darkcore.mod.helpers.ServerHelper;
-
-import java.util.HashMap;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -15,8 +16,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-
-import com.google.common.collect.Multimap;
 
 public class UniqueSwordItem extends AbstractItem
 {

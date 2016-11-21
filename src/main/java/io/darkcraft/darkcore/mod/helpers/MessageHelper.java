@@ -7,6 +7,7 @@ import io.darkcraft.darkcore.mod.network.DataPacket;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.FakePlayer;
 
 /**
  * This class is used to help send messages to the DarkCore message box system
@@ -29,7 +30,7 @@ public class MessageHelper
 		if(player instanceof EntityPlayerMP)
 			sendMess((EntityPlayerMP)player, MessagePacketHandler.getDataPacket(icon, message, seconds, uv));
 		else
-			player.addChatMessage(new ChatComponentText(message));
+			player.sendChatToPlayer(new ChatComponentText(message));
 	}
 
 	public static void sendMessage(ICommandSender player, ResourceLocation icon, String message, int seconds)

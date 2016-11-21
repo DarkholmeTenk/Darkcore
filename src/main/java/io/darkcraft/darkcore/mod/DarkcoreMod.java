@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Random;
 
-import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.SidedProxy;
@@ -46,6 +45,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.ForgeSubscribe;
 
 /**
  * When creating a mod using DarkCore, if that mod implements new blocks/items, you should call {@link #registerCreativeTab(String, CreativeTabs)} before instantiating your items
@@ -107,7 +107,7 @@ public class DarkcoreMod implements IConfigHandlerMod
 		i = this;
 		ConfigHandlerFactory.setConfigDir(ev.getModConfigurationDirectory());
 		configHandler = ConfigHandlerFactory.getConfigHandler(this);
-		networkChannel = NetworkRegistry.INSTANCE.newEventDrivenChannel("darkcore");
+		networkChannel = NetworkRegistry.instance().newEventDrivenChannel("darkcore");
 		packetHandler.registerHandler(SoundPacketHandler.disc, soundPacketHandler);
 		packetHandler.registerHandler(EntityPacketHandler.disc, new EntityPacketHandler());
 		packetHandler.registerHandler(MessagePacketHandler.disc, new MessagePacketHandler());
@@ -123,15 +123,13 @@ public class DarkcoreMod implements IConfigHandlerMod
 	{
 		refreshConfigs();
 		networkChannel.register(packetHandler);
-		FMLCommonHandler.instance().bus().register(this);
+		MinecraftForge.EVENT_BUS.register(this);
 		WeatherWatchingHandler wwHandler = new WeatherWatchingHandler();
-		FMLCommonHandler.instance().bus().register(wwHandler);
 		MinecraftForge.EVENT_BUS.register(wwHandler);
 		comHandler.addCommand(new DebugCommand());
 		EffectHandler eh = new EffectHandler();
 		EffectHandler.registerEffectFactory(new TestEffectFactory());
 		MinecraftForge.EVENT_BUS.register(eh);
-		FMLCommonHandler.instance().bus().register(eh);
 		proxy.init();
 		inited = true;
 	}
@@ -168,11 +166,9 @@ public class DarkcoreMod implements IConfigHandlerMod
 		if (chunkLoadingHandler != null)
 		{
 			MinecraftForge.EVENT_BUS.unregister(chunkLoadingHandler);
-			FMLCommonHandler.instance().bus().unregister(chunkLoadingHandler);
 		}
 		chunkLoadingHandler = new ChunkLoadingHandler();
 		MinecraftForge.EVENT_BUS.register(chunkLoadingHandler);
-		FMLCommonHandler.instance().bus().register(chunkLoadingHandler);
 		ForgeChunkManager.setForcedChunkLoadingCallback(this, chunkLoadingHandler);
 	}
 
@@ -193,7 +189,7 @@ public class DarkcoreMod implements IConfigHandlerMod
 		return null;
 	}
 
-	@SubscribeEvent
+	@ForgeSubscribe
 	public void repostWarning(PlayerLoggedInEvent event)
 	{
 		PlayerHelper.i.playerSpawn(event);

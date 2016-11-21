@@ -1,9 +1,10 @@
 package io.darkcraft.darkcore.mod.abstracts;
 
-import io.darkcraft.darkcore.mod.interfaces.IColorableBlock;
-
 import java.util.List;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import io.darkcraft.darkcore.mod.interfaces.IColorableBlock;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
@@ -12,17 +13,15 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public abstract class AbstractItemBlock extends ItemBlock
 {
 	Block	bID;
 
-	public AbstractItemBlock(Block par1)
+	public AbstractItemBlock(int par1)
 	{
 		super(par1);
-		bID = par1;
+		bID = Block.blocksList[par1];
 		if (!(getBlock() instanceof IColorableBlock))
 			setHasSubtypes(true);
 		else
@@ -92,7 +91,7 @@ public abstract class AbstractItemBlock extends ItemBlock
 		Block b = getBlock();
 		if (b instanceof IColorableBlock)
 		{
-			if ((m >= 0) && (m < ItemDye.field_150922_c.length)) return ItemDye.field_150922_c[m];
+			if ((m >= 0) && (m < ItemDye.dyeColors.length)) return ItemDye.dyeColors[m];
 		}
 		return 16777215;
 	}

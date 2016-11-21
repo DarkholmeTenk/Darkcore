@@ -5,18 +5,19 @@ import java.util.HashMap;
 import io.darkcraft.darkcore.mod.DarkcoreMod;
 import io.darkcraft.darkcore.mod.interfaces.IDataPacketHandler;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.event.ForgeSubscribe;
 
 public class PacketHandler
 {
 	HashMap<String, IDataPacketHandler>	handlers	= new HashMap<String, IDataPacketHandler>();
 
-	@SubscribeEvent
+	@ForgeSubscribe
 	public void handleCustomClientPacket(ClientCustomPacketEvent event)
 	{
 		handleCustomPacket(event);
 	}
 
-	@SubscribeEvent
+	@ForgeSubscribe
 	public void handleCustomServerPacket(ServerCustomPacketEvent event)
 	{
 		handleCustomPacket(event);

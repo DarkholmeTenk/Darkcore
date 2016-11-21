@@ -1,11 +1,11 @@
 package io.darkcraft.darkcore.mod.abstracts;
 
-import io.darkcraft.darkcore.mod.DarkcoreMod;
-import io.darkcraft.darkcore.mod.helpers.ServerHelper;
-
 import java.util.ArrayList;
 import java.util.List;
 
+import io.darkcraft.darkcore.mod.DarkcoreMod;
+import io.darkcraft.darkcore.mod.compat.ChatComponentText;
+import io.darkcraft.darkcore.mod.helpers.ServerHelper;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
@@ -47,7 +47,7 @@ public abstract class AbstractCommand implements ICommand
 		if (canCommandSenderUseCommand(icommandsender))
 			commandBody(icommandsender, astring);
 		else
-			icommandsender.addChatMessage(new ChatComponentText("You do not have permission for that command"));
+			icommandsender.sendChatToPlayer(new ChatComponentText("You do not have permission for that command"));
 	}
 
 	public boolean isPlayer(ICommandSender sen)
@@ -86,7 +86,7 @@ public abstract class AbstractCommand implements ICommand
 	{
 		if(toSend == null) return;
 		for(String s : toSend)
-			comsen.addChatMessage(new ChatComponentText(s));
+			comsen.sendChatToPlayer(new ChatComponentText(s));
 	}
 
 	public List<String> splitStr(String... toSplit)
