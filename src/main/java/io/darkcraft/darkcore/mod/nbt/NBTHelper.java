@@ -13,6 +13,7 @@ import io.darkcraft.darkcore.mod.nbt.NBTProperty.SerialisableType;
 import io.darkcraft.darkcore.mod.nbt.impl.ArrayMapper;
 import io.darkcraft.darkcore.mod.nbt.impl.BasicMappers;
 import io.darkcraft.darkcore.mod.nbt.impl.GeneratedMapper;
+import io.darkcraft.darkcore.mod.nbt.impl.collections.CollectionMappers;
 import net.minecraft.nbt.NBTTagCompound;
 
 public class NBTHelper
@@ -31,6 +32,7 @@ public class NBTHelper
 					}
 			});
 		BasicMappers.register();
+		CollectionMappers.register();
 	}
 
 	public static <T> void register(Class<T> c, Mapper<T> mapper)
