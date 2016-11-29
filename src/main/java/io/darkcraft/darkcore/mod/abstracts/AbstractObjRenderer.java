@@ -2,6 +2,7 @@ package io.darkcraft.darkcore.mod.abstracts;
 
 import org.lwjgl.opengl.GL11;
 
+import io.darkcraft.darkcore.mod.helpers.RenderHelper;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.tileentity.TileEntity;
@@ -15,7 +16,7 @@ public abstract class AbstractObjRenderer extends AbstractBlockRenderer
 	{
 		ptt = f;
 		if(fr == null)
-			fr = func_147498_b();
+			fr = RenderHelper.getFontRenderer();
 		GL11.glPushMatrix();
 		GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
 		GL11.glEnable(GL11.GL_BLEND);
@@ -33,7 +34,7 @@ public abstract class AbstractObjRenderer extends AbstractBlockRenderer
 		if(handleLighting() && (w != null))
 		{
 			float brightness = w.getBlockLightValue(x, y, z);
-			int l = w.getLightBrightnessForSkyBlocks(x, y, z, 0);
+			int l = w.getLightBrightnessForSkyBlock(x, y, z, 0);
 			int l1 = l % 65536;
 			int l2 = l / 65536;
 			tessellator.setColorOpaque_F(brightness, brightness, brightness);

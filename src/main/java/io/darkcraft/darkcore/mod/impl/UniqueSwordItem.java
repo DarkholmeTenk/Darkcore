@@ -124,7 +124,7 @@ public class UniqueSwordItem extends AbstractItem
 		double zo = Math.sin(Math.toRadians(pl.rotationYaw + 90));
 		Vec3 start = Vec3.createVectorHelper(pl.posX, pl.posY + pl.eyeHeight, pl.posZ);
 		Vec3 end = Vec3.createVectorHelper(pl.posX + (dist * xo), pl.posY + pl.eyeHeight + (dist * yo), pl.posZ + (dist * zo));
-		MovingObjectPosition mop = w.rayTraceBlocks(start, end);
+		MovingObjectPosition mop = w.rayTraceBlock(start, end);
 		pl.fallDistance = 0;
 		if ((mop == null) || (mop.typeOfHit == MovingObjectType.MISS))
 		{

@@ -12,11 +12,12 @@ import net.minecraft.item.ItemStack;
 public class DefaultItemBlock extends AbstractItemBlock
 {
 	private final AbstractBlock b;
-	public DefaultItemBlock(Block par1)
+	public DefaultItemBlock(int par1)
 	{
 		super(par1);
-		if(par1 instanceof AbstractBlock)
-			b = (AbstractBlock) par1;
+		Block d = Block.blocksList[par1];
+		if(d instanceof AbstractBlock)
+			b = (AbstractBlock) d;
 		else
 			b = null;
 	}
@@ -31,7 +32,7 @@ public class DefaultItemBlock extends AbstractItemBlock
 	public void addInfo(ItemStack is, EntityPlayer player, List infoList)
 	{
 		if((is == null) || !(is.getItem() instanceof ItemBlock)) return;
-		Block b = ((ItemBlock)is.getItem()).field_150939_a;
+		Block b = Block.blocksList[is.itemID];
 		if(b instanceof AbstractBlock)
 			((AbstractBlock)b).addInfo(is.getItemDamage(), is.stackTagCompound, infoList);
 	}

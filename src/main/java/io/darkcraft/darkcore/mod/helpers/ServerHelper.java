@@ -9,6 +9,7 @@ import java.util.zip.ZipException;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
+import io.darkcraft.darkcore.mod.compat.ChatComponentText;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;

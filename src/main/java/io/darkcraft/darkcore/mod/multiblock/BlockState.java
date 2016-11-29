@@ -67,7 +67,7 @@ public class BlockState implements IBlockState
 	@Override
 	public void set(World w, int x, int y, int z)
 	{
-		w.setBlock(x, y, z, b, m==-1?0:m,3);
+		w.setBlock(x, y, z, b.blockID, m==-1?0:m,3);
 	}
 
 	@Override

@@ -2,12 +2,14 @@ package io.darkcraft.darkcore.mod.multiblock;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
+import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraftforge.common.ForgeDirection;
 
-public class RenderBlockAccess implements IBlockAccess
+public class RenderBlockAccess extends World
 {
 	private final IMultiBlockStructure struct;
 	private final IBlockState[][][] s;
@@ -41,9 +43,9 @@ public class RenderBlockAccess implements IBlockAccess
 	@Override
 	public Block getBlock(int x, int y, int z)
 	{
-		if((y < 0) || (y >= s.length) || (s[y] == null)) return Blocks.air;
-		if((x < 0) || (x >= s[y].length) || (s[y][x] == null)) return Blocks.air;
-		if((z < 0) || (z >= s[y][x].length) || (s[y][x][z] == null)) return Blocks.air;
+		if((y < 0) || (y >= s.length) || (s[y] == null)) return null;
+		if((x < 0) || (x >= s[y].length) || (s[y][x] == null)) return null;
+		if((z < 0) || (z >= s[y][x].length) || (s[y][x][z] == null)) return null;
 		return s[y][x][z].getDefaultBlock();
 	}
 
@@ -57,7 +59,7 @@ public class RenderBlockAccess implements IBlockAccess
 	}
 
 	@Override
-	public int getLightBrightnessForSkyBlocks(int p_72802_1_, int p_72802_2_, int p_72802_3_, int p_72802_4_)
+	public int getLightBrightnessForSkyBlock(int p_72802_1_, int p_72802_2_, int p_72802_3_, int p_72802_4_)
 	{
 		return 15728704;
 	}
@@ -108,8 +110,20 @@ public class RenderBlockAccess implements IBlockAccess
 	public boolean isSideSolid(int x, int y, int z, ForgeDirection side, boolean _default)
 	{
 		Block block = getBlock(x, y, z);
-		if(block == Blocks.air) return _default;
-        return block.isSideSolid(this, x, y, z, side);
+		if(block == null) return _default;
+        return block.isBlockSolidOnSide(this, x, y, z, side);
+	}
+
+	@Override
+	protected IChunkProvider createChunkProvider()
+	{
+		return null;
+	}
+
+	@Override
+	public Entity getEntityByID(int i)
+	{
+		return null;
 	}
 
 }

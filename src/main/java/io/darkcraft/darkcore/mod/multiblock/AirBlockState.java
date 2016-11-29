@@ -11,7 +11,7 @@ public class AirBlockState implements IBlockState
 	@Override
 	public boolean equals(Block b, int m)
 	{
-		if((b == null) || (b == Blocks.air))
+		if(b == null)
 			return true;
 		return false;
 	}
@@ -31,7 +31,7 @@ public class AirBlockState implements IBlockState
 	@Override
 	public Block getDefaultBlock()
 	{
-		return Blocks.air;
+		return null;
 	}
 
 	@Override

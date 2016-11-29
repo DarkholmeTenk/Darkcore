@@ -8,14 +8,10 @@ import java.util.UUID;
 
 import io.darkcraft.darkcore.mod.abstracts.AbstractWorldDataStore;
 import io.darkcraft.darkcore.mod.handlers.containers.EntityContainerHandler;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.scoreboard.Scoreboard;
-import net.minecraft.scoreboard.Team;
-import net.minecraft.world.World;
 import net.minecraftforge.event.ForgeSubscribe;
 
 public class PlayerHelper
@@ -48,7 +44,7 @@ public class PlayerHelper
 		if(pl.isDead) return false;
 		try
 		{
-			pl.playerNetServerHandler.netManager.channel().attr(NetworkDispatcher.FML_DISPATCHER).get();
+			pl.playerNetServerHandler.netManager.getSocketAddress();
 		}
 		catch(NullPointerException e)
 		{
@@ -69,28 +65,6 @@ public class PlayerHelper
 			store.load();
 		}
 		return store;
-	}
-
-	public static UUID getUUID(EntityPlayer pl)
-	{
-		GameProfile profile = pl.getGameProfile();
-		if(profile != null)
-			return profile.getId();
-		else
-		{
-			NBTTagCompound plNbt = pl.getEntityData();
-			if(plNbt == null) return null;
-			long least = plNbt.getLong("UUIDLeast");
-			long most = plNbt.getLong("UUIDMost");
-			if((least != 0) && (most != 0))
-				return new UUID(most,least);
-		}
-		return null;
-	}
-
-	public static UUID getUUID(String un)
-	{
-		return getStore().getUUID(un);
 	}
 
 	/**
@@ -151,25 +125,6 @@ public class PlayerHelper
 		return ServerHelper.getConfigManager().playerEntityList;
 	}
 
-	public static Team getTeam(EntityLivingBase ent)
-	{
-		return ent.getTeam();
-	}
-
-	public static Scoreboard getScoreboard(int dim)
-	{
-		World w = WorldHelper.getWorld(dim);
-		if(w == null) return null;
-		return w.getScoreboard();
-	}
-
-	public static Team getTeam(int dim,String id)
-	{
-		Scoreboard sb = getScoreboard(dim);
-		if(sb == null) return null;
-		return sb.getTeam(id);
-	}
-
 	public static boolean swordsEnabled()
 	{
 		return getStore().swordsEnabled;
@@ -212,14 +167,9 @@ public class PlayerHelper
 		{
 			try
 			{
-				UUID uuid = ent.getGameProfile().getId();
 				EntityContainerHandler.getContainer(ent);
 				String name = ServerHelper.getUsername(ent);
 				String prev = null;
-				synchronized (uuidMap)
-				{
-					prev = uuidMap.put(uuid, name);
-				}
 				if (!name.equals(prev))
 				{
 					markDirty();
@@ -234,8 +184,7 @@ public class PlayerHelper
 
 		public String getUsername(EntityPlayer ent)
 		{
-			UUID uuid = PlayerHelper.getUUID(ent);
-			return getUsername(uuid);
+			return ent.username;
 		}
 
 		public String getUsername(UUID uuid)

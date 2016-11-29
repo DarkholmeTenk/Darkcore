@@ -198,7 +198,7 @@ public class SimpleCoordStore
 	public Block getBlock()
 	{
 		World w = getWorldObj();
-		if (w != null) if (!(Block.blocksList[w.getBlockId(x, y, z)] == Blocks.air)) return Block.blocksList[w.getBlockId(x, y, z)];
+		if (w != null) if (!(Block.blocksList[w.getBlockId(x, y, z)] == Block.air)) return Block.blocksList[w.getBlockId(x, y, z)];
 		return null;
 	}
 

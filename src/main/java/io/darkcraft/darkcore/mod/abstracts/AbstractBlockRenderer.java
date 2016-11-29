@@ -36,7 +36,7 @@ public abstract class AbstractBlockRenderer extends TileEntitySpecialRenderer im
 	public void renderTileEntityAt(TileEntity tileEntity, double d0, double d1, double d2, float f)
 	{
 		if(fr == null)
-			fr = func_147498_b();
+			fr = RenderHelper.getFontRenderer();
 		GL11.glPushMatrix();
 		GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
 		GL11.glEnable(GL11.GL_BLEND);
@@ -54,7 +54,7 @@ public abstract class AbstractBlockRenderer extends TileEntitySpecialRenderer im
 		if(handleLighting() && (w!= null))
 		{
 			float b = w.getBlockLightValue(x, y, z);
-			int l = (w.getLightBrightnessForSkyBlocks(x, y, z,0));
+			int l = (w.getLightBrightnessForSkyBlock(x, y, z,0));
 			int l1 = l % 65536;
 			int l2 = l >> 16;
 			tessellator.setColorOpaque_F(b, b, b);

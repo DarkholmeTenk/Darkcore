@@ -5,6 +5,9 @@ import static io.darkcraft.darkcore.mod.nbt.NBTProperty.SerialisableType.WORLD;
 
 import io.darkcraft.darkcore.mod.nbt.NBTHelper;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.INetworkManager;
+import net.minecraft.network.packet.Packet;
+import net.minecraft.network.packet.Packet132TileEntityData;
 
 public class AbstractTileEntitySer extends AbstractTileEntity
 {
@@ -18,14 +21,14 @@ public class AbstractTileEntitySer extends AbstractTileEntity
 	{
 		NBTTagCompound tag = new NBTTagCompound();
 		NBTHelper.getMapper(getClass(), TRANSMIT).writeToNBT(tag, this);
-		Packet p = new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, 3, tag);
+		Packet p = new Packet132TileEntityData(xCoord, yCoord, zCoord, 3, tag);
 		return p;
 	}
 
 	@Override
-	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity packet)
+	public void onDataPacket(INetworkManager net, Packet132TileEntityData packet)
 	{
-		NBTTagCompound nbt = packet.func_148857_g();
+		NBTTagCompound nbt = packet.data;
 		NBTHelper.getMapper(getClass(), TRANSMIT).fillFromNBT(nbt, this);
 		super.onDataPacket(net, packet);
 	}

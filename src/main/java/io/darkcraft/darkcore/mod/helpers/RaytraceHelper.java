@@ -24,7 +24,7 @@ public class RaytraceHelper
 		AxisAlignedBB aabb = ent.boundingBox.expand(expansion, expansion, expansion);
 		//aabb = aabb.addCoord(ent.posX, ent.posY, ent.posZ);
 		if(aabb.isVecInside(origin) || aabb.isVecInside(end))
-			return new MovingObjectPosition(ent,end);
+			return new MovingObjectPosition(ent);
 		MovingObjectPosition mop = aabb.calculateIntercept(origin, end);
 		return mop;
 	}
@@ -54,7 +54,7 @@ public class RaytraceHelper
 	{
 		Vec3 s2 = Vec3.createVectorHelper(s.xCoord, s.yCoord, s.zCoord);
 		Vec3 e2 = Vec3.createVectorHelper(e.xCoord, e.yCoord, e.zCoord);
-		return w.rayTraceBlocks(s2, e2, l);
+		return w.rayTraceBlocks_do_do(s2, e2, l, l);
 	}
 
 	public static MovingObjectPosition rayTrace(Entity tracer, Vec3 end, boolean liquids, Class<? extends Entity> entClass, boolean doBlocks, boolean doEnts, Entity... skip)
@@ -88,8 +88,6 @@ public class RaytraceHelper
 				if((entClass != null) && !entClass.isInstance(e)) continue;
 				MovingObjectPosition entityMop = rayIntersectEntity(e, start, end);
 				if(entityMop == null) continue;
-				entityMop.entityHit = e;
-				entityMop.typeOfHit = MovingObjectType.ENTITY;
 				double entDist = start.distanceTo(entityMop.hitVec);
 				if(entDist < dist)
 				{

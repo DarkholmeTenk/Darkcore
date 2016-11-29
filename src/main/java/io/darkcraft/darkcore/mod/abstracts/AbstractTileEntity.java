@@ -16,7 +16,9 @@ import io.darkcraft.darkcore.mod.multiblock.IMultiBlockCore;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet;
+import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.ServerConfigurationManager;
 import net.minecraft.tileentity.TileEntity;
@@ -67,7 +69,7 @@ public abstract class AbstractTileEntity extends TileEntity
 		NBTTagCompound tag = new NBTTagCompound();
 		writeTransmittable(tag);
 		writeTransmittableOnly(tag);
-		Packet p = new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, 3, tag);
+		Packet p = new Packet132TileEntityData(xCoord, yCoord, zCoord, 3, tag);
 		return p;
 	}
 
@@ -176,9 +178,9 @@ public abstract class AbstractTileEntity extends TileEntity
 	}
 
 	@Override
-	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity packet)
+	public void onDataPacket(INetworkManager net, Packet132TileEntityData packet)
 	{
-		NBTTagCompound nbt = packet.func_148857_g();
+		NBTTagCompound nbt = packet.data;
 		readTransmittable(nbt);
 		readTransmittableOnly(nbt);
 		super.onDataPacket(net, packet);
