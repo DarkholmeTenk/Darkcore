@@ -1,5 +1,6 @@
 package io.darkcraft.darkcore.mod.handlers.containers;
 
+import io.darkcraft.darkcore.mod.interfaces.IPositionProvider;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -10,7 +11,7 @@ import net.minecraft.nbt.NBTTagCompound;
  * @author dark
  *
  */
-public interface IEntityContainer<T extends EntityLivingBase>
+public interface IEntityContainer<T extends EntityLivingBase> extends IPositionProvider
 {
 	/**
 	 * @return the entity contained within this container.<br>May return null, if the entity no longer exists or the player is offline, etc.

@@ -2,6 +2,7 @@ package io.darkcraft.darkcore.mod.datastore;
 
 import io.darkcraft.darkcore.mod.helpers.MathHelper;
 import io.darkcraft.darkcore.mod.helpers.WorldHelper;
+import io.darkcraft.darkcore.mod.interfaces.IPositionProvider;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.nbt.NBTTagCompound;
@@ -9,7 +10,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 
-public class SimpleDoubleCoordStore
+public class SimpleDoubleCoordStore implements IPositionProvider
 {
 	public final int	world;
 	public final double	x;
@@ -237,5 +238,11 @@ public class SimpleDoubleCoordStore
 		double y = nbt.getDouble("y");
 		double z = nbt.getDouble("z");
 		return new SimpleDoubleCoordStore(w, x, y, z);
+	}
+
+	@Override
+	public SimpleDoubleCoordStore getPosition()
+	{
+		return this;
 	}
 }

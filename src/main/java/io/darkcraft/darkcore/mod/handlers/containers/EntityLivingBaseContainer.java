@@ -2,6 +2,7 @@ package io.darkcraft.darkcore.mod.handlers.containers;
 
 import java.lang.ref.WeakReference;
 
+import io.darkcraft.darkcore.mod.datastore.SimpleDoubleCoordStore;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -36,6 +37,24 @@ public class EntityLivingBaseContainer implements IEntityContainer<EntityLivingB
 
 	public static EntityLivingBaseContainer readFromNBT(NBTTagCompound snbt)
 	{
+		return null;
+	}
+
+	private int lastAge = -1;
+	private SimpleDoubleCoordStore lastPosition = null;
+	@Override
+	public SimpleDoubleCoordStore getPosition()
+	{
+		EntityLivingBase ent = getEntity();
+		if(ent != null)
+		{
+			if(ent.getAge() != lastAge)
+			{
+				lastAge = ent.getAge();
+				return lastPosition = new SimpleDoubleCoordStore(ent);
+			}
+			return lastPosition;
+		}
 		return null;
 	}
 

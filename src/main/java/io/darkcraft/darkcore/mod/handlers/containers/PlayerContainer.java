@@ -3,9 +3,11 @@ package io.darkcraft.darkcore.mod.handlers.containers;
 import java.lang.ref.WeakReference;
 import java.util.UUID;
 
+import io.darkcraft.darkcore.mod.datastore.SimpleDoubleCoordStore;
 import io.darkcraft.darkcore.mod.helpers.NBTHelper;
 import io.darkcraft.darkcore.mod.helpers.PlayerHelper;
 import io.darkcraft.darkcore.mod.helpers.ServerHelper;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
@@ -75,4 +77,21 @@ public final class PlayerContainer implements IEntityContainer<EntityPlayer>
 		return uuid.equals(newID);
 	}
 
+	private int lastAge = -1;
+	private SimpleDoubleCoordStore lastPosition = null;
+	@Override
+	public SimpleDoubleCoordStore getPosition()
+	{
+		EntityLivingBase ent = getEntity();
+		if(ent != null)
+		{
+			if(ent.getAge() != lastAge)
+			{
+				lastAge = ent.getAge();
+				return lastPosition = new SimpleDoubleCoordStore(ent);
+			}
+			return lastPosition;
+		}
+		return null;
+	}
 }
