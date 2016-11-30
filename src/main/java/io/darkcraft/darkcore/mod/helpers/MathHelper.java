@@ -11,7 +11,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 public class MathHelper
 {
 	private static double[] sinData;
-	private static int sinNum = 4;
+	private static int sinNum = 10;
 	static
 	{
 		sinData = new double[360*sinNum];
@@ -21,7 +21,7 @@ public class MathHelper
 
 	public static double sin(double degrees)
 	{
-		if(degrees < 0) degrees += 36000;
+		while(degrees < 0) degrees += 36000;
 		return sinData[((int) Math.round(degrees * sinNum)) % sinData.length];
 	}
 
