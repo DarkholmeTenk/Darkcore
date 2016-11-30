@@ -10,7 +10,7 @@ import io.darkcraft.darkcore.mod.nbt.NBTProperty.SerialisableType;
 import io.darkcraft.darkcore.mod.nbt.impl.SubTypeMapper;
 import net.minecraft.nbt.NBTTagCompound;
 
-public abstract class ListMapper<T extends List<?>> extends Mapper<T>
+public abstract class ListMapper<T extends List> extends Mapper<T>
 {
 	private static final String SIZE_KEY = "size";
 	private final SubTypeMapper stm;

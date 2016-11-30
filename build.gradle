@@ -21,8 +21,8 @@ version = "0.45"
 group= "io.darkcraft.darkcore" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "darkcore"
 
-sourceCompatibility = 1.7
-targetCompatibility = 1.7
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 minecraft {
     version = "1.7.10-10.13.3.1403-1.7.10"

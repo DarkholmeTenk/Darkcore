@@ -12,7 +12,7 @@ import io.darkcraft.darkcore.mod.nbt.NBTProperty.SerialisableType;
 import io.darkcraft.darkcore.mod.nbt.impl.SubTypeMapper;
 import net.minecraft.nbt.NBTTagCompound;
 
-public abstract class MapMapper<T extends Map<?,?>> extends Mapper<T>
+public abstract class MapMapper<T extends Map> extends Mapper<T>
 {
 	private static final String SIZE_KEY = "size";
 	private final SubTypeMapper stm;
@@ -31,8 +31,9 @@ public abstract class MapMapper<T extends Map<?,?>> extends Mapper<T>
 		int size = t.size();
 		nbt.setInteger(SIZE_KEY, size);
 		int i = 0;
-		for(Entry<?,?> obj : t.entrySet())
+		for(Object objO : t.entrySet())
 		{
+			Entry obj = (Entry) objO;
 			stm.writeToNBT(nbt, "k"+i, obj.getKey());
 			stm.writeToNBT(nbt, "v"+i, obj.getValue());
 			i++;

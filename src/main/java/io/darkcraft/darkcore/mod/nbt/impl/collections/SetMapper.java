@@ -11,7 +11,7 @@ import io.darkcraft.darkcore.mod.nbt.NBTProperty.SerialisableType;
 import io.darkcraft.darkcore.mod.nbt.impl.SubTypeMapper;
 import net.minecraft.nbt.NBTTagCompound;
 
-public abstract class SetMapper<T extends Set<?>> extends Mapper<T>
+public abstract class SetMapper<T extends Set> extends Mapper<T>
 {
 	private static final String SIZE_KEY = "size";
 	private final SubTypeMapper stm;
