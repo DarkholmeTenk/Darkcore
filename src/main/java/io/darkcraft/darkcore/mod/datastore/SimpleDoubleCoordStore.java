@@ -1,14 +1,15 @@
 package io.darkcraft.darkcore.mod.datastore;
 
-import io.darkcraft.darkcore.mod.helpers.MathHelper;
-import io.darkcraft.darkcore.mod.helpers.WorldHelper;
-import io.darkcraft.darkcore.mod.interfaces.IPositionProvider;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
+
+import io.darkcraft.darkcore.mod.helpers.MathHelper;
+import io.darkcraft.darkcore.mod.helpers.WorldHelper;
+import io.darkcraft.darkcore.mod.interfaces.IPositionProvider;
 
 public class SimpleDoubleCoordStore implements IPositionProvider
 {
@@ -244,5 +245,10 @@ public class SimpleDoubleCoordStore implements IPositionProvider
 	public SimpleDoubleCoordStore getPosition()
 	{
 		return this;
+	}
+
+	public SimpleDoubleCoordStore subtract(SimpleDoubleCoordStore from)
+	{
+		return new SimpleDoubleCoordStore(world, x - from.x, y - from.y, z - from.z);
 	}
 }
