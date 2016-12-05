@@ -2,10 +2,11 @@ package io.darkcraft.darkcore.mod.abstracts.effects;
 
 import java.lang.ref.WeakReference;
 
-import io.darkcraft.darkcore.mod.datastore.UVStore;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
+
+import io.darkcraft.darkcore.mod.datastore.UVStore;
 
 public abstract class AbstractEffect
 {
@@ -41,6 +42,11 @@ public abstract class AbstractEffect
 	public int getTT()
 	{
 		return tt;
+	}
+
+	public int getRemaining()
+	{
+		return duration - getTT();
 	}
 
 	public final void update()
