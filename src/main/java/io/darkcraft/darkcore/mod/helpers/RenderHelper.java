@@ -3,11 +3,6 @@ package io.darkcraft.darkcore.mod.helpers;
 import org.lwjgl.Sys;
 import org.lwjgl.opengl.GL11;
 
-import io.darkcraft.darkcore.mod.datastore.Colour;
-import io.darkcraft.darkcore.mod.datastore.UVStore;
-import io.darkcraft.darkcore.mod.multiblock.IBlockState;
-import io.darkcraft.darkcore.mod.multiblock.IMultiBlockStructure;
-import io.darkcraft.darkcore.mod.multiblock.RenderBlockAccess;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -16,6 +11,12 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
+
+import io.darkcraft.darkcore.mod.datastore.Colour;
+import io.darkcraft.darkcore.mod.datastore.UVStore;
+import io.darkcraft.darkcore.mod.multiblock.IBlockState;
+import io.darkcraft.darkcore.mod.multiblock.IMultiBlockStructure;
+import io.darkcraft.darkcore.mod.multiblock.RenderBlockAccess;
 
 public class RenderHelper
 {
@@ -103,6 +104,13 @@ public class RenderHelper
 	{
 		GL11.glColor4f(c.r, c.g, c.b, c.a);
 	}
+
+	public static void colour(Tessellator tess, Colour c)
+	{
+		tess.setColorRGBA_F(c.r, c.g, c.b, c.a);
+	}
+
+	public static void resetColour(Tessellator tess){ colour(tess, white); }
 	public static void resetColour(){ colour(white); }
 
 	public static long getTime()
