@@ -14,13 +14,18 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import io.darkcraft.darkcore.mod.helpers.MathHelper;
 import io.darkcraft.darkcore.mod.helpers.WorldHelper;
+import io.darkcraft.darkcore.mod.nbt.Mapper;
 import io.darkcraft.darkcore.mod.nbt.NBTConstructor;
+import io.darkcraft.darkcore.mod.nbt.NBTHelper;
 import io.darkcraft.darkcore.mod.nbt.NBTProperty;
+import io.darkcraft.darkcore.mod.nbt.NBTProperty.SerialisableType;
 import io.darkcraft.darkcore.mod.nbt.NBTSerialisable;
 
 @NBTSerialisable
 public class SimpleCoordStore
 {
+	private static final Mapper<SimpleCoordStore> MAPPER = NBTHelper.getMapper(SimpleCoordStore.class, SerialisableType.WORLD);
+
 	@NBTProperty
 	public final int	world;
 	@NBTProperty
@@ -157,36 +162,22 @@ public class SimpleCoordStore
 
 	public void writeToNBT(NBTTagCompound nbt)
 	{
-		nbt.setInteger("w", world);
-		nbt.setInteger("x", x);
-		nbt.setInteger("y", y);
-		nbt.setInteger("z", z);
+		MAPPER.writeToNBT(nbt, this);
 	}
 
 	public void writeToNBT(NBTTagCompound nbt, String name)
 	{
-		NBTTagCompound temp = writeToNBT();
-		nbt.setTag(name, temp);
+		MAPPER.writeToNBT(nbt, name, this);
 	}
 
 	public static SimpleCoordStore readFromNBT(NBTTagCompound nbt)
 	{
-		if (!(nbt.hasKey("w") && nbt.hasKey("x") && nbt.hasKey("y") && nbt.hasKey("z"))) return null;
-		int w = nbt.getInteger("w");
-		int x = nbt.getInteger("x");
-		int y = nbt.getInteger("y");
-		int z = nbt.getInteger("z");
-		return new SimpleCoordStore(w, x, y, z);
+		return MAPPER.createFromNBT(nbt);
 	}
 
 	public static SimpleCoordStore readFromNBT(NBTTagCompound nbt, String name)
 	{
-		if (nbt.hasKey(name))
-		{
-			NBTTagCompound newNBT = nbt.getCompoundTag(name);
-			return readFromNBT(newNBT);
-		}
-		return null;
+		return MAPPER.readFromNBT(nbt, name);
 	}
 
 	public ChunkCoordIntPair toChunkCoords()

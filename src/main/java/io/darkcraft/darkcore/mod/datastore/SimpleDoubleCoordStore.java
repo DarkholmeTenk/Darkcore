@@ -10,13 +10,18 @@ import net.minecraft.world.World;
 import io.darkcraft.darkcore.mod.helpers.MathHelper;
 import io.darkcraft.darkcore.mod.helpers.WorldHelper;
 import io.darkcraft.darkcore.mod.interfaces.IPositionProvider;
+import io.darkcraft.darkcore.mod.nbt.Mapper;
 import io.darkcraft.darkcore.mod.nbt.NBTConstructor;
+import io.darkcraft.darkcore.mod.nbt.NBTHelper;
 import io.darkcraft.darkcore.mod.nbt.NBTProperty;
+import io.darkcraft.darkcore.mod.nbt.NBTProperty.SerialisableType;
 import io.darkcraft.darkcore.mod.nbt.NBTSerialisable;
 
 @NBTSerialisable
 public class SimpleDoubleCoordStore implements IPositionProvider
 {
+	private final static Mapper<SimpleDoubleCoordStore> MAPPER = NBTHelper.getMapper(SimpleDoubleCoordStore.class, SerialisableType.WORLD);
+
 	@NBTProperty
 	public final int	world;
 	@NBTProperty
@@ -222,32 +227,22 @@ public class SimpleDoubleCoordStore implements IPositionProvider
 
 	public NBTTagCompound writeToNBT()
 	{
-		NBTTagCompound nbt = new NBTTagCompound();
-		writeToNBT(nbt);
-		return nbt;
+		return MAPPER.writeToNBT(this);
 	}
 
 	public void writeToNBT(NBTTagCompound nbt)
 	{
-		nbt.setInteger("w", world);
-		nbt.setDouble("x", x);
-		nbt.setDouble("y", y);
-		nbt.setDouble("z", z);
+		MAPPER.writeToNBT(nbt, this);
 	}
 
 	public void writeToNBT(NBTTagCompound nbt, String id)
 	{
-		nbt.setTag(id, writeToNBT());
+		MAPPER.writeToNBT(nbt, id, this);
 	}
 
 	public static SimpleDoubleCoordStore readFromNBT(NBTTagCompound nbt)
 	{
-		if (!(nbt.hasKey("w") && nbt.hasKey("x") && nbt.hasKey("y") && nbt.hasKey("z"))) return null;
-		int w = nbt.getInteger("w");
-		double x = nbt.getDouble("x");
-		double y = nbt.getDouble("y");
-		double z = nbt.getDouble("z");
-		return new SimpleDoubleCoordStore(w, x, y, z);
+		return MAPPER.createFromNBT(nbt);
 	}
 
 	@Override

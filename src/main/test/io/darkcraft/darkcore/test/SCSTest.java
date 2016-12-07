@@ -9,22 +9,22 @@ import org.junit.Test;
 
 import net.minecraft.nbt.NBTTagCompound;
 
-import io.darkcraft.darkcore.mod.datastore.SimpleDoubleCoordStore;
+import io.darkcraft.darkcore.mod.datastore.SimpleCoordStore;
 import io.darkcraft.darkcore.mod.nbt.Mapper;
 import io.darkcraft.darkcore.mod.nbt.NBTHelper;
 import io.darkcraft.darkcore.mod.nbt.NBTProperty.SerialisableType;
 
-public class SDCSMapperTest
+public class SCSTest
 {
-	private SimpleDoubleCoordStore coords;
-	private Mapper<SimpleDoubleCoordStore> mapper;
+	private SimpleCoordStore coords;
+	private Mapper<SimpleCoordStore> mapper;
 
 	@Before
 	public void setup()
 	{
 		Random r = new Random();
-		coords = new SimpleDoubleCoordStore(r.nextInt(255), r.nextDouble(), r.nextDouble(), r.nextDouble());
-		mapper = NBTHelper.getMapper(SimpleDoubleCoordStore.class, SerialisableType.TRANSMIT);
+		coords = new SimpleCoordStore(r.nextInt(255), r.nextInt(), r.nextInt(), r.nextInt());
+		mapper = NBTHelper.getMapper(SimpleCoordStore.class, SerialisableType.TRANSMIT);
 	}
 
 	@Test
@@ -32,7 +32,7 @@ public class SDCSMapperTest
 	{
 		NBTTagCompound tag = mapper.writeToNBT(coords);
 
-		SimpleDoubleCoordStore newCoords = mapper.createFromNBT(tag);
+		SimpleCoordStore newCoords = mapper.createFromNBT(tag);
 		System.out.println(newCoords);
 
 		assertEquals(coords, newCoords);
@@ -43,7 +43,7 @@ public class SDCSMapperTest
 	{
 		NBTTagCompound nbt = coords.writeToNBT();
 
-		SimpleDoubleCoordStore newCoords = SimpleDoubleCoordStore.readFromNBT(nbt);
+		SimpleCoordStore newCoords = SimpleCoordStore.readFromNBT(nbt);
 
 		assertEquals(coords, newCoords);
 	}
