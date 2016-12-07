@@ -3,6 +3,7 @@ package io.darkcraft.darkcore.mod.nbt.impl;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -46,6 +47,8 @@ public class GeneratedMapper<T> extends Mapper<T>
 				throw new RuntimeException("Field " + f.getName() + " in " + clazz.getSimpleName()
 					+ " is declared as NBTProperty but no mapper can be found");
 			fields.put(f, new Data(f, property, mapper));
+			if(!serProp.createNew() && Modifier.isFinal(f.getModifiers()))
+				throw new RuntimeException("Field " + f.getName() + " is final, but class is not set to create new instances on fill");
 		}
 		NBTConstructorData<T> constructor = null;
 		try

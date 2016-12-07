@@ -22,7 +22,7 @@ public class SimpleDoubleCoordStore implements IPositionProvider
 {
 	private final static Mapper<SimpleDoubleCoordStore> MAPPER = NBTHelper.getMapper(SimpleDoubleCoordStore.class, SerialisableType.WORLD);
 
-	@NBTProperty
+	@NBTProperty(name = "w")
 	public final int	world;
 	@NBTProperty
 	public final double	x;

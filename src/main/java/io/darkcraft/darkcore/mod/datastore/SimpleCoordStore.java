@@ -26,7 +26,7 @@ public class SimpleCoordStore
 {
 	private static final Mapper<SimpleCoordStore> MAPPER = NBTHelper.getMapper(SimpleCoordStore.class, SerialisableType.WORLD);
 
-	@NBTProperty
+	@NBTProperty(name = "w")
 	public final int	world;
 	@NBTProperty
 	public final int	x;
