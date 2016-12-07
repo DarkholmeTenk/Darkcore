@@ -1,7 +1,5 @@
 package io.darkcraft.darkcore.mod.datastore;
 
-import io.darkcraft.darkcore.mod.helpers.MathHelper;
-import io.darkcraft.darkcore.mod.helpers.WorldHelper;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -14,11 +12,22 @@ import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import io.darkcraft.darkcore.mod.helpers.MathHelper;
+import io.darkcraft.darkcore.mod.helpers.WorldHelper;
+import io.darkcraft.darkcore.mod.nbt.NBTConstructor;
+import io.darkcraft.darkcore.mod.nbt.NBTProperty;
+import io.darkcraft.darkcore.mod.nbt.NBTSerialisable;
+
+@NBTSerialisable
 public class SimpleCoordStore
 {
+	@NBTProperty
 	public final int	world;
+	@NBTProperty
 	public final int	x;
+	@NBTProperty
 	public final int	y;
+	@NBTProperty
 	public final int	z;
 
 	public SimpleCoordStore(TileEntity te)
@@ -29,6 +38,7 @@ public class SimpleCoordStore
 		z = te.zCoord;
 	}
 
+	@NBTConstructor({"world", "x", "y", "z"})
 	public SimpleCoordStore(int win, int xin, int yin, int zin)
 	{
 		world = win;

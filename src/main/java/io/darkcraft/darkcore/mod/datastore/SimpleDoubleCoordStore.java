@@ -10,12 +10,20 @@ import net.minecraft.world.World;
 import io.darkcraft.darkcore.mod.helpers.MathHelper;
 import io.darkcraft.darkcore.mod.helpers.WorldHelper;
 import io.darkcraft.darkcore.mod.interfaces.IPositionProvider;
+import io.darkcraft.darkcore.mod.nbt.NBTConstructor;
+import io.darkcraft.darkcore.mod.nbt.NBTProperty;
+import io.darkcraft.darkcore.mod.nbt.NBTSerialisable;
 
+@NBTSerialisable
 public class SimpleDoubleCoordStore implements IPositionProvider
 {
+	@NBTProperty
 	public final int	world;
+	@NBTProperty
 	public final double	x;
+	@NBTProperty
 	public final double	y;
+	@NBTProperty
 	public final double	z;
 	public final int	iX;
 	public final int	iY;
@@ -26,6 +34,7 @@ public class SimpleDoubleCoordStore implements IPositionProvider
 		this(WorldHelper.getWorldID(te), te.xCoord, te.yCoord, te.zCoord);
 	}
 
+	@NBTConstructor({"world", "x", "y", "z"})
 	public SimpleDoubleCoordStore(int win, double xin, double yin, double zin)
 	{
 		world = win;
