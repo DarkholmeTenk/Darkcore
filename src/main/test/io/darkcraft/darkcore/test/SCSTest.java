@@ -1,6 +1,7 @@
 package io.darkcraft.darkcore.test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotSame;
 
 import java.util.Random;
 
@@ -46,5 +47,16 @@ public class SCSTest
 		SimpleCoordStore newCoords = SimpleCoordStore.readFromNBT(nbt);
 
 		assertEquals(coords, newCoords);
+	}
+
+	@Test
+	public void testCreateNew()
+	{
+		NBTTagCompound nbt = coords.writeToNBT();
+
+		SimpleCoordStore newCoords = mapper.fillFromNBT(nbt, coords);
+
+		assertEquals(coords, newCoords);
+		assertNotSame(coords, newCoords);
 	}
 }

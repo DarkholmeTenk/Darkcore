@@ -17,7 +17,7 @@ import io.darkcraft.darkcore.mod.nbt.NBTProperty;
 import io.darkcraft.darkcore.mod.nbt.NBTProperty.SerialisableType;
 import io.darkcraft.darkcore.mod.nbt.NBTSerialisable;
 
-@NBTSerialisable
+@NBTSerialisable(createNew = true)
 public class SimpleDoubleCoordStore implements IPositionProvider
 {
 	private final static Mapper<SimpleDoubleCoordStore> MAPPER = NBTHelper.getMapper(SimpleDoubleCoordStore.class, SerialisableType.WORLD);

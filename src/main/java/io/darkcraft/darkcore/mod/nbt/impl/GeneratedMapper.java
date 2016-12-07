@@ -64,7 +64,7 @@ public class GeneratedMapper<T> extends Mapper<T>
 		catch(SecurityException e){
 			e.printStackTrace();
 		}
-		Mapper<T> m = new GeneratedMapper(clazz, fields, constructor);
+		Mapper<T> m = new GeneratedMapper(clazz, fields, constructor, serProp.createNew());
 		if(serProp.includeType())
 			m = new TypeWrapperMapper(clazz, m);
 		return m;
@@ -74,8 +74,9 @@ public class GeneratedMapper<T> extends Mapper<T>
 	private final Map<Field, Data> fields;
 	private final Map<String, Data> fieldNames;
 	private final NBTConstructorData<T> constructor;
+	private final boolean shouldCreateNew;
 
-	private GeneratedMapper(Class c, Map<Field, Data> fieldMap, NBTConstructorData<T> constructor)
+	private GeneratedMapper(Class c, Map<Field, Data> fieldMap, NBTConstructorData<T> constructor, boolean shouldCreateNew)
 	{
 		clazz = c;
 		fields = fieldMap;
@@ -83,6 +84,7 @@ public class GeneratedMapper<T> extends Mapper<T>
 		for(Entry<Field, Data> entry : fields.entrySet())
 			fieldNames.put(entry.getKey().getName(), entry.getValue());
 		this.constructor = constructor;
+		this.shouldCreateNew = shouldCreateNew;
 	}
 
 	@Override
@@ -107,6 +109,12 @@ public class GeneratedMapper<T> extends Mapper<T>
 	@Override
 	public T fillFromNBT(NBTTagCompound nbt, Object t)
 	{
+		if(shouldCreateNew)
+		{
+			t = createFromNBT(nbt);
+			if(constructor != null)
+				return (T) t;
+		}
 		for(Entry<Field, Data> entry : fields.entrySet())
 		{
 			Field f = entry.getKey();
@@ -170,6 +178,12 @@ public class GeneratedMapper<T> extends Mapper<T>
 		if(t != null)
 			fillFromNBT(nbt, t);
 		return t;
+	}
+
+	@Override
+	public boolean shouldCreateNew()
+	{
+		return shouldCreateNew;
 	}
 
 	private static class Data

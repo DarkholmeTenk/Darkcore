@@ -19,5 +19,10 @@ public @interface NBTSerialisable
 	 */
 	boolean includeType() default false;
 
+	/**
+	 * If this is true then a new instance will be created whenever the type is deserialised
+	 * @return
+	 */
+	boolean createNew() default false;
 }
 

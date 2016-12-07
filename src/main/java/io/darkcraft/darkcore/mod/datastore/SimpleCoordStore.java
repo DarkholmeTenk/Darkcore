@@ -21,7 +21,7 @@ import io.darkcraft.darkcore.mod.nbt.NBTProperty;
 import io.darkcraft.darkcore.mod.nbt.NBTProperty.SerialisableType;
 import io.darkcraft.darkcore.mod.nbt.NBTSerialisable;
 
-@NBTSerialisable
+@NBTSerialisable(createNew = true)
 public class SimpleCoordStore
 {
 	private static final Mapper<SimpleCoordStore> MAPPER = NBTHelper.getMapper(SimpleCoordStore.class, SerialisableType.WORLD);
