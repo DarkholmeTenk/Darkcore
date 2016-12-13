@@ -13,6 +13,7 @@ import io.darkcraft.darkcore.mod.nbt.NBTProperty.SerialisableType;
 import io.darkcraft.darkcore.mod.nbt.impl.ArrayMapper;
 import io.darkcraft.darkcore.mod.nbt.impl.BasicMappers;
 import io.darkcraft.darkcore.mod.nbt.impl.GeneratedMapper;
+import io.darkcraft.darkcore.mod.nbt.impl.SubTypeMapper;
 import io.darkcraft.darkcore.mod.nbt.impl.collections.CollectionMappers;
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -105,5 +106,33 @@ public class NBTHelper
 			e.printStackTrace();
 		}
 		return null;
+	}
+	
+	public static void serialise(SerialisableType type, NBTTagCompound nbt, String id, Object o)
+	{
+		if(o == null)
+			return;
+		Class<?> c = o.getClass();
+		Mapper<?> mapper = getMapper(c, type);
+		mapper.writeToNBT(nbt, id, o);
+	}
+	
+	public static NBTTagCompound serialise(SerialisableType type, Object... os)
+	{
+		NBTTagCompound nbt = new NBTTagCompound();
+		for(int i = 0; i < os.length; i++)
+			serialise(type, nbt, "i"+i, os[i]);
+		nbt.setInteger("size", os.length);
+		return nbt;
+	}
+	
+	public static Object[] deserialise(SerialisableType type, NBTTagCompound nbt)
+	{
+		int size = nbt.getInteger("size");
+		Object[] objArr = new Object[size];
+		Mapper<Object> mapper = new SubTypeMapper<>(type);
+		for(int i = 0; i < size; i++)
+			objArr[i] = mapper.readFromNBT(nbt, "i"+i);
+		return objArr;
 	}
 }

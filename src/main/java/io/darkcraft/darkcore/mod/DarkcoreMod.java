@@ -34,6 +34,7 @@ import io.darkcraft.darkcore.mod.handlers.packets.EntityDataStorePacketHandler;
 import io.darkcraft.darkcore.mod.handlers.packets.EntityPacketHandler;
 import io.darkcraft.darkcore.mod.handlers.packets.MessagePacketHandler;
 import io.darkcraft.darkcore.mod.handlers.packets.PreciseRightClickHandler;
+import io.darkcraft.darkcore.mod.handlers.packets.ProxyHandler;
 import io.darkcraft.darkcore.mod.handlers.packets.SoundPacketHandler;
 import io.darkcraft.darkcore.mod.handlers.packets.WorldDataStoreHandler;
 import io.darkcraft.darkcore.mod.helpers.PlayerHelper;
@@ -116,6 +117,7 @@ public class DarkcoreMod implements IConfigHandlerMod
 		packetHandler.registerHandler(MessagePacketHandler.disc, new MessagePacketHandler());
 		packetHandler.registerHandler(EntityDataStorePacketHandler.disc, new EntityDataStorePacketHandler());
 		packetHandler.registerHandler(PreciseRightClickHandler.disc, new PreciseRightClickHandler());
+		packetHandler.registerHandler(ProxyHandler.disc, new ProxyHandler());
 		DarkcoreMod.packetHandler.registerHandler(WorldDataStoreHandler.disc, new WorldDataStoreHandler());
 		uniqueSword = new UniqueSwordItem().register();
 		preInited = true;
