@@ -2,6 +2,7 @@ package io.darkcraft.darkcore.mod.nbt.impl;
 
 import java.util.UUID;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 
 import io.darkcraft.darkcore.mod.handlers.containers.EntityContainer;
@@ -11,6 +12,7 @@ import io.darkcraft.darkcore.mod.handlers.containers.IEntityContainer;
 import io.darkcraft.darkcore.mod.handlers.containers.PlayerContainer;
 import io.darkcraft.darkcore.mod.nbt.Mapper;
 import io.darkcraft.darkcore.mod.nbt.NBTHelper;
+import io.darkcraft.darkcore.mod.nbt.NBTProperty.SerialisableType;
 
 public class DataStoreMappers
 {
@@ -19,6 +21,7 @@ public class DataStoreMappers
 		NBTHelper.register(PlayerContainer.class, new PlayerContainerMapper());
 		NBTHelper.register(EntityContainer.class, new EntityContainerMapper());
 		NBTHelper.register(EntityLivingBaseContainer.class, new EntityLBContainerMapper());
+		NBTHelper.register(Entity.class, new EntityMapper());
 	}
 
 	public static class PlayerContainerMapper extends Mapper<PlayerContainer>
@@ -82,5 +85,27 @@ public class DataStoreMappers
 				return (EntityLivingBaseContainer) cont;
 			return null;
 		}
+	}
+
+	public static class EntityMapper extends PrimMapper<Entity>
+	{
+		private final Mapper<IEntityContainer> mapper = NBTHelper.getMapper(IEntityContainer.class, SerialisableType.TRANSMIT);
+
+		@Override
+		public void writeToNBT(NBTTagCompound nbt, String id, Object t)
+		{
+			IEntityContainer e = EntityContainerHandler.getContainer((Entity) t);
+			mapper.writeToNBT(nbt, id, e);
+		}
+
+		@Override
+		public Entity readFromNBT(NBTTagCompound nbt, String id)
+		{
+			IEntityContainer e = mapper.readFromNBT(nbt, id);
+			if(e != null)
+				return e.getEntity();
+			return null;
+		}
+
 	}
 }
