@@ -6,17 +6,19 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 
-import io.darkcraft.darkcore.mod.helpers.NBTHelper;
-import io.darkcraft.darkcore.mod.helpers.PlayerHelper;
-import io.darkcraft.darkcore.mod.helpers.ServerHelper;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.FakePlayer;
 
+import io.darkcraft.darkcore.mod.helpers.NBTHelper;
+import io.darkcraft.darkcore.mod.helpers.PlayerHelper;
+import io.darkcraft.darkcore.mod.helpers.ServerHelper;
+
 public class EntityContainerHandler
 {
-	public static IEntityContainer getContainer(EntityLivingBase ent)
+	public static IEntityContainer getContainer(Entity ent)
 	{
 		if((ent instanceof EntityPlayer) && !(ent instanceof FakePlayer))
 		{
@@ -31,10 +33,10 @@ public class EntityContainerHandler
 			else
 				return null;
 		}
+		else if(ent instanceof EntityLivingBase)
+			return new EntityLivingBaseContainer((EntityLivingBase) ent);
 		else
-		{
-			return new EntityLivingBaseContainer(ent);
-		}
+			return new EntityContainer(ent);
 	}
 
 	public static IEntityContainer getContainer(NBTTagCompound nbt, String id)
@@ -48,7 +50,7 @@ public class EntityContainerHandler
 			return pc;
 		}
 		else
-			return EntityLivingBaseContainer.readFromNBT(snbt);
+			return EntityContainer.readFromNBT(snbt);
 	}
 
 	public static PlayerContainer getContainer(UUID uuid)

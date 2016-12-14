@@ -1,16 +1,17 @@
 package io.darkcraft.darkcore.mod.abstracts;
 
-import io.darkcraft.darkcore.mod.handlers.containers.EntityContainerHandler;
-import io.darkcraft.darkcore.mod.handlers.containers.IEntityContainer;
-import io.darkcraft.darkcore.mod.handlers.packets.EntityDataStorePacketHandler;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.IExtendedEntityProperties;
 
+import io.darkcraft.darkcore.mod.handlers.containers.EntityContainerHandler;
+import io.darkcraft.darkcore.mod.handlers.containers.IEntityContainer;
+import io.darkcraft.darkcore.mod.handlers.packets.EntityDataStorePacketHandler;
+
 public abstract class AbstractEntityDataStore<E extends EntityLivingBase> implements IExtendedEntityProperties
 {
 	public final String id;
-	private IEntityContainer entity;
+	private IEntityContainer<E> entity;
 	private E temp;
 
 	public AbstractEntityDataStore(E ent, String _id)

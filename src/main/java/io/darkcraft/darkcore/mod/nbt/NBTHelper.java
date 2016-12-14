@@ -9,13 +9,14 @@ import com.google.common.collect.Table;
 import com.google.common.collect.Tables;
 import com.google.common.primitives.Primitives;
 
+import net.minecraft.nbt.NBTTagCompound;
+
 import io.darkcraft.darkcore.mod.nbt.NBTProperty.SerialisableType;
 import io.darkcraft.darkcore.mod.nbt.impl.ArrayMapper;
 import io.darkcraft.darkcore.mod.nbt.impl.BasicMappers;
 import io.darkcraft.darkcore.mod.nbt.impl.GeneratedMapper;
 import io.darkcraft.darkcore.mod.nbt.impl.SubTypeMapper;
 import io.darkcraft.darkcore.mod.nbt.impl.collections.CollectionMappers;
-import net.minecraft.nbt.NBTTagCompound;
 
 public class NBTHelper
 {
@@ -57,36 +58,37 @@ public class NBTHelper
 		if(c.isPrimitive())
 			c = Primitives.wrap(c);
 		Mapper<T> mapper = (Mapper<T>) mapperTable.get(c, type);
-		if(mapper == null)
+		if(mapper != null)
+			return mapper;
+		if(c.isInterface())
+			mapper = new SubTypeMapper(type);
+		else if(c.isArray())
 		{
-			if(c.isArray())
+			Class<?> arr = c.getComponentType();
+			Mapper<?> map = getMapper(arr, type);
+			if(map != null)
+				mapper = new ArrayMapper(arr, map);
+		}
+		else
+		{
+			mapper = GeneratedMapper.getMapper(c, type);
+			if(mapper == null)
 			{
-				Class<?> arr = c.getComponentType();
-				Mapper<?> map = getMapper(arr, type);
-				if(map != null)
-					mapper = new ArrayMapper(arr, map);
-			}
-			else
-			{
-				mapper = GeneratedMapper.getMapper(c, type);
-				if(mapper == null)
+				Class p = c.getSuperclass();
+				while(p != null)
 				{
-					Class p = c.getSuperclass();
-					while(p != null)
+					Mapper m = getMapper(p, type);
+					if((m != null) && m.handleSubclasses())
 					{
-						Mapper m = getMapper(p, type);
-						if((m != null) && m.handleSubclasses())
-						{
-							mapper = m;
-							break;
-						}
-						p = p.getSuperclass();
+						mapper = m;
+						break;
 					}
+					p = p.getSuperclass();
 				}
 			}
-			if(mapper != null)
-				register(c, type, mapper);
 		}
+		if(mapper != null)
+			register(c, type, mapper);
 		return mapper;
 	}
 

@@ -3,15 +3,18 @@ package io.darkcraft.darkcore.mod.handlers.containers;
 import java.lang.ref.WeakReference;
 import java.util.UUID;
 
-import io.darkcraft.darkcore.mod.datastore.SimpleDoubleCoordStore;
-import io.darkcraft.darkcore.mod.helpers.NBTHelper;
-import io.darkcraft.darkcore.mod.helpers.PlayerHelper;
-import io.darkcraft.darkcore.mod.helpers.ServerHelper;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 
+import io.darkcraft.darkcore.mod.datastore.SimpleDoubleCoordStore;
+import io.darkcraft.darkcore.mod.helpers.NBTHelper;
+import io.darkcraft.darkcore.mod.helpers.PlayerHelper;
+import io.darkcraft.darkcore.mod.helpers.ServerHelper;
+import io.darkcraft.darkcore.mod.nbt.NBTSerialisable;
+
+@NBTSerialisable
 public final class PlayerContainer implements IEntityContainer<EntityPlayer>
 {
 	public final boolean serverSide;

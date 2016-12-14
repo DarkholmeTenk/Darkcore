@@ -1,5 +1,10 @@
 package io.darkcraft.darkcore.mod.datastore;
 
+import io.darkcraft.darkcore.mod.nbt.NBTConstructor;
+import io.darkcraft.darkcore.mod.nbt.NBTProperty;
+import io.darkcraft.darkcore.mod.nbt.NBTSerialisable;
+
+@NBTSerialisable
 public class Colour
 {
 	public final static Colour white = new Colour(1,1,1);
@@ -16,6 +21,7 @@ public class Colour
 	/**
 	 * This long represents the colour in the same way the minecraft font renderer does, but has the most significant byte as the alpha
 	 */
+	@NBTProperty
 	public final long asLong;
 
 	public Colour(int i)
@@ -23,6 +29,7 @@ public class Colour
 		this(iToF(i,16),iToF(i,8),iToF(i,0));
 	}
 
+	@NBTConstructor("asLong")
 	public Colour(long i)
 	{
 		this(iToF(i,16),iToF(i,8),iToF(i,0),iToF(i,24));
