@@ -20,12 +20,7 @@ public class EntityLivingBaseContainer extends EntityContainer<EntityLivingBase>
 		EntityLivingBase ent = getEntity();
 		if(ent != null)
 		{
-			if(ent.getAge() != lastAge)
-			{
-				lastAge = ent.getAge();
-				return lastPosition = new SimpleDoubleCoordStore(ent);
-			}
-			return lastPosition;
+			return new SimpleDoubleCoordStore(ent).translate(0, ent.height/2, 0);
 		}
 		return null;
 	}
