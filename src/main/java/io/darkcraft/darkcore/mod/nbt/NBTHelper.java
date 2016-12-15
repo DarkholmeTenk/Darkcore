@@ -109,7 +109,7 @@ public class NBTHelper
 		}
 		return null;
 	}
-	
+
 	public static void serialise(SerialisableType type, NBTTagCompound nbt, String id, Object o)
 	{
 		if(o == null)
@@ -118,16 +118,18 @@ public class NBTHelper
 		Mapper<?> mapper = getMapper(c, type);
 		mapper.writeToNBT(nbt, id, o);
 	}
-	
+
 	public static NBTTagCompound serialise(SerialisableType type, Object... os)
 	{
 		NBTTagCompound nbt = new NBTTagCompound();
+		Mapper<Object> mapper = new SubTypeMapper<>(type);
 		for(int i = 0; i < os.length; i++)
-			serialise(type, nbt, "i"+i, os[i]);
+			mapper.writeToNBT(nbt, "i"+i, os[i]);
+		//	serialise(type, nbt, "i"+i, os[i]);
 		nbt.setInteger("size", os.length);
 		return nbt;
 	}
-	
+
 	public static Object[] deserialise(SerialisableType type, NBTTagCompound nbt)
 	{
 		int size = nbt.getInteger("size");
