@@ -3,7 +3,6 @@ package io.darkcraft.darkcore.mod.handlers.packets;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
@@ -41,12 +40,6 @@ public class ProxyHandler implements IDataPacketHandler
 	{
 		if((world != null) && (world.provider != null))
 			sendToDimension(WorldHelper.getWorldID(world), data);
-	}
-
-	public static void sendToDimension(Entity entity, NBTTagCompound data)
-	{
-		if(entity != null)
-			sendToDimension(entity.worldObj, data);
 	}
 
 	public static void sendToDimension(IPositionProvider provider, NBTTagCompound data)
