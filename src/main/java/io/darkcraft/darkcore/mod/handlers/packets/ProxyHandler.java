@@ -52,7 +52,7 @@ public class ProxyHandler implements IDataPacketHandler
 	public static void sendToDimension(IPositionProvider provider, NBTTagCompound data)
 	{
 		if(provider != null)
-			sendToDimension(provider.getPosition(), data);
+			sendToDimensionInt(provider.getPosition(), data);
 	}
 
 	public static void sendToDimension(SimpleCoordStore scs, NBTTagCompound data)
@@ -61,7 +61,7 @@ public class ProxyHandler implements IDataPacketHandler
 			sendToDimension(scs.world, data);
 	}
 
-	public static void sendToDimension(SimpleDoubleCoordStore scds, NBTTagCompound data)
+	public static void sendToDimensionInt(SimpleDoubleCoordStore scds, NBTTagCompound data)
 	{
 		if(scds != null)
 			sendToDimension(scds.world, data);
