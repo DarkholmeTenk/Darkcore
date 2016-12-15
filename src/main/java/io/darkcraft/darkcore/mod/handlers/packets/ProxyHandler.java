@@ -90,9 +90,14 @@ public class ProxyHandler implements IDataPacketHandler
 			{
 				m.invoke(bp, objects);
 			}
-			catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e)
+			catch (Throwable e)
 			{
+				System.err.println(e.getMessage());
 				System.err.println("Exception occured during proxy call with data: " + data);
+				for(Object o : objects)
+					System.out.println(o);
+				if(e instanceof InvocationTargetException)
+					e = e.getCause();
 				e.printStackTrace();
 			}
 			return;
