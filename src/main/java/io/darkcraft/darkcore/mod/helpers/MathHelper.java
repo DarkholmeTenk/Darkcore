@@ -4,9 +4,10 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
-import io.darkcraft.darkcore.mod.datastore.SimpleDoubleCoordStore;
 import net.minecraft.util.Vec3;
 import net.minecraftforge.common.util.ForgeDirection;
+
+import io.darkcraft.darkcore.mod.datastore.SimpleDoubleCoordStore;
 
 public class MathHelper
 {
@@ -31,6 +32,11 @@ public class MathHelper
 	}
 
 	public static float interpolate(float a, float b, float mix)
+	{
+		return (a * mix) + (b * (1-mix));
+	}
+
+	public static double interpolate(double a, double b, double mix)
 	{
 		return (a * mix) + (b * (1-mix));
 	}
@@ -96,13 +102,13 @@ public class MathHelper
 
 	public static HashSet<SimpleDoubleCoordStore> removeDuplicateLocations(Set<SimpleDoubleCoordStore> inputSet, double tolerance)
 	{
-		HashMap<Integer, SimpleDoubleCoordStore> magicStore = new HashMap<Integer, SimpleDoubleCoordStore>();
+		HashMap<Integer, SimpleDoubleCoordStore> magicStore = new HashMap<>();
 		for (SimpleDoubleCoordStore input : inputSet)
 		{
 			int hash = input.hashCodeTolerance(tolerance);
 			magicStore.put(hash, input);
 		}
-		HashSet<SimpleDoubleCoordStore> coords = new HashSet<SimpleDoubleCoordStore>();
+		HashSet<SimpleDoubleCoordStore> coords = new HashSet<>();
 		coords.addAll(magicStore.values());
 		return coords;
 	}

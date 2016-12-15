@@ -255,4 +255,12 @@ public class SimpleDoubleCoordStore implements IPositionProvider
 	{
 		return new SimpleDoubleCoordStore(world, x - from.x, y - from.y, z - from.z);
 	}
+
+	public SimpleDoubleCoordStore interpolate(SimpleDoubleCoordStore other, double in)
+	{
+		double nx = MathHelper.interpolate(x, other.x, in);
+		double ny = MathHelper.interpolate(y, other.y, in);
+		double nz = MathHelper.interpolate(z, other.z, in);
+		return new SimpleDoubleCoordStore(world, nx, ny, nz);
+	}
 }
