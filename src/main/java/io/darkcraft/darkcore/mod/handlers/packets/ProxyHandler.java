@@ -15,6 +15,7 @@ import io.darkcraft.darkcore.mod.datastore.SimpleDoubleCoordStore;
 import io.darkcraft.darkcore.mod.handlers.containers.PlayerContainer;
 import io.darkcraft.darkcore.mod.helpers.WorldHelper;
 import io.darkcraft.darkcore.mod.interfaces.IDataPacketHandler;
+import io.darkcraft.darkcore.mod.interfaces.IPositionProvider;
 import io.darkcraft.darkcore.mod.nbt.NBTHelper;
 import io.darkcraft.darkcore.mod.nbt.NBTProperty.SerialisableType;
 import io.darkcraft.darkcore.mod.network.DataPacket;
@@ -46,6 +47,12 @@ public class ProxyHandler implements IDataPacketHandler
 	{
 		if(entity != null)
 			sendToDimension(entity.worldObj, data);
+	}
+
+	public static void sendToDimension(IPositionProvider provider, NBTTagCompound data)
+	{
+		if(provider != null)
+			sendToDimension(provider.getPosition(), data);
 	}
 
 	public static void sendToDimension(SimpleCoordStore scs, NBTTagCompound data)
