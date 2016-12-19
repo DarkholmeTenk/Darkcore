@@ -2,12 +2,11 @@ package io.darkcraft.darkcore.mod.nbt.impl;
 
 import java.util.UUID;
 
+import io.darkcraft.darkcore.mod.nbt.Mapper;
+import io.darkcraft.darkcore.mod.nbt.NBTHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fluids.FluidStack;
-
-import io.darkcraft.darkcore.mod.nbt.Mapper;
-import io.darkcraft.darkcore.mod.nbt.NBTHelper;
 
 public class BasicMappers
 {
@@ -157,10 +156,10 @@ public class BasicMappers
 	{
 
 		@Override
-		public void writeToNBT(NBTTagCompound nbt, String id, Object t)
+		public void writeToNBT(NBTTagCompound nbt, String id, UUID t)
 		{
-			nbt.setLong(id+".l", ((UUID)t).getLeastSignificantBits());
-			nbt.setLong(id+".m", ((UUID)t).getMostSignificantBits());
+			nbt.setLong(id+".l", t.getLeastSignificantBits());
+			nbt.setLong(id+".m", t.getMostSignificantBits());
 		}
 
 		@Override

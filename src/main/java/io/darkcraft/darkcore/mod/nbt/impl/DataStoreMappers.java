@@ -2,9 +2,6 @@ package io.darkcraft.darkcore.mod.nbt.impl;
 
 import java.util.UUID;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.nbt.NBTTagCompound;
-
 import io.darkcraft.darkcore.mod.handlers.containers.EntityContainer;
 import io.darkcraft.darkcore.mod.handlers.containers.EntityContainerHandler;
 import io.darkcraft.darkcore.mod.handlers.containers.EntityLivingBaseContainer;
@@ -13,6 +10,8 @@ import io.darkcraft.darkcore.mod.handlers.containers.PlayerContainer;
 import io.darkcraft.darkcore.mod.nbt.Mapper;
 import io.darkcraft.darkcore.mod.nbt.NBTHelper;
 import io.darkcraft.darkcore.mod.nbt.NBTProperty.SerialisableType;
+import net.minecraft.entity.Entity;
+import net.minecraft.nbt.NBTTagCompound;
 
 public class DataStoreMappers
 {
@@ -27,20 +26,20 @@ public class DataStoreMappers
 	public static class PlayerContainerMapper extends Mapper<PlayerContainer>
 	{
 		@Override
-		public void writeToNBT(NBTTagCompound nbt, Object o)
+		public void writeToNBT(NBTTagCompound nbt, PlayerContainer o)
 		{
 			if(o == null) return;
-			PlayerContainer pc = (PlayerContainer) o;
+			PlayerContainer pc = o;
 			BasicMappers.uuidMapper.writeToNBT(nbt, "uuid", pc.getUUID());
 		}
 
 		@Override
-		public PlayerContainer fillFromNBT(NBTTagCompound nbt, Object t)
+		public PlayerContainer fillFromNBT(NBTTagCompound nbt, PlayerContainer t)
 		{
 			UUID uuid = BasicMappers.uuidMapper.readFromNBT(nbt, "uuid");
-			if((t == null) || !((PlayerContainer)t).getUUID().equals(uuid))
+			if((t == null) || !t.getUUID().equals(uuid))
 				return createFromNBT(nbt);
-			return (PlayerContainer) t;
+			return t;
 		}
 
 		@Override
@@ -54,9 +53,9 @@ public class DataStoreMappers
 	public static class EntityContainerMapper extends PrimMapper<EntityContainer>
 	{
 		@Override
-		public void writeToNBT(NBTTagCompound nbt, String id, Object t)
+		public void writeToNBT(NBTTagCompound nbt, String id, EntityContainer t)
 		{
-			((EntityContainer)t).writeToNBT(nbt, id);
+			t.writeToNBT(nbt, id);
 		}
 
 		@Override
@@ -72,9 +71,9 @@ public class DataStoreMappers
 	public static class EntityLBContainerMapper extends PrimMapper<EntityLivingBaseContainer>
 	{
 		@Override
-		public void writeToNBT(NBTTagCompound nbt, String id, Object t)
+		public void writeToNBT(NBTTagCompound nbt, String id, EntityLivingBaseContainer t)
 		{
-			((EntityLivingBaseContainer)t).writeToNBT(nbt, id);
+			t.writeToNBT(nbt, id);
 		}
 
 		@Override
@@ -92,9 +91,9 @@ public class DataStoreMappers
 		private final Mapper<IEntityContainer> mapper = NBTHelper.getMapper(IEntityContainer.class, SerialisableType.TRANSMIT);
 
 		@Override
-		public void writeToNBT(NBTTagCompound nbt, String id, Object t)
+		public void writeToNBT(NBTTagCompound nbt, String id, Entity t)
 		{
-			IEntityContainer e = EntityContainerHandler.getContainer((Entity) t);
+			IEntityContainer e = EntityContainerHandler.getContainer(t);
 			mapper.writeToNBT(nbt, id, e);
 		}
 
