@@ -10,26 +10,26 @@ import java.util.Map.Entry;
 
 import com.google.common.collect.Maps;
 
-import net.minecraft.nbt.NBTTagCompound;
-
 import io.darkcraft.darkcore.mod.nbt.Mapper;
 import io.darkcraft.darkcore.mod.nbt.NBTConstructor;
 import io.darkcraft.darkcore.mod.nbt.NBTHelper;
 import io.darkcraft.darkcore.mod.nbt.NBTProperty;
 import io.darkcraft.darkcore.mod.nbt.NBTProperty.SerialisableType;
 import io.darkcraft.darkcore.mod.nbt.NBTSerialisable;
+import net.minecraft.nbt.NBTTagCompound;
 
 public class GeneratedMapper<T> extends Mapper<T>
 {
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static <T> Mapper<T> getMapper(Class<T> clazz, SerialisableType t)
 	{
 		if(NBTHelper.hasMapper(clazz, t))
-			return NBTHelper.getMapper(clazz, t);
+			return (Mapper<T>) NBTHelper.getMapper(clazz, t);
 		NBTSerialisable serProp = clazz.getAnnotation(NBTSerialisable.class);
 		if(serProp == null)
 			return null;
-		Mapper<? super T> parent = NBTHelper.getMapper(clazz.getSuperclass(), t);
+		Mapper<? super T> parent = (Mapper<? super T>) NBTHelper.getMapper(clazz.getSuperclass(), t);
 
 		Map<Field, Data> fields;
 		if(parent instanceof GeneratedMapper)
@@ -91,12 +91,12 @@ public class GeneratedMapper<T> extends Mapper<T>
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbt, Object t)
+	public void writeToNBT(NBTTagCompound nbt, T t)
 	{
 		for(Entry<Field, Data> entry : fields.entrySet())
 		{
 			Field f = entry.getKey();
-			Mapper<?> m = entry.getValue().m;
+			Mapper<Object> m = (Mapper<Object>) entry.getValue().m;
 			String n = entry.getValue().n;
 			try
 			{
@@ -110,18 +110,18 @@ public class GeneratedMapper<T> extends Mapper<T>
 	}
 
 	@Override
-	public T fillFromNBT(NBTTagCompound nbt, Object t)
+	public T fillFromNBT(NBTTagCompound nbt, T t)
 	{
 		if(shouldCreateNew)
 		{
 			t = createFromNBT(nbt);
 			if(constructor != null)
-				return (T) t;
+				return t;
 		}
 		for(Entry<Field, Data> entry : fields.entrySet())
 		{
 			Field f = entry.getKey();
-			Mapper<?> m = entry.getValue().m;
+			Mapper<Object> m = (Mapper<Object>) entry.getValue().m;
 			String n = entry.getValue().n;
 			try
 			{
@@ -139,7 +139,7 @@ public class GeneratedMapper<T> extends Mapper<T>
 			}
 			catch(SecurityException | IllegalArgumentException | IllegalAccessException e){}
 		}
-		return (T) t;
+		return t;
 	}
 
 	private T getNewT(Object... args)

@@ -25,7 +25,7 @@ public class BasicMappers
 	public static Mapper<String> stringMapper = new PrimMapper<String>()
 	{
 		@Override
-		public void writeToNBT(NBTTagCompound nbt, String id, Object t) { nbt.setString(id, (String) t); }
+		public void writeToNBT(NBTTagCompound nbt, String id, String t) { nbt.setString(id, t); }
 
 		@Override
 		public String readFromNBT(NBTTagCompound nbt, String id) { return nbt.getString(id); }
@@ -34,7 +34,7 @@ public class BasicMappers
 	public static Mapper<Byte> byteMapper = new PrimMapper<Byte>()
 	{
 		@Override
-		public void writeToNBT(NBTTagCompound nbt, String id, Object t) { nbt.setByte(id, (byte) t); }
+		public void writeToNBT(NBTTagCompound nbt, String id, Byte t) { nbt.setByte(id, t); }
 
 		@Override
 		public Byte readFromNBT(NBTTagCompound nbt, String id) { return nbt.getByte(id); }
@@ -43,7 +43,7 @@ public class BasicMappers
 	public static Mapper<byte[]> byteArrMapper = new PrimMapper<byte[]>()
 	{
 		@Override
-		public void writeToNBT(NBTTagCompound nbt, String id, Object t) { nbt.setByteArray(id, (byte[])t); }
+		public void writeToNBT(NBTTagCompound nbt, String id, byte[] t) { nbt.setByteArray(id, t); }
 
 		@Override
 		public byte[] readFromNBT(NBTTagCompound nbt, String id) { return nbt.getByteArray(id); }
@@ -52,7 +52,7 @@ public class BasicMappers
 	public static Mapper<Integer> intMapper = new PrimMapper<Integer>()
 	{
 		@Override
-		public void writeToNBT(NBTTagCompound nbt, String id, Object t) { nbt.setInteger(id, (int) t); }
+		public void writeToNBT(NBTTagCompound nbt, String id, Integer t) { nbt.setInteger(id, t); }
 
 		@Override
 		public Integer readFromNBT(NBTTagCompound nbt, String id) { return nbt.getInteger(id); }
@@ -61,7 +61,7 @@ public class BasicMappers
 	public static Mapper<int[]> intArrMapper = new PrimMapper<int[]>()
 	{
 		@Override
-		public void writeToNBT(NBTTagCompound nbt, String id, Object t) { nbt.setIntArray(id, (int[])t); }
+		public void writeToNBT(NBTTagCompound nbt, String id, int[] t) { nbt.setIntArray(id, t); }
 
 		@Override
 		public int[] readFromNBT(NBTTagCompound nbt, String id) { return nbt.getIntArray(id); }
@@ -70,7 +70,7 @@ public class BasicMappers
 	public static Mapper<Long> longMapper = new PrimMapper<Long>()
 	{
 		@Override
-		public void writeToNBT(NBTTagCompound nbt, String id, Object t) { nbt.setLong(id, (long) t); }
+		public void writeToNBT(NBTTagCompound nbt, String id, Long t) { nbt.setLong(id, t); }
 
 		@Override
 		public Long readFromNBT(NBTTagCompound nbt, String id) { return nbt.getLong(id); }
@@ -79,7 +79,7 @@ public class BasicMappers
 	public static Mapper<Double> doubleMapper = new PrimMapper<Double>()
 	{
 		@Override
-		public void writeToNBT(NBTTagCompound nbt, String id, Object t) { nbt.setDouble(id, (double) t); }
+		public void writeToNBT(NBTTagCompound nbt, String id, Double t) { nbt.setDouble(id, t); }
 
 		@Override
 		public Double readFromNBT(NBTTagCompound nbt, String id) { return nbt.getDouble(id); }
@@ -88,7 +88,7 @@ public class BasicMappers
 	public static Mapper<Boolean> boolMapper = new PrimMapper<Boolean>()
 	{
 		@Override
-		public void writeToNBT(NBTTagCompound nbt, String id, Object t) { nbt.setBoolean(id, (boolean) t); }
+		public void writeToNBT(NBTTagCompound nbt, String id, Boolean t) { nbt.setBoolean(id, t); }
 
 		@Override
 		public Boolean readFromNBT(NBTTagCompound nbt, String id) { return nbt.getBoolean(id); }
@@ -98,19 +98,19 @@ public class BasicMappers
 	{
 
 		@Override
-		public void writeToNBT(NBTTagCompound nbt, Object o)
+		public void writeToNBT(NBTTagCompound nbt, ItemStack o)
 		{
 			if(o == null)
 				return;
-			((ItemStack)o).writeToNBT(nbt);
+			o.writeToNBT(nbt);
 		}
 
 		@Override
-		public ItemStack fillFromNBT(NBTTagCompound nbt, Object o)
+		public ItemStack fillFromNBT(NBTTagCompound nbt, ItemStack o)
 		{
 			if(o == null)
 				return createFromNBT(nbt);
-			ItemStack t = (ItemStack) o;
+			ItemStack t = o;
 			t.readFromNBT(nbt);
 			return t;
 		}
@@ -126,15 +126,15 @@ public class BasicMappers
 	{
 
 		@Override
-		public void writeToNBT(NBTTagCompound nbt, Object o)
+		public void writeToNBT(NBTTagCompound nbt, FluidStack o)
 		{
 			if(o == null)
 				return;
-			((FluidStack)o).writeToNBT(nbt);
+			o.writeToNBT(nbt);
 		}
 
 		@Override
-		public FluidStack fillFromNBT(NBTTagCompound nbt, Object t)
+		public FluidStack fillFromNBT(NBTTagCompound nbt, FluidStack t)
 		{
 			return FluidStack.loadFluidStackFromNBT(nbt);
 		}

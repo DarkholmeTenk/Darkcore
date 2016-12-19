@@ -10,39 +10,39 @@ import io.darkcraft.darkcore.mod.nbt.NBTProperty.SerialisableType;
 import io.darkcraft.darkcore.mod.nbt.impl.SubTypeMapper;
 import net.minecraft.nbt.NBTTagCompound;
 
+@SuppressWarnings("rawtypes")
 public abstract class ListMapper<T extends List> extends Mapper<T>
 {
 	private static final String SIZE_KEY = "size";
-	private final SubTypeMapper stm;
+	private final SubTypeMapper<Object> stm;
 
 	public ListMapper(SerialisableType type)
 	{
-		stm = new SubTypeMapper(type);
+		stm = new SubTypeMapper<Object>(type);
 	}
 
 	public abstract T createNewList();
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbt, Object o)
+	public void writeToNBT(NBTTagCompound nbt, T t)
 	{
-		T t = (T) o;
 		int size = t.size();
 		nbt.setInteger(SIZE_KEY, size);
 		for(int i = 0; i < size; i++)
 			stm.writeToNBT(nbt, "i"+i, t.get(i));
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public T fillFromNBT(NBTTagCompound nbt, Object o)
+	public T fillFromNBT(NBTTagCompound nbt, T t)
 	{
-		if(o == null)
+		if(t == null)
 			return createFromNBT(nbt);
-		List<Object> t = (List<Object>) o;
 		t.clear();
 		int size = nbt.getInteger(SIZE_KEY);
 		for(int i = 0; i < size; i++)
 			t.add(stm.readFromNBT(nbt, "i"+i));
-		return (T) t;
+		return t;
 	}
 
 	@Override

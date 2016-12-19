@@ -8,6 +8,7 @@ import io.darkcraft.darkcore.mod.nbt.impl.SubTypeMapper;
 
 public class CollectionMappers
 {
+	@SuppressWarnings("rawtypes")
 	public static void register()
 	{
 		for(SerialisableType t : SerialisableType.values())

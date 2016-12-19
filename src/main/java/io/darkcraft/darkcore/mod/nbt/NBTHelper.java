@@ -8,6 +8,7 @@ import com.google.common.base.Supplier;
 import com.google.common.collect.Table;
 import com.google.common.collect.Tables;
 import com.google.common.primitives.Primitives;
+import com.google.common.reflect.Reflection;
 
 import io.darkcraft.darkcore.mod.nbt.NBTProperty.SerialisableType;
 import io.darkcraft.darkcore.mod.nbt.impl.ArrayMapper;
@@ -51,11 +52,20 @@ public class NBTHelper
 	{
 		return mapperTable.contains(c, type);
 	}
+	
+	@SuppressWarnings("unchecked")
+	public static <T> Mapper<T> getMapper(T t, SerialisableType type)
+	{
+		Class<?> c = t.getClass();
+		return (Mapper<T>) getMapper(c, type);
+	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static <T> Mapper<T> getMapper(Class<T> c, SerialisableType type)
 	{
 		if(c.isPrimitive())
 			c = Primitives.wrap(c);
+		Reflection.initialize(c);
 		Mapper<T> mapper = (Mapper<T>) mapperTable.get(c, type);
 		if(mapper == null)
 		{
@@ -108,12 +118,13 @@ public class NBTHelper
 		return null;
 	}
 	
-	public static void serialise(SerialisableType type, NBTTagCompound nbt, String id, Object o)
+	@SuppressWarnings("unchecked")
+	public static <T> void serialise(SerialisableType type, NBTTagCompound nbt, String id, T o)
 	{
 		if(o == null)
 			return;
 		Class<?> c = o.getClass();
-		Mapper<?> mapper = getMapper(c, type);
+		Mapper<T> mapper = (Mapper<T>) getMapper(c, type);
 		mapper.writeToNBT(nbt, id, o);
 	}
 	

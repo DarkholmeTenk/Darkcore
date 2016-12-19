@@ -10,7 +10,7 @@ import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 
 public class AbstractTileEntitySer extends AbstractTileEntity
-{
+{	
 	{
 		NBTHelper.getMapper(getClass(), TRANSMIT);
 		NBTHelper.getMapper(getClass(), WORLD);
@@ -20,7 +20,7 @@ public class AbstractTileEntitySer extends AbstractTileEntity
 	public Packet getDescriptionPacket()
 	{
 		NBTTagCompound tag = new NBTTagCompound();
-		NBTHelper.getMapper(getClass(), TRANSMIT).writeToNBT(tag, this);
+		NBTHelper.getMapper(this, TRANSMIT).writeToNBT(tag, this);
 		Packet p = new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, 3, tag);
 		return p;
 	}
@@ -29,7 +29,7 @@ public class AbstractTileEntitySer extends AbstractTileEntity
 	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity packet)
 	{
 		NBTTagCompound nbt = packet.func_148857_g();
-		NBTHelper.getMapper(getClass(), TRANSMIT).fillFromNBT(nbt, this);
+		NBTHelper.getMapper(this, TRANSMIT).fillFromNBT(nbt, this);
 		super.onDataPacket(net, packet);
 	}
 
@@ -37,13 +37,13 @@ public class AbstractTileEntitySer extends AbstractTileEntity
 	public void readFromNBT(NBTTagCompound nbt)
 	{
 		if (!nbt.hasKey("placed")) super.readFromNBT(nbt);
-		NBTHelper.getMapper(getClass(), WORLD).fillFromNBT(nbt, this);
+		NBTHelper.getMapper(this, WORLD).fillFromNBT(nbt, this);
 	}
 
 	@Override
 	public void writeToNBT(NBTTagCompound nbt)
 	{
 		super.writeToNBT(nbt);
-		NBTHelper.getMapper(getClass(), WORLD).writeToNBT(nbt, this);
+		NBTHelper.getMapper(this, WORLD).writeToNBT(nbt, this);
 	}
 }

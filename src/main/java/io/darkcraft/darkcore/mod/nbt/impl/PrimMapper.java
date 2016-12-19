@@ -6,16 +6,16 @@ import net.minecraft.nbt.NBTTagCompound;
 public abstract class PrimMapper<T> extends Mapper<T>
 {
 	@Override
-	public void writeToNBT(NBTTagCompound nbt, Object o)
+	public void writeToNBT(NBTTagCompound nbt, T o)
 	{
 		writeToNBT(nbt, "value", o);
 	}
 
 	@Override
-	public abstract void writeToNBT(NBTTagCompound nbt, String id, Object t);
+	public abstract void writeToNBT(NBTTagCompound nbt, String id, T t);
 
 	@Override
-	public T fillFromNBT(NBTTagCompound nbt, Object t){return (T) t;}
+	public T fillFromNBT(NBTTagCompound nbt, T t){return t;}
 
 	@Override
 	public abstract T readFromNBT(NBTTagCompound nbt, String id);

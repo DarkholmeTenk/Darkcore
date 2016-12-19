@@ -15,14 +15,14 @@ public class TypeWrapperMapper<T> extends Mapper<T>
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbt, Object o)
+	public void writeToNBT(NBTTagCompound nbt, T o)
 	{
 		nbt.setString(NBTCLASSNAME, c.getName());
 		subMapper.writeToNBT(nbt, o);
 	}
 
 	@Override
-	public T fillFromNBT(NBTTagCompound nbt, Object t)
+	public T fillFromNBT(NBTTagCompound nbt, T t)
 	{
 		return subMapper.fillFromNBT(nbt, t);
 	}

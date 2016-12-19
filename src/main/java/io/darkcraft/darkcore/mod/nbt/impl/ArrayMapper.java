@@ -17,11 +17,10 @@ public class ArrayMapper<T> extends Mapper<T[]>
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbt, Object o)
+	public void writeToNBT(NBTTagCompound nbt, T[] t)
 	{
-		if(o == null)
+		if(t == null)
 			return;
-		T[] t = (T[]) o;
 		nbt.setInteger("s", t.length);
 		for(int i = 0; i < t.length; i++)
 		{
@@ -31,11 +30,10 @@ public class ArrayMapper<T> extends Mapper<T[]>
 	}
 
 	@Override
-	public T[] fillFromNBT(NBTTagCompound nbt, Object o)
+	public T[] fillFromNBT(NBTTagCompound nbt, T[] t)
 	{
-		if(o == null)
+		if(t == null)
 			return createFromNBT(nbt);
-		T[] t = (T[]) o;
 		if(t.length != nbt.getInteger("s"))
 			return createFromNBT(nbt);
 		for(int i = 0; i < t.length; i++)
@@ -53,6 +51,7 @@ public class ArrayMapper<T> extends Mapper<T[]>
 		return t;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public T[] createFromNBT(NBTTagCompound nbt, Object... arguments)
 	{

@@ -9,24 +9,24 @@ public abstract class Mapper<T>
 	/**
 	 * Writes appropriate NBT data from t to nbt
 	 */
-	public abstract void writeToNBT(NBTTagCompound nbt, Object o);
+	public abstract void writeToNBT(NBTTagCompound nbt, T o);
 
-	public void writeToNBT(NBTTagCompound nbt, String id, Object object)
+	public void writeToNBT(NBTTagCompound nbt, String id, T object)
 	{
 		NBTTagCompound snbt = writeToNBT(object);
 		nbt.setTag(id, snbt);
 	}
 
-	public NBTTagCompound writeToNBT(Object o)
+	public NBTTagCompound writeToNBT(T o)
 	{
 		NBTTagCompound nbt = new NBTTagCompound();
 		writeToNBT(nbt, o);
 		return nbt;
 	}
 
-	public abstract T fillFromNBT(NBTTagCompound nbt, Object t);
+	public abstract T fillFromNBT(NBTTagCompound nbt, T t);
 
-	public T fillFromNBT(NBTTagCompound nbt, String id, Object t)
+	public T fillFromNBT(NBTTagCompound nbt, String id, T t)
 	{
 		return fillFromNBT(nbt.getCompoundTag(id), t);
 	}

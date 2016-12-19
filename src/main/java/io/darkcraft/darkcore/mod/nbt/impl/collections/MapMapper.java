@@ -12,22 +12,22 @@ import io.darkcraft.darkcore.mod.nbt.NBTProperty.SerialisableType;
 import io.darkcraft.darkcore.mod.nbt.impl.SubTypeMapper;
 import net.minecraft.nbt.NBTTagCompound;
 
+@SuppressWarnings({ "unchecked", "rawtypes" })
 public abstract class MapMapper<T extends Map> extends Mapper<T>
 {
 	private static final String SIZE_KEY = "size";
-	private final SubTypeMapper stm;
+	private final SubTypeMapper<Object> stm;
 
 	public MapMapper(SerialisableType type)
 	{
-		stm = new SubTypeMapper(type);
+		stm = new SubTypeMapper<>(type);
 	}
 
 	public abstract T createNewMap();
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbt, Object o)
+	public void writeToNBT(NBTTagCompound nbt, T t)
 	{
-		T t = (T) o;
 		int size = t.size();
 		nbt.setInteger(SIZE_KEY, size);
 		int i = 0;
@@ -41,11 +41,10 @@ public abstract class MapMapper<T extends Map> extends Mapper<T>
 	}
 
 	@Override
-	public T fillFromNBT(NBTTagCompound nbt, Object o)
+	public T fillFromNBT(NBTTagCompound nbt, T t)
 	{
-		if(o == null)
+		if(t == null)
 			return createFromNBT(nbt);
-		Map<Object, Object> t = (Map<Object, Object>) o;
 		t.clear();
 		int size = nbt.getInteger(SIZE_KEY);
 		for(int i = 0; i < size; i++)
@@ -54,7 +53,7 @@ public abstract class MapMapper<T extends Map> extends Mapper<T>
 			Object v  = stm.createFromNBT(nbt.getCompoundTag("v"+i));
 			t.put(k, v);
 		}
-		return (T) t;
+		return t;
 	}
 
 	@Override
