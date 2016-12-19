@@ -1,10 +1,13 @@
 package io.darkcraft.darkcore.mod.nbt.impl;
 
-import io.darkcraft.darkcore.mod.nbt.Mapper;
-import io.darkcraft.darkcore.mod.nbt.NBTHelper;
+import java.util.UUID;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fluids.FluidStack;
+
+import io.darkcraft.darkcore.mod.nbt.Mapper;
+import io.darkcraft.darkcore.mod.nbt.NBTHelper;
 
 public class BasicMappers
 {
@@ -20,6 +23,7 @@ public class BasicMappers
 		NBTHelper.register(int[].class, intArrMapper);
 		NBTHelper.register(Boolean.class, boolMapper);
 		NBTHelper.register(ItemStack.class, isMapper);
+		NBTHelper.register(UUID.class, uuidMapper);
 	}
 
 	public static Mapper<String> stringMapper = new PrimMapper<String>()
@@ -147,5 +151,25 @@ public class BasicMappers
 
 		@Override
 		public boolean shouldCreateNew() { return true; }
+	};
+
+	public static Mapper<UUID> uuidMapper = new PrimMapper<UUID>()
+	{
+
+		@Override
+		public void writeToNBT(NBTTagCompound nbt, String id, Object t)
+		{
+			nbt.setLong(id+".l", ((UUID)t).getLeastSignificantBits());
+			nbt.setLong(id+".m", ((UUID)t).getMostSignificantBits());
+		}
+
+		@Override
+		public UUID readFromNBT(NBTTagCompound nbt, String id)
+		{
+			long l = nbt.getLong(id  +".l");
+			long m = nbt.getLong(id  +".m");
+			return new UUID(m, l);
+		}
+
 	};
 }

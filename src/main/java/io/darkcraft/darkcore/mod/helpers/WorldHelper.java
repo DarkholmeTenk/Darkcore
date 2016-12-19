@@ -3,11 +3,6 @@ package io.darkcraft.darkcore.mod.helpers;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import io.darkcraft.darkcore.mod.DarkcoreMod;
-import io.darkcraft.darkcore.mod.abstracts.AbstractWorldDataStore;
-import io.darkcraft.darkcore.mod.datastore.SimpleDoubleCoordStore;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFire;
 import net.minecraft.client.Minecraft;
@@ -24,6 +19,13 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.oredict.OreDictionary;
+
+import io.darkcraft.darkcore.mod.DarkcoreMod;
+import io.darkcraft.darkcore.mod.abstracts.AbstractWorldDataStore;
+import io.darkcraft.darkcore.mod.datastore.SimpleDoubleCoordStore;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class WorldHelper
 {
@@ -76,6 +78,9 @@ public class WorldHelper
 	 */
 	public static int getWorldID(World w)
 	{
+		//TODO: Look into this
+		if((w == null) || (w.provider == null))
+			return 0;
 		return w.provider.dimensionId;
 	}
 

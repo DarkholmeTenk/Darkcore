@@ -67,36 +67,37 @@ public class NBTHelper
 			c = Primitives.wrap(c);
 		Reflection.initialize(c);
 		Mapper<T> mapper = (Mapper<T>) mapperTable.get(c, type);
-		if(mapper == null)
+		if(mapper != null)
+			return mapper;
+		if(c.isInterface())
+			mapper = new SubTypeMapper(type);
+		else if(c.isArray())
 		{
-			if(c.isArray())
+			Class<?> arr = c.getComponentType();
+			Mapper<?> map = getMapper(arr, type);
+			if(map != null)
+				mapper = new ArrayMapper(arr, map);
+		}
+		else
+		{
+			mapper = GeneratedMapper.getMapper(c, type);
+			if(mapper == null)
 			{
-				Class<?> arr = c.getComponentType();
-				Mapper<?> map = getMapper(arr, type);
-				if(map != null)
-					mapper = new ArrayMapper(arr, map);
-			}
-			else
-			{
-				mapper = GeneratedMapper.getMapper(c, type);
-				if(mapper == null)
+				Class p = c.getSuperclass();
+				while(p != null)
 				{
-					Class p = c.getSuperclass();
-					while(p != null)
+					Mapper m = getMapper(p, type);
+					if((m != null) && m.handleSubclasses())
 					{
-						Mapper m = getMapper(p, type);
-						if((m != null) && m.handleSubclasses())
-						{
-							mapper = m;
-							break;
-						}
-						p = p.getSuperclass();
+						mapper = m;
+						break;
 					}
+					p = p.getSuperclass();
 				}
 			}
-			if(mapper != null)
-				register(c, type, mapper);
 		}
+		if(mapper != null)
+			register(c, type, mapper);
 		return mapper;
 	}
 
@@ -127,16 +128,18 @@ public class NBTHelper
 		Mapper<T> mapper = (Mapper<T>) getMapper(c, type);
 		mapper.writeToNBT(nbt, id, o);
 	}
-	
+
 	public static NBTTagCompound serialise(SerialisableType type, Object... os)
 	{
 		NBTTagCompound nbt = new NBTTagCompound();
+		Mapper<Object> mapper = new SubTypeMapper<>(type);
 		for(int i = 0; i < os.length; i++)
-			serialise(type, nbt, "i"+i, os[i]);
+			mapper.writeToNBT(nbt, "i"+i, os[i]);
+		//	serialise(type, nbt, "i"+i, os[i]);
 		nbt.setInteger("size", os.length);
 		return nbt;
 	}
-	
+
 	public static Object[] deserialise(SerialisableType type, NBTTagCompound nbt)
 	{
 		int size = nbt.getInteger("size");
