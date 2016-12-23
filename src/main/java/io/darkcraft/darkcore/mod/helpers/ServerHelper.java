@@ -7,32 +7,50 @@ import java.io.OutputStream;
 import java.util.List;
 import java.util.zip.ZipException;
 
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.gameevent.TickEvent;
-import cpw.mods.fml.common.gameevent.TickEvent.Type;
-import cpw.mods.fml.relauncher.Side;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.ServerConfigurationManager;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.world.World;
+
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.gameevent.TickEvent;
+import cpw.mods.fml.common.gameevent.TickEvent.Type;
+import cpw.mods.fml.relauncher.Side;
 
 public class ServerHelper
 {
-
-
 	public static boolean isServer()
 	{
 		return !FMLCommonHandler.instance().getEffectiveSide().equals(Side.CLIENT);
 	}
 
+	public static boolean isServer(Object o)
+	{
+		if(o instanceof World)
+			return !((World) o).isRemote;
+		if(o instanceof Entity)
+			return isServer(((Entity) o).worldObj);
+		if(o instanceof TileEntity)
+			return isServer(((TileEntity) o).getWorldObj());
+		return isServer();
+	}
+
 	public static boolean isClient()
 	{
 		return FMLCommonHandler.instance().getEffectiveSide().equals(Side.CLIENT);
+	}
+
+	public static boolean isClient(Object o)
+	{
+		return !isServer(o);
 	}
 
 	public static boolean correctSide(TickEvent.Type t)
