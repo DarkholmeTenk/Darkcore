@@ -138,6 +138,8 @@ public class ServerHelper
 
 	public static String getUsername(EntityPlayer player)
 	{
+		if(player == null)
+			return null;
 		return player.getCommandSenderName();
 	}
 

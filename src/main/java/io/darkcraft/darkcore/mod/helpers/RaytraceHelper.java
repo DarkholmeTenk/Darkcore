@@ -1,8 +1,10 @@
 package io.darkcraft.darkcore.mod.helpers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.IEntityMultiPart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MovingObjectPosition;
@@ -78,7 +80,19 @@ public class RaytraceHelper
 		}
 		if(doEnts)
 		{
+			List<Entity> multiparts = new ArrayList<>();
 			List entityList = w.getEntitiesWithinAABBExcludingEntity(tracer, getAABB(start, end).expand(0.8, 0.8, 0.8));
+
+			aLoop:
+			for(Object o : entityList)
+			{
+				for(Entity e : skip) if(o == e) continue aLoop;
+				if(!(o instanceof Entity)) continue;
+				Entity e = (Entity) o;
+				if((e instanceof IEntityMultiPart) && (entClass != null) && entClass.isInstance(e))
+					multiparts.add(e);
+			}
+
 			oLoop:
 			for(Object o : entityList)
 			{
@@ -86,7 +100,18 @@ public class RaytraceHelper
 				if(!(o instanceof Entity)) continue;
 				Entity e = (Entity) o;
 				if(!e.canBeCollidedWith()) continue;
-				if((entClass != null) && !entClass.isInstance(e)) continue;
+				if((entClass != null) && !entClass.isInstance(e))
+				{
+					boolean f = false;
+					for(Entity mp : multiparts)
+						if(e.isEntityEqual(mp))
+						{
+							f = true;
+							break;
+						}
+					if(!f)
+						continue oLoop;
+				}
 				MovingObjectPosition entityMop = rayIntersectEntity(e, start, end);
 				if(entityMop == null) continue;
 				entityMop.entityHit = e;

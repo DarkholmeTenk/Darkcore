@@ -1,6 +1,6 @@
 package io.darkcraft.darkcore.mod.abstracts;
 
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.IExtendedEntityProperties;
 
@@ -8,7 +8,7 @@ import io.darkcraft.darkcore.mod.handlers.containers.EntityContainerHandler;
 import io.darkcraft.darkcore.mod.handlers.containers.IEntityContainer;
 import io.darkcraft.darkcore.mod.handlers.packets.EntityDataStorePacketHandler;
 
-public abstract class AbstractEntityDataStore<E extends EntityLivingBase> implements IExtendedEntityProperties
+public abstract class AbstractEntityDataStore<E extends Entity> implements IExtendedEntityProperties
 {
 	public final String id;
 	private IEntityContainer<E> entity;
@@ -38,7 +38,7 @@ public abstract class AbstractEntityDataStore<E extends EntityLivingBase> implem
 			else
 				temp = null;
 		}
-		EntityLivingBase e = entity.getEntity();
+		Entity e = entity.getEntity();
 		return (E) e;
 	}
 

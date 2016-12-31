@@ -8,22 +8,6 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 import com.google.common.collect.HashMultimap;
 
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerRespawnEvent;
-import cpw.mods.fml.common.gameevent.TickEvent;
-import cpw.mods.fml.common.gameevent.TickEvent.Phase;
-import cpw.mods.fml.common.gameevent.TickEvent.Type;
-import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
-import gnu.trove.set.hash.THashSet;
-import io.darkcraft.darkcore.mod.DarkcoreMod;
-import io.darkcraft.darkcore.mod.abstracts.AbstractEntityDataStore;
-import io.darkcraft.darkcore.mod.datastore.Pair;
-import io.darkcraft.darkcore.mod.helpers.PlayerHelper;
-import io.darkcraft.darkcore.mod.helpers.ServerHelper;
-import io.darkcraft.darkcore.mod.helpers.WorldHelper;
-import io.darkcraft.darkcore.mod.interfaces.IDataPacketHandler;
-import io.darkcraft.darkcore.mod.network.DataPacket;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -34,6 +18,24 @@ import net.minecraftforge.common.IExtendedEntityProperties;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+
+import io.darkcraft.darkcore.mod.DarkcoreMod;
+import io.darkcraft.darkcore.mod.abstracts.AbstractEntityDataStore;
+import io.darkcraft.darkcore.mod.datastore.Pair;
+import io.darkcraft.darkcore.mod.helpers.PlayerHelper;
+import io.darkcraft.darkcore.mod.helpers.ServerHelper;
+import io.darkcraft.darkcore.mod.helpers.WorldHelper;
+import io.darkcraft.darkcore.mod.interfaces.IDataPacketHandler;
+import io.darkcraft.darkcore.mod.network.DataPacket;
+
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerRespawnEvent;
+import cpw.mods.fml.common.gameevent.TickEvent;
+import cpw.mods.fml.common.gameevent.TickEvent.Phase;
+import cpw.mods.fml.common.gameevent.TickEvent.Type;
+import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
+import gnu.trove.set.hash.THashSet;
 
 public class EntityDataStorePacketHandler implements IDataPacketHandler
 {
@@ -73,7 +75,7 @@ public class EntityDataStorePacketHandler implements IDataPacketHandler
 	public static boolean sendUpdate(AbstractEntityDataStore aeds)
 	{
 		if(ServerHelper.isClient()) return false;
-		EntityLivingBase ent = aeds.getEntity();
+		Entity ent = aeds.getEntity();
 		if((ent == null) || ent.isDead)
 		{
 			if(DarkcoreMod.debugText) System.err.println("DC AEDS - Update cancelled - Noent " + (ent == null)+ " - " + aeds.id);

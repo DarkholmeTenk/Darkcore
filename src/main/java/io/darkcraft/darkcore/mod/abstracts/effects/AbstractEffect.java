@@ -2,6 +2,7 @@ package io.darkcraft.darkcore.mod.abstracts.effects;
 
 import java.lang.ref.WeakReference;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
@@ -11,7 +12,7 @@ import io.darkcraft.darkcore.mod.datastore.UVStore;
 public abstract class AbstractEffect
 {
 	public final String id;
-	public final WeakReference<EntityLivingBase> entity;
+	public final WeakReference<Entity> entity;
 	public final boolean visible;
 	public final boolean doesTick;
 	public final int tickFreq;
@@ -19,12 +20,12 @@ public abstract class AbstractEffect
 	public boolean canStack = false;
 	int tt = -1;
 
-	public AbstractEffect(String _id, EntityLivingBase ent, int duration)
+	public AbstractEffect(String _id, Entity ent, int duration)
 	{
 		this(_id,ent,duration,false,false,1);
 	}
 
-	public AbstractEffect(String _id, EntityLivingBase ent, int _duration, boolean _visible, boolean _doesTick, int _tickFreq)
+	public AbstractEffect(String _id, Entity ent, int _duration, boolean _visible, boolean _doesTick, int _tickFreq)
 	{
 		id = _id;
 		visible = _visible;
@@ -34,9 +35,17 @@ public abstract class AbstractEffect
 		duration = _duration;
 	}
 
-	public EntityLivingBase getEntity()
+	public Entity getEntity()
 	{
 		return entity.get();
+	}
+
+	public EntityLivingBase getEntityLB()
+	{
+		Entity e = getEntity();
+		if(!(e instanceof EntityLivingBase))
+			return null;
+		return (EntityLivingBase) e;
 	}
 
 	public int getTT()

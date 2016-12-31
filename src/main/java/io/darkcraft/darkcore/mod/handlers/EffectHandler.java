@@ -6,24 +6,26 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.WeakHashMap;
 
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.TickEvent;
-import cpw.mods.fml.common.gameevent.TickEvent.Phase;
-import cpw.mods.fml.common.gameevent.TickEvent.Type;
-import io.darkcraft.darkcore.mod.abstracts.effects.AbstractEffect;
-import io.darkcraft.darkcore.mod.abstracts.effects.IEffectFactory;
-import io.darkcraft.darkcore.mod.abstracts.effects.StackedEffect;
-import io.darkcraft.darkcore.mod.helpers.ServerHelper;
-import io.darkcraft.darkcore.mod.impl.EntityEffectStore;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.IExtendedEntityProperties;
 import net.minecraftforge.event.entity.EntityEvent.EntityConstructing;
 
+import io.darkcraft.darkcore.mod.abstracts.effects.AbstractEffect;
+import io.darkcraft.darkcore.mod.abstracts.effects.IEffectFactory;
+import io.darkcraft.darkcore.mod.abstracts.effects.StackedEffect;
+import io.darkcraft.darkcore.mod.helpers.ServerHelper;
+import io.darkcraft.darkcore.mod.impl.EntityEffectStore;
+
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.TickEvent;
+import cpw.mods.fml.common.gameevent.TickEvent.Phase;
+import cpw.mods.fml.common.gameevent.TickEvent.Type;
+
 public class EffectHandler
 {
-	private static HashSet<IEffectFactory> factories = new HashSet<IEffectFactory>();
+	private static HashSet<IEffectFactory> factories = new HashSet<>();
 	private static Set<EntityEffectStore> watchedStores = Collections.newSetFromMap(new WeakHashMap<EntityEffectStore,Boolean>());
 
 	public static void registerEffectFactory(IEffectFactory factory)
@@ -31,7 +33,7 @@ public class EffectHandler
 		factories.add(factory);
 	}
 
-	private static AbstractEffect getStackedEffect(EntityLivingBase ent, NBTTagCompound nbt)
+	private static AbstractEffect getStackedEffect(Entity ent, NBTTagCompound nbt)
 	{
 		int num = nbt.getInteger("numSubs");
 		if(num == 0) return null;
@@ -50,7 +52,7 @@ public class EffectHandler
 		return se;
 	}
 
-	public static AbstractEffect getEffect(EntityLivingBase ent, NBTTagCompound nbt)
+	public static AbstractEffect getEffect(Entity ent, NBTTagCompound nbt)
 	{
 		String id = nbt.getString("id");
 		if((id == null) || id.isEmpty()) return null;
@@ -76,7 +78,7 @@ public class EffectHandler
 		}
 	}
 
-	public static EntityEffectStore getEffectStore(EntityLivingBase ent)
+	public static EntityEffectStore getEffectStore(Entity ent)
 	{
 		IExtendedEntityProperties store = ent.getExtendedProperties("dcEff");
 		if((store == null) || !(store instanceof EntityEffectStore))
@@ -92,7 +94,7 @@ public class EffectHandler
 	{
 		Entity ent = event.entity;
 		if(ent instanceof EntityLivingBase)
-			ent.registerExtendedProperties("dcEff", new EntityEffectStore((EntityLivingBase) ent));
+			ent.registerExtendedProperties("dcEff", new EntityEffectStore(ent));
 	}
 
 	@SubscribeEvent

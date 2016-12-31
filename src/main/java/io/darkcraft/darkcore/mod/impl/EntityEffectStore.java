@@ -5,22 +5,22 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
+
 import io.darkcraft.darkcore.mod.abstracts.AbstractEntityDataStore;
 import io.darkcraft.darkcore.mod.abstracts.effects.AbstractEffect;
 import io.darkcraft.darkcore.mod.abstracts.effects.StackedEffect;
 import io.darkcraft.darkcore.mod.handlers.EffectHandler;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.World;
 
 public class EntityEffectStore extends AbstractEntityDataStore
 {
 	public static final String disc = "dcEff";
 	public final boolean client;
-	private HashMap<String,AbstractEffect> effects = new HashMap<String,AbstractEffect>();
+	private HashMap<String,AbstractEffect> effects = new HashMap<>();
 
-	public EntityEffectStore(EntityLivingBase ent)
+	public EntityEffectStore(Entity ent)
 	{
 		super(ent, disc);
 		if((ent == null) || (ent.worldObj == null))
