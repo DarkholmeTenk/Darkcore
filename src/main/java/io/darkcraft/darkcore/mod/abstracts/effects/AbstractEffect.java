@@ -103,6 +103,11 @@ public abstract class AbstractEffect
 		readFromNBT(nbt);
 	}
 
+	public boolean dispellable()
+	{
+		return true;
+	}
+
 	/**
 	 * Save the current state of the effect to NBT (id, tt and duration are all saved automatically in the write function)
 	 * @param nbt

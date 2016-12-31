@@ -14,6 +14,11 @@ import io.darkcraft.darkcore.mod.abstracts.effects.AbstractEffect;
 import io.darkcraft.darkcore.mod.abstracts.effects.StackedEffect;
 import io.darkcraft.darkcore.mod.handlers.EffectHandler;
 
+/**
+ * EntityEffectStores should be obtained via {@link EffectHandler#getEffectStore(Entity)}
+ * @author dark
+ *
+ */
 public class EntityEffectStore extends AbstractEntityDataStore
 {
 	public static final String disc = "dcEff";

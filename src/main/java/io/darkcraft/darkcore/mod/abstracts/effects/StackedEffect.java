@@ -1,8 +1,9 @@
 package io.darkcraft.darkcore.mod.abstracts.effects;
 
-import io.darkcraft.darkcore.mod.datastore.UVStore;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
+
+import io.darkcraft.darkcore.mod.datastore.UVStore;
 
 public final class StackedEffect extends AbstractEffect
 {
@@ -75,6 +76,15 @@ public final class StackedEffect extends AbstractEffect
 	{
 		for(AbstractEffect e : effects)
 			e.effectRemoved();
+	}
+
+	@Override
+	public boolean dispellable()
+	{
+		for(AbstractEffect e : effects)
+			if((e.tt < e.duration) && !e.dispellable())
+				return false;
+		return true;
 	}
 
 	@Override
