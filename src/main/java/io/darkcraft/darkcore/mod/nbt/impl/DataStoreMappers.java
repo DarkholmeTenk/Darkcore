@@ -2,6 +2,10 @@ package io.darkcraft.darkcore.mod.nbt.impl;
 
 import java.util.UUID;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.Vec3;
+
 import io.darkcraft.darkcore.mod.handlers.containers.EntityContainer;
 import io.darkcraft.darkcore.mod.handlers.containers.EntityContainerHandler;
 import io.darkcraft.darkcore.mod.handlers.containers.EntityLivingBaseContainer;
@@ -10,8 +14,6 @@ import io.darkcraft.darkcore.mod.handlers.containers.PlayerContainer;
 import io.darkcraft.darkcore.mod.nbt.Mapper;
 import io.darkcraft.darkcore.mod.nbt.NBTHelper;
 import io.darkcraft.darkcore.mod.nbt.NBTProperty.SerialisableType;
-import net.minecraft.entity.Entity;
-import net.minecraft.nbt.NBTTagCompound;
 
 public class DataStoreMappers
 {
@@ -21,6 +23,7 @@ public class DataStoreMappers
 		NBTHelper.register(EntityContainer.class, new EntityContainerMapper());
 		NBTHelper.register(EntityLivingBaseContainer.class, new EntityLBContainerMapper());
 		NBTHelper.register(Entity.class, new EntityMapper());
+		NBTHelper.register(Vec3.class, new Vec3Mapper());
 	}
 
 	public static class PlayerContainerMapper extends Mapper<PlayerContainer>
@@ -104,6 +107,29 @@ public class DataStoreMappers
 			if(e != null)
 				return e.getEntity();
 			return null;
+		}
+	}
+
+	public static class Vec3Mapper extends PrimMapper<Vec3>
+	{
+		@Override
+		public void writeToNBT(NBTTagCompound nbt, String id, Vec3 t)
+		{
+			NBTTagCompound snbt = new NBTTagCompound();
+			snbt.setDouble("x", t.xCoord);
+			snbt.setDouble("y", t.yCoord);
+			snbt.setDouble("z", t.zCoord);
+			nbt.setTag(id,snbt);
+		}
+
+		@Override
+		public Vec3 readFromNBT(NBTTagCompound nbt, String id)
+		{
+			NBTTagCompound snbt = nbt.getCompoundTag(id);
+			double x = snbt.getDouble("x");
+			double y = snbt.getDouble("y");
+			double z = snbt.getDouble("z");
+			return Vec3.createVectorHelper(x, y, z);
 		}
 
 	}
