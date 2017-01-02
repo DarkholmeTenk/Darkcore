@@ -10,13 +10,15 @@ import com.google.common.collect.Tables;
 import com.google.common.primitives.Primitives;
 import com.google.common.reflect.Reflection;
 
+import net.minecraft.nbt.NBTTagCompound;
+
 import io.darkcraft.darkcore.mod.nbt.NBTProperty.SerialisableType;
 import io.darkcraft.darkcore.mod.nbt.impl.ArrayMapper;
 import io.darkcraft.darkcore.mod.nbt.impl.BasicMappers;
+import io.darkcraft.darkcore.mod.nbt.impl.DataStoreMappers;
 import io.darkcraft.darkcore.mod.nbt.impl.GeneratedMapper;
 import io.darkcraft.darkcore.mod.nbt.impl.SubTypeMapper;
 import io.darkcraft.darkcore.mod.nbt.impl.collections.CollectionMappers;
-import net.minecraft.nbt.NBTTagCompound;
 
 public class NBTHelper
 {
@@ -34,6 +36,7 @@ public class NBTHelper
 					}
 			});
 		BasicMappers.register();
+		DataStoreMappers.register();
 		CollectionMappers.register();
 	}
 
@@ -52,7 +55,7 @@ public class NBTHelper
 	{
 		return mapperTable.contains(c, type);
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public static <T> Mapper<T> getMapper(T t, SerialisableType type)
 	{
@@ -118,7 +121,7 @@ public class NBTHelper
 		}
 		return null;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public static <T> void serialise(SerialisableType type, NBTTagCompound nbt, String id, T o)
 	{
