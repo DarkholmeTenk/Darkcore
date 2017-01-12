@@ -1,17 +1,18 @@
 package io.darkcraft.darkcore.mod.impl.command;
 
-import io.darkcraft.darkcore.mod.abstracts.AbstractCommandNew;
-import io.darkcraft.darkcore.mod.impl.UniqueSwordItem;
-
 import java.util.List;
 
 import net.minecraft.command.ICommandSender;
+
+import io.darkcraft.darkcore.mod.abstracts.AbstractCommandNew;
+import io.darkcraft.darkcore.mod.impl.UniqueSwordItem;
 
 public class DebugCommand extends AbstractCommandNew
 {
 	public DebugCommand()
 	{
-		super(new DCDChunkLoadingCommand(), new DCDSwordCommand(), new DCDMessageCommand(), new DCDEffectCommand(), new DCDWorldCommand());
+		super(new DCDChunkLoadingCommand(), new DCDSwordCommand(), new DCDMessageCommand(), new DCDEffectCommand(), new DCDWorldCommand(),
+				new DCDClearEntsCommand());
 	}
 
 	@Override
