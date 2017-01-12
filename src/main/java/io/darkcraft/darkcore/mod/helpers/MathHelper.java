@@ -4,10 +4,14 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
-import net.minecraft.util.Vec3;
-import net.minecraftforge.common.util.ForgeDirection;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
+import com.google.common.cache.Weigher;
 
 import io.darkcraft.darkcore.mod.datastore.SimpleDoubleCoordStore;
+import net.minecraft.util.Vec3;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public class MathHelper
 {
@@ -170,6 +174,58 @@ public class MathHelper
 		if((from == null) || (to == null)) return null;
 		if(from.world != to.world) return null;
 		return Vec3.createVectorHelper(to.x-from.x,to.y-from.y,to.z-from.z);
+	}
+	
+	private static LoadingCache<Integer, int[]> binomialCache = CacheBuilder.newBuilder()
+			.weigher(new Weigher<Integer,int[]>() {
+				@Override
+				public int weigh(Integer key, int[] value)
+				{
+					return key;
+				}
+			})
+			.maximumWeight(200)
+			.build(new CacheLoader<Integer, int[]>() {
+
+				@Override
+				public int[] load(Integer key) throws Exception
+				{
+					if(key <= 1) return new int[]{1};
+					int[] previous = binomialCache.getIfPresent(key - 1);
+					if(previous == null) previous = load(key - 1);
+					int[] newArray = new int[key];
+					newArray[0] = 1;
+					int mid = (key + 1)/2;
+					for(int i = 1; i < mid; i++)
+						newArray[i] = previous[i-1] + previous[i];
+					for(int i = mid; i < key; i++)
+						newArray[i] = newArray[key-i - 1];
+					return newArray;
+				}
+				
+			});
+			
+	public static int[] getBinomialCoefficient(int depth)
+	{
+		return binomialCache.getUnchecked(depth);
+	}
+	
+	public static double[] getCoefficients(double t, double mt, int size)
+	{
+		double[] array = new double[size];
+		for(int i = 0; i < size; i++) array[i] = 1;
+		int lastPos = size - 1;
+		for(int i = 0; i < lastPos; i++)
+		{
+			array[0] *= t;
+			array[lastPos] *= mt;
+			if(i < (lastPos - 1))
+			{
+				array[lastPos - i - 1] *= array[0];
+				array[i + 1] *= array[lastPos];
+			}
+		}
+		return array;
 	}
 
 	public static final ForgeDirection[] horizontal = new ForgeDirection[]{ForgeDirection.NORTH,ForgeDirection.EAST,ForgeDirection.SOUTH,ForgeDirection.WEST};
