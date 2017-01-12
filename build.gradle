@@ -15,8 +15,9 @@ buildscript {
 		}
 	}
 	dependencies {
-		classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
-		exclude module: 'forgeBin'
+		classpath('net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT') {
+			exclude module: 'forgeBin'
+		}
 	}
 }
 
