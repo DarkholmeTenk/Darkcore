@@ -2,11 +2,13 @@ package io.darkcraft.darkcore.mod.nbt.impl;
 
 import java.util.UUID;
 
-import io.darkcraft.darkcore.mod.nbt.Mapper;
-import io.darkcraft.darkcore.mod.nbt.NBTHelper;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fluids.FluidStack;
+
+import io.darkcraft.darkcore.mod.nbt.Mapper;
+import io.darkcraft.darkcore.mod.nbt.NBTHelper;
 
 public class BasicMappers
 {
@@ -23,6 +25,7 @@ public class BasicMappers
 		NBTHelper.register(Boolean.class, boolMapper);
 		NBTHelper.register(ItemStack.class, isMapper);
 		NBTHelper.register(UUID.class, uuidMapper);
+		NBTHelper.register(NBTBase.class, nbtMapper);
 	}
 
 	public static Mapper<String> stringMapper = new PrimMapper<String>()
@@ -170,5 +173,37 @@ public class BasicMappers
 			return new UUID(m, l);
 		}
 
+	};
+
+	public static Mapper<NBTBase> nbtMapper = new PrimMapper<NBTBase>()
+	{
+
+		@Override
+		public void writeToNBT(NBTTagCompound nbt, String id, NBTBase t)
+		{
+			nbt.setTag(id, t);
+		}
+
+		@Override
+		public NBTBase readFromNBT(NBTTagCompound nbt, String id)
+		{
+			return nbt.getTag(id);
+		}
+	};
+
+	public static Mapper<NBTTagCompound> nbtTagCompoundMapper = new PrimMapper<NBTTagCompound>()
+	{
+
+		@Override
+		public void writeToNBT(NBTTagCompound nbt, String id, NBTTagCompound t)
+		{
+			nbt.setTag(id, t);
+		}
+
+		@Override
+		public NBTTagCompound readFromNBT(NBTTagCompound nbt, String id)
+		{
+			return nbt.getCompoundTag(id);
+		}
 	};
 }
