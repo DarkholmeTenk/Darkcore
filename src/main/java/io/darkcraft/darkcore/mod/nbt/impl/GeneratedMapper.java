@@ -152,6 +152,7 @@ public class GeneratedMapper<T> extends Mapper<T>
 		{
 			try
 			{
+				m.setAccessible(true);
 				m.invoke(t, nbt);
 			}
 			catch (SecurityException | IllegalArgumentException | IllegalAccessException | InvocationTargetException e){}
@@ -192,6 +193,7 @@ public class GeneratedMapper<T> extends Mapper<T>
 		{
 			try
 			{
+				m.setAccessible(true);
 				m.invoke(t, nbt);
 			}
 			catch (SecurityException | IllegalArgumentException | IllegalAccessException | InvocationTargetException e){}
