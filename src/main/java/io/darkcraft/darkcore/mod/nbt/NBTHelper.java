@@ -3,6 +3,7 @@ package io.darkcraft.darkcore.mod.nbt;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import com.google.common.base.Supplier;
 import com.google.common.collect.Table;
@@ -22,6 +23,7 @@ import io.darkcraft.darkcore.mod.nbt.impl.collections.CollectionMappers;
 
 public class NBTHelper
 {
+	private static Set<Class<?>> unmappableClasses;
 	private static Table<Class<?>, SerialisableType, Mapper<?>> mapperTable;
 
 	static
@@ -69,6 +71,8 @@ public class NBTHelper
 		if(c.isPrimitive())
 			c = Primitives.wrap(c);
 		Reflection.initialize(c);
+		if(unmappableClasses.contains(c))
+			return null;
 		Mapper<T> mapper = (Mapper<T>) mapperTable.get(c, type);
 		if(mapper != null)
 			return mapper;
@@ -101,6 +105,8 @@ public class NBTHelper
 		}
 		if(mapper != null)
 			register(c, type, mapper);
+		else
+			unmappableClasses.add(c);
 		return mapper;
 	}
 
