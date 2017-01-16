@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.google.common.base.Supplier;
+import com.google.common.collect.Sets;
 import com.google.common.collect.Table;
 import com.google.common.collect.Tables;
 import com.google.common.primitives.Primitives;
@@ -23,7 +24,7 @@ import io.darkcraft.darkcore.mod.nbt.impl.collections.CollectionMappers;
 
 public class NBTHelper
 {
-	private static Set<Class<?>> unmappableClasses;
+	private static Set<Class<?>> unmappableClasses = Sets.newHashSet();
 	private static Table<Class<?>, SerialisableType, Mapper<?>> mapperTable;
 
 	static
