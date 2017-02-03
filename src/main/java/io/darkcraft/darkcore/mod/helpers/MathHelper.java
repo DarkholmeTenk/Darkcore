@@ -9,9 +9,12 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.google.common.cache.Weigher;
 
-import io.darkcraft.darkcore.mod.datastore.SimpleDoubleCoordStore;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.Vec3;
 import net.minecraftforge.common.util.ForgeDirection;
+
+import io.darkcraft.darkcore.mod.datastore.SimpleDoubleCoordStore;
 
 public class MathHelper
 {
@@ -175,7 +178,7 @@ public class MathHelper
 		if(from.world != to.world) return null;
 		return Vec3.createVectorHelper(to.x-from.x,to.y-from.y,to.z-from.z);
 	}
-	
+
 	private static LoadingCache<Integer, int[]> binomialCache = CacheBuilder.newBuilder()
 			.weigher(new Weigher<Integer,int[]>() {
 				@Override
@@ -202,14 +205,14 @@ public class MathHelper
 						newArray[i] = newArray[key-i - 1];
 					return newArray;
 				}
-				
+
 			});
-			
+
 	public static int[] getBinomialCoefficient(int depth)
 	{
 		return binomialCache.getUnchecked(depth);
 	}
-	
+
 	public static double[] getCoefficients(double t, double mt, int size)
 	{
 		double[] array = new double[size];
@@ -226,6 +229,14 @@ public class MathHelper
 			}
 		}
 		return array;
+	}
+
+	public static double castHeight(Entity e)
+	{
+		if(e instanceof EntityPlayer)
+			return ((EntityPlayer)e).eyeHeight;
+		else
+			return e.height/2;
 	}
 
 	public static final ForgeDirection[] horizontal = new ForgeDirection[]{ForgeDirection.NORTH,ForgeDirection.EAST,ForgeDirection.SOUTH,ForgeDirection.WEST};

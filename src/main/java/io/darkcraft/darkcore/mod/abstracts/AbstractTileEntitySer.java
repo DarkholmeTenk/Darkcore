@@ -3,24 +3,25 @@ package io.darkcraft.darkcore.mod.abstracts;
 import static io.darkcraft.darkcore.mod.nbt.NBTProperty.SerialisableType.TRANSMIT;
 import static io.darkcraft.darkcore.mod.nbt.NBTProperty.SerialisableType.WORLD;
 
-import io.darkcraft.darkcore.mod.nbt.NBTHelper;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 
+import io.darkcraft.darkcore.mod.nbt.Mapper;
+import io.darkcraft.darkcore.mod.nbt.NBTHelper;
+
 public class AbstractTileEntitySer extends AbstractTileEntity
-{	
-	{
-		NBTHelper.getMapper(getClass(), TRANSMIT);
-		NBTHelper.getMapper(getClass(), WORLD);
-	}
+{
+	protected final Mapper<AbstractTileEntitySer> WORLD_MAPPER = NBTHelper.getMapper(this, WORLD);
+	protected final Mapper<AbstractTileEntitySer> TRANS_MAPPER = NBTHelper.getMapper(this, TRANSMIT);
 
 	@Override
 	public Packet getDescriptionPacket()
 	{
 		NBTTagCompound tag = new NBTTagCompound();
-		NBTHelper.getMapper(this, TRANSMIT).writeToNBT(tag, this);
+		if(TRANS_MAPPER != null)
+			TRANS_MAPPER.writeToNBT(tag, this);
 		Packet p = new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, 3, tag);
 		return p;
 	}
@@ -29,7 +30,8 @@ public class AbstractTileEntitySer extends AbstractTileEntity
 	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity packet)
 	{
 		NBTTagCompound nbt = packet.func_148857_g();
-		NBTHelper.getMapper(this, TRANSMIT).fillFromNBT(nbt, this);
+		if(TRANS_MAPPER != null)
+			TRANS_MAPPER.fillFromNBT(nbt, this);
 		super.onDataPacket(net, packet);
 	}
 
@@ -37,13 +39,15 @@ public class AbstractTileEntitySer extends AbstractTileEntity
 	public void readFromNBT(NBTTagCompound nbt)
 	{
 		if (!nbt.hasKey("placed")) super.readFromNBT(nbt);
-		NBTHelper.getMapper(this, WORLD).fillFromNBT(nbt, this);
+		if(WORLD_MAPPER != null)
+			WORLD_MAPPER.fillFromNBT(nbt, this);
 	}
 
 	@Override
 	public void writeToNBT(NBTTagCompound nbt)
 	{
 		super.writeToNBT(nbt);
-		NBTHelper.getMapper(this, WORLD).writeToNBT(nbt, this);
+		if(WORLD_MAPPER != null)
+			WORLD_MAPPER.writeToNBT(nbt, this);
 	}
 }

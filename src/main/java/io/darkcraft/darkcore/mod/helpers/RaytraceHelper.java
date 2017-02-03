@@ -62,7 +62,7 @@ public class RaytraceHelper
 
 	public static MovingObjectPosition rayTrace(Entity tracer, Vec3 end, boolean liquids, Class<? extends Entity> entClass, boolean doBlocks, boolean doEnts, Entity... skip)
 	{
-		Vec3 start = Vec3.createVectorHelper(tracer.posX, tracer.posY, tracer.posZ);
+		Vec3 start = Vec3.createVectorHelper(tracer.posX, tracer.posY + MathHelper.castHeight(tracer), tracer.posZ);
 		if(ServerHelper.isServer() && (tracer instanceof EntityPlayer))
 			start = Vec3.createVectorHelper(tracer.posX, tracer.posY + tracer.getEyeHeight(), tracer.posZ);
 		World w = tracer.worldObj;
