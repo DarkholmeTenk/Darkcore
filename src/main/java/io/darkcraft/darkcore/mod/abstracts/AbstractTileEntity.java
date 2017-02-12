@@ -3,16 +3,6 @@ package io.darkcraft.darkcore.mod.abstracts;
 import java.util.List;
 import java.util.Random;
 
-import io.darkcraft.darkcore.mod.DarkcoreMod;
-import io.darkcraft.darkcore.mod.config.CType;
-import io.darkcraft.darkcore.mod.config.ConfigFile;
-import io.darkcraft.darkcore.mod.config.ConfigItem;
-import io.darkcraft.darkcore.mod.datastore.SimpleCoordStore;
-import io.darkcraft.darkcore.mod.datastore.SimpleDoubleCoordStore;
-import io.darkcraft.darkcore.mod.helpers.ServerHelper;
-import io.darkcraft.darkcore.mod.helpers.WorldHelper;
-import io.darkcraft.darkcore.mod.interfaces.IChunkLoader;
-import io.darkcraft.darkcore.mod.multiblock.IMultiBlockCore;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -25,10 +15,21 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import io.darkcraft.darkcore.mod.DarkcoreMod;
+import io.darkcraft.darkcore.mod.config.CType;
+import io.darkcraft.darkcore.mod.config.ConfigFile;
+import io.darkcraft.darkcore.mod.config.ConfigItem;
+import io.darkcraft.darkcore.mod.datastore.SimpleCoordStore;
+import io.darkcraft.darkcore.mod.datastore.SimpleDoubleCoordStore;
+import io.darkcraft.darkcore.mod.helpers.ServerHelper;
+import io.darkcraft.darkcore.mod.helpers.WorldHelper;
+import io.darkcraft.darkcore.mod.interfaces.IChunkLoader;
+import io.darkcraft.darkcore.mod.multiblock.IMultiBlockCore;
+
 public abstract class AbstractTileEntity extends TileEntity
 {
 	public boolean				init				= false;
-	public int					tt					= 0;
+	public int					tt					= -3;
 	private static int			updateInterval		= 0;
 	private static int			updateCounterMax	= 0;
 	private static int			multiBlockInterval	= 80;
@@ -127,6 +128,8 @@ public abstract class AbstractTileEntity extends TileEntity
 		if (coords == null) coords = new SimpleCoordStore(this);
 		tt++;
 
+		if(tt < 0)
+			return;
 		if (((tt % 11) == 0) && (updateCounter > 0)) updateCounter--;
 
 		if (updateQueued && canSendUpdate()) sendUpdate();

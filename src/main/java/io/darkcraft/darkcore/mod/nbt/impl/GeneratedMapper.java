@@ -101,8 +101,8 @@ public class GeneratedMapper<T> extends Mapper<T>
 				throw new RuntimeException("Field " + f.getName() + " in " + clazz.getSimpleName()
 					+ " is declared as NBTProperty but no mapper can be found");
 			fields.put(f, new Data(f, property, mapper));
-			if(!serProp.createNew() && Modifier.isFinal(f.getModifiers()))
-				throw new RuntimeException("Field " + f.getName() + " is final, but class is not set to create new instances on fill");
+//			if(!serProp.createNew() && Modifier.isFinal(f.getModifiers()))
+//				throw new RuntimeException("Field " + f.getName() + " is final, but class is not set to create new instances on fill");
 		}
 		NBTConstructorData<T> constructor = getConstructor(clazz, fields);
 		Multimap<Type, Method> methods = getMethods(clazz);
@@ -171,6 +171,8 @@ public class GeneratedMapper<T> extends Mapper<T>
 		for(Entry<Field, Data> entry : fields.entrySet())
 		{
 			Field f = entry.getKey();
+			if(Modifier.isFinal(f.getModifiers()))
+				continue;
 			Mapper<Object> m = (Mapper<Object>) entry.getValue().m;
 			String n = entry.getValue().n;
 			try

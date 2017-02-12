@@ -285,4 +285,12 @@ public class SimpleCoordStore
 	{
 		return new SimpleCoordStore(world, x+_x, y+_y, z+_z);
 	}
+
+	public <T> T getTileEntity(Class<T> clazz)
+	{
+		TileEntity t = getTileEntity();
+		if(clazz.isInstance(t))
+			return (T) t;
+		return null;
+	}
 }

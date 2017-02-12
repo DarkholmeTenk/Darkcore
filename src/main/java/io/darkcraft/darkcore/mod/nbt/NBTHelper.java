@@ -18,6 +18,7 @@ import io.darkcraft.darkcore.mod.nbt.NBTProperty.SerialisableType;
 import io.darkcraft.darkcore.mod.nbt.impl.ArrayMapper;
 import io.darkcraft.darkcore.mod.nbt.impl.BasicMappers;
 import io.darkcraft.darkcore.mod.nbt.impl.DataStoreMappers;
+import io.darkcraft.darkcore.mod.nbt.impl.EnumMapper;
 import io.darkcraft.darkcore.mod.nbt.impl.GeneratedMapper;
 import io.darkcraft.darkcore.mod.nbt.impl.SubTypeMapper;
 import io.darkcraft.darkcore.mod.nbt.impl.collections.CollectionMappers;
@@ -67,7 +68,7 @@ public class NBTHelper
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public static <T> Mapper<T> getMapper(Class<T> c, SerialisableType type)
+	public synchronized static <T> Mapper<T> getMapper(Class<T> c, SerialisableType type)
 	{
 		if(c.isPrimitive())
 			c = Primitives.wrap(c);
@@ -77,7 +78,9 @@ public class NBTHelper
 		Mapper<T> mapper = (Mapper<T>) mapperTable.get(c, type);
 		if(mapper != null)
 			return mapper;
-		if(c.isInterface())
+		if(c.isEnum())
+			mapper = new EnumMapper(c);
+		else if(c.isInterface())
 			mapper = new SubTypeMapper(type);
 		else if(c.isArray())
 		{
