@@ -5,6 +5,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,7 +39,7 @@ public class RegistryHelper
 				if(f.isAnnotationPresent(RegistryIgnore.class))
 					continue;
 				CustomRegistryItem annotation = f.getAnnotation(CustomRegistryItem.class);
-				if((annotation != null) && !f.isAccessible())
+				if((annotation != null) && !Modifier.isPublic(f.getModifiers()))
 					throw new RuntimeException(c.getName() + "." + f.getName() + " is not accessible for RegistryHelper");
 				Class<?> fieldClass = f.getType();
 				if(!(AbstractBlock.class.isAssignableFrom(fieldClass) || AbstractItem.class.isAssignableFrom(fieldClass)))
