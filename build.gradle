@@ -23,7 +23,7 @@ buildscript {
 
 apply plugin: 'forge'
 
-version = "0.45"
+version = "0.46"
 group= "io.darkcraft.darkcore" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "darkcore"
 
