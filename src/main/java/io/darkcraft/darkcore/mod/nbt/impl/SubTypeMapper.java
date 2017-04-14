@@ -1,9 +1,10 @@
 package io.darkcraft.darkcore.mod.nbt.impl;
 
+import net.minecraft.nbt.NBTTagCompound;
+
 import io.darkcraft.darkcore.mod.nbt.Mapper;
 import io.darkcraft.darkcore.mod.nbt.NBTHelper;
 import io.darkcraft.darkcore.mod.nbt.NBTProperty.SerialisableType;
-import net.minecraft.nbt.NBTTagCompound;
 
 public class SubTypeMapper<T> extends Mapper<T>
 {
@@ -38,8 +39,7 @@ public class SubTypeMapper<T> extends Mapper<T>
 		Mapper<T> mapper = NBTHelper.getMapper(clazz, type);
 		if(mapper == null)
 			throw new RuntimeException("No mapper could be found for class " + clazz.getName());
-		mapper.fillFromNBT(nbt, OBJ_KEY, o);
-		return o;
+		return mapper.fillFromNBT(nbt, OBJ_KEY, o);
 	}
 
 	@Override

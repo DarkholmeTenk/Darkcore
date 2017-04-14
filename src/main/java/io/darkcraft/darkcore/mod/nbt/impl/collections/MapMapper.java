@@ -1,22 +1,25 @@
 package io.darkcraft.darkcore.mod.nbt.impl.collections;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
+import net.minecraft.nbt.NBTTagCompound;
+
+import io.darkcraft.darkcore.mod.datastore.PropertyMap;
 import io.darkcraft.darkcore.mod.nbt.Mapper;
 import io.darkcraft.darkcore.mod.nbt.NBTHelper;
 import io.darkcraft.darkcore.mod.nbt.NBTProperty.SerialisableType;
 import io.darkcraft.darkcore.mod.nbt.impl.SubTypeMapper;
-import net.minecraft.nbt.NBTTagCompound;
 
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public abstract class MapMapper<T extends Map> extends Mapper<T>
 {
-	private static final String SIZE_KEY = "size";
-	private final SubTypeMapper<Object> stm;
+	protected static final String SIZE_KEY = "size";
+	protected final SubTypeMapper<Object> stm;
 
 	public MapMapper(SerialisableType type)
 	{
@@ -45,13 +48,32 @@ public abstract class MapMapper<T extends Map> extends Mapper<T>
 	{
 		if(t == null)
 			return createFromNBT(nbt);
-		t.clear();
+		Map<Object,Object> map = t;
+		Map<Object, Integer> keyMap = new HashMap<>();
 		int size = nbt.getInteger(SIZE_KEY);
 		for(int i = 0; i < size; i++)
 		{
 			Object k  = stm.createFromNBT(nbt.getCompoundTag("k"+i));
-			Object v  = stm.createFromNBT(nbt.getCompoundTag("v"+i));
-			t.put(k, v);
+			keyMap.put(k, i);
+		}
+
+		Iterator<Entry<Object, Object>> iter = map.entrySet().iterator();
+		while(iter.hasNext())
+		{
+			Entry entry = iter.next();
+			if(!keyMap.containsKey(entry.getKey()))
+				iter.remove();
+			else
+			{
+				int slot = keyMap.remove(entry.getKey());
+				Object v = stm.fillFromNBT(nbt, "v"+slot, entry.getValue());
+				entry.setValue(v);
+			}
+		}
+		for(Entry<Object, Integer> remaining : keyMap.entrySet())
+		{
+			int slot = remaining.getValue();
+			map.put(remaining.getKey(), stm.createFromNBT(nbt.getCompoundTag("v"+slot)));
 		}
 		return t;
 	}
@@ -72,6 +94,7 @@ public abstract class MapMapper<T extends Map> extends Mapper<T>
 			NBTHelper.register(HashMap.class, type, new HashMapMapper(type));
 			NBTHelper.register(TreeMap.class, type, new TreeMapMapper(type));
 			NBTHelper.register(LinkedHashMap.class, type, new LinkedHashMapMapper(type));
+			NBTHelper.register(PropertyMap.class, new PropertyMapMapper(type));
 		}
 	}
 
