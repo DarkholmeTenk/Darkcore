@@ -80,6 +80,8 @@ public class GeneratedMapper<T> extends Mapper<T>
 	{
 		if(NBTHelper.hasMapper(clazz, t))
 			return NBTHelper.getMapper(clazz, t);
+		if(clazz.isInterface() || Modifier.isAbstract(clazz.getModifiers()))
+			return new SubTypeMapper(t);
 		NBTSerialisable serProp = clazz.getAnnotation(NBTSerialisable.class);
 		if(serProp == null)
 			return null;

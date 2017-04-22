@@ -6,7 +6,7 @@ import io.darkcraft.darkcore.mod.nbt.Mapper;
 import io.darkcraft.darkcore.mod.nbt.NBTHelper;
 import io.darkcraft.darkcore.mod.nbt.NBTProperty.SerialisableType;
 
-public class SubTypeMapper<T> extends Mapper<T>
+public final class SubTypeMapper<T> extends Mapper<T>
 {
 	private final SerialisableType type;
 	private static final String OBJ_KEY = "obj";
