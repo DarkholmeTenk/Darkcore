@@ -92,19 +92,24 @@ public class GeneratedMapper<T> extends Mapper<T>
 			fields = Maps.newHashMap(((GeneratedMapper)parent).fields);
 		else
 			fields = Maps.newHashMap();
-
-		for(Field f : clazz.getDeclaredFields())
+		boolean recurse = fields.isEmpty();
+		Class<?> c = clazz;
+		while(c != null)
 		{
-			NBTProperty property = f.getAnnotation(NBTProperty.class);
-			if((property == null) || !t.valid(property))
-				continue;
-			Mapper<?> mapper = NBTHelper.getMapper(f.getType(), t);
-			if(mapper == null)
-				throw new RuntimeException("Field " + f.getName() + " in " + clazz.getSimpleName()
-					+ " is declared as NBTProperty but no mapper can be found");
-			fields.put(f, new Data(f, property, mapper));
-//			if(!serProp.createNew() && Modifier.isFinal(f.getModifiers()))
-//				throw new RuntimeException("Field " + f.getName() + " is final, but class is not set to create new instances on fill");
+			for(Field f : clazz.getDeclaredFields())
+			{
+				NBTProperty property = f.getAnnotation(NBTProperty.class);
+				if((property == null) || !t.valid(property))
+					continue;
+				Mapper<?> mapper = NBTHelper.getMapper(f.getType(), t);
+				if(mapper == null)
+					throw new RuntimeException("Field " + f.getName() + " in " + clazz.getSimpleName()
+						+ " is declared as NBTProperty but no mapper can be found");
+				fields.put(f, new Data(f, property, mapper));
+	//			if(!serProp.createNew() && Modifier.isFinal(f.getModifiers()))
+	//				throw new RuntimeException("Field " + f.getName() + " is final, but class is not set to create new instances on fill");
+			}
+			c = recurse ? c.getSuperclass() : null;
 		}
 		NBTConstructorData<T> constructor = getConstructor(clazz, fields);
 		Multimap<Type, Method> methods = getMethods(clazz);
