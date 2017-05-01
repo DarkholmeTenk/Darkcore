@@ -1,5 +1,8 @@
 package io.darkcraft.darkcore.mod.helpers;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.lwjgl.Sys;
 import org.lwjgl.opengl.GL11;
 
@@ -11,6 +14,8 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.model.AdvancedModelLoader;
+import net.minecraftforge.client.model.IModelCustom;
 
 import io.darkcraft.darkcore.mod.datastore.Colour;
 import io.darkcraft.darkcore.mod.datastore.UVStore;
@@ -169,5 +174,60 @@ public class RenderHelper
 	{
 		if(fr == null) fr = Minecraft.getMinecraft().fontRenderer;
 		return fr;
+	}
+
+	public static IModelCustom getModel(ResourceLocation location)
+	{
+		return DeferredObject.map.computeIfAbsent(location, DeferredObject::new);
+	}
+
+	public static class DeferredObject implements IModelCustom
+	{
+		private final static Map<ResourceLocation, DeferredObject> map = new HashMap<>();
+
+		private IModelCustom model;
+		private final ResourceLocation location;
+
+		private DeferredObject(ResourceLocation location)
+		{
+			this.location = location;
+		}
+
+		public IModelCustom get()
+		{
+			if(model == null)
+				return model = AdvancedModelLoader.loadModel(location);
+			return model;
+		}
+
+		@Override
+		public String getType()
+		{
+			return get().getType();
+		}
+
+		@Override
+		public void renderAll()
+		{
+			get().renderAll();
+		}
+
+		@Override
+		public void renderOnly(String... groupNames)
+		{
+			get().renderOnly(groupNames);
+		}
+
+		@Override
+		public void renderPart(String partName)
+		{
+			get().renderPart(partName);
+		}
+
+		@Override
+		public void renderAllExcept(String... excludedGroupNames)
+		{
+			get().renderAllExcept(excludedGroupNames);
+		}
 	}
 }
