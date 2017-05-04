@@ -96,7 +96,7 @@ public class GeneratedMapper<T> extends Mapper<T>
 		Class<?> c = clazz;
 		while(c != null)
 		{
-			for(Field f : clazz.getDeclaredFields())
+			for(Field f : c.getDeclaredFields())
 			{
 				NBTProperty property = f.getAnnotation(NBTProperty.class);
 				if((property == null) || !t.valid(property))
@@ -178,12 +178,19 @@ public class GeneratedMapper<T> extends Mapper<T>
 		for(Entry<Field, Data> entry : fields.entrySet())
 		{
 			Field f = entry.getKey();
-			if(Modifier.isFinal(f.getModifiers()))
-				continue;
 			Mapper<Object> m = (Mapper<Object>) entry.getValue().m;
 			String n = entry.getValue().n;
 			try
 			{
+				if(Modifier.isFinal(f.getModifiers()))
+				{
+					if(nbt.hasKey(n))
+					{
+						f.setAccessible(true);
+						m.fillFromNBT(nbt, n, f.get(t));
+					}
+					continue;
+				}
 				f.setAccessible(true);
 				if(nbt.hasKey(n))
 				{

@@ -10,7 +10,9 @@ import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 
 import io.darkcraft.darkcore.mod.nbt.Mapper;
 import io.darkcraft.darkcore.mod.nbt.NBTHelper;
+import io.darkcraft.darkcore.mod.nbt.NBTSerialisable;
 
+@NBTSerialisable
 public class AbstractTileEntitySer extends AbstractTileEntity
 {
 	protected final Mapper<AbstractTileEntitySer> WORLD_MAPPER = NBTHelper.getMapper(this, WORLD);

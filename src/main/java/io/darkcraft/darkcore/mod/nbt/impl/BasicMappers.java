@@ -17,6 +17,7 @@ public class BasicMappers
 	{
 		NBTHelper.register(String.class, stringMapper);
 		NBTHelper.register(Long.class, longMapper);
+		NBTHelper.register(Float.class, floatMapper);
 		NBTHelper.register(Double.class, doubleMapper);
 		NBTHelper.register(Byte.class, byteMapper);
 		NBTHelper.register(byte[].class, byteArrMapper);
@@ -80,6 +81,15 @@ public class BasicMappers
 
 		@Override
 		public Long readFromNBT(NBTTagCompound nbt, String id) { return nbt.getLong(id); }
+	};
+
+	public static Mapper<Float> floatMapper = new PrimMapper<Float>()
+	{
+		@Override
+		public void writeToNBT(NBTTagCompound nbt, String id, Float t) { nbt.setDouble(id, t); }
+
+		@Override
+		public Float readFromNBT(NBTTagCompound nbt, String id) { return (float) nbt.getDouble(id); }
 	};
 
 	public static Mapper<Double> doubleMapper = new PrimMapper<Double>()

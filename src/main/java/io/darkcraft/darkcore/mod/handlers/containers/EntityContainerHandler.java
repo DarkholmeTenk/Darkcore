@@ -39,6 +39,13 @@ public class EntityContainerHandler
 			return new EntityContainer(ent);
 	}
 
+	public static PlayerContainer getPlayerContainer(EntityPlayer ent)
+	{
+		if(ent instanceof FakePlayer)
+			return null;
+		return (PlayerContainer) getContainer(ent);
+	}
+
 	public static IEntityContainer getContainer(NBTTagCompound nbt, String id)
 	{
 		NBTTagCompound snbt = nbt.getCompoundTag(id);

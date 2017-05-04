@@ -44,7 +44,7 @@ public abstract class AbstractObjRenderer extends AbstractBlockRenderer
 		GL11.glPushMatrix();
 		GL11.glTranslated(0.5, 0.5, 0.5);
 		GL11.glScaled(0.5, 0.5, 0.5);
-		renderBlock(tessellator, tileEntity, x, y, z);
+		renderBlock(tessellator, tileEntity, x, y, z, f);
 		GL11.glPopMatrix();
 		renderNormal(tessellator, tileEntity, x, y, z);
 		GL11.glPopAttrib();
