@@ -73,7 +73,9 @@ public abstract class MapMapper<T extends Map> extends Mapper<T>
 		for(Entry<Object, Integer> remaining : keyMap.entrySet())
 		{
 			int slot = remaining.getValue();
-			map.put(remaining.getKey(), stm.createFromNBT(nbt.getCompoundTag("v"+slot)));
+			Object o = stm.createFromNBT(nbt.getCompoundTag("v"+slot));
+			if(o != null)
+				map.put(remaining.getKey(), o);
 		}
 		return t;
 	}
