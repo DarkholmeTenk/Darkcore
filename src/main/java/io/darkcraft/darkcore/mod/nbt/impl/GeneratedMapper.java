@@ -210,7 +210,10 @@ public class GeneratedMapper<T> extends Mapper<T>
 			try
 			{
 				m.setAccessible(true);
-				m.invoke(t, nbt);
+				if(m.getParameterTypes().length == 0)
+					m.invoke(t);
+				else
+					m.invoke(t, nbt);
 			}
 			catch (SecurityException | IllegalArgumentException | IllegalAccessException | InvocationTargetException e){}
 		}
