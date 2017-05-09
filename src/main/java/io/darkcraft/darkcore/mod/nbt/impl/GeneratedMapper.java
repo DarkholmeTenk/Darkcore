@@ -68,7 +68,7 @@ public class GeneratedMapper<T> extends Mapper<T>
 			NBTMethod annotation = m.getAnnotation(NBTMethod.class);
 			if(annotation == null)
 				continue;
-			if(!Arrays.equals(m.getParameterTypes(), new Class<?>[]{NBTTagCompound.class}))
+			if((m.getParameterTypes().length != 0) && !Arrays.equals(m.getParameterTypes(), new Class<?>[]{NBTTagCompound.class}))
 				throw new RuntimeException("Exception constructing mapper. " + m.getName() + " does not take a single NBTTagCompound");
 			methods.put(annotation.value(), m);
 		}
