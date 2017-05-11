@@ -26,7 +26,7 @@ public class EntityContainerHandler
 			PlayerContainer pc;
 			if(uuid != null)
 			{
-				pc = getCache(ent.worldObj.isRemote).getUnchecked(uuid);
+				pc = getCache(ServerHelper.isServer(ent)).getUnchecked(uuid);
 				pc.setEntity((EntityPlayer) ent);
 				return pc;
 			}

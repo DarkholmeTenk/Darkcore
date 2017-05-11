@@ -43,7 +43,7 @@ public class SimpleCoordStore
 		z = te.zCoord;
 	}
 
-	@NBTConstructor({"world", "x", "y", "z"})
+	@NBTConstructor({"w", "x", "y", "z"})
 	public SimpleCoordStore(int win, int xin, int yin, int zin)
 	{
 		world = win;

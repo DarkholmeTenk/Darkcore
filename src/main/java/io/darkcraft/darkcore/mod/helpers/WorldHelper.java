@@ -188,13 +188,14 @@ public class WorldHelper
 	public static void giveItemStack(EntityPlayer pl, ItemStack is)
 	{
 		if((is == null) || (pl == null)) return;
+		World w = getWorld(getWorldID(pl));
 		if(ServerHelper.isClient())
 		{
 			Exception e = new RuntimeException("Mod is trying to give item stack client side!");
 			e.printStackTrace();
 			return;
 		}
-		EntityItem ie = new EntityItem(pl.worldObj, pl.posX, pl.posY, pl.posZ, is);
+		EntityItem ie = new EntityItem(w, pl.posX, pl.posY, pl.posZ, is);
 		ie.delayBeforeCanPickup = 0;
 		pl.worldObj.spawnEntityInWorld(ie);
 	}

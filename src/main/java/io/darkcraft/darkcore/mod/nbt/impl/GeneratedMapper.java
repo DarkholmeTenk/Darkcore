@@ -42,7 +42,15 @@ public class GeneratedMapper<T> extends Mapper<T>
 				NBTConstructor annotation = constr.getAnnotation(NBTConstructor.class);
 				if(annotation != null)
 				{
-					return new NBTConstructorData(annotation, constr, fields);
+					return new NBTConstructorData(annotation, null, constr, fields);
+				}
+			}
+			for(Method m : clazz.getDeclaredMethods())
+			{
+				NBTConstructor annotation = m.getAnnotation(NBTConstructor.class);
+				if(annotation != null)
+				{
+					return new NBTConstructorData(annotation, m, null, fields);
 				}
 			}
 		}
@@ -284,15 +292,17 @@ public class GeneratedMapper<T> extends Mapper<T>
 
 	private static class NBTConstructorData<T>
 	{
+		private Method factory;
 		private Constructor<T> constructor;
 		private final Data[] data;
 
-		public NBTConstructorData(NBTConstructor annotation, Constructor<T> constructor, Map<Field, Data> dataMap)
+		public NBTConstructorData(NBTConstructor annotation, Method factory, Constructor<T> constructor, Map<Field, Data> dataMap)
 		{
+			this.factory = factory;
 			this.constructor = constructor;
 			Map<String, Data> dm = new HashMap<>();
 			for(Entry<Field, Data> entry : dataMap.entrySet())
-				dm.put(entry.getKey().getName(), entry.getValue());
+				dm.put(entry.getValue().n, entry.getValue());
 
 			String[] names = annotation.value();
 			data = new Data[names.length];
@@ -312,7 +322,13 @@ public class GeneratedMapper<T> extends Mapper<T>
 					Data data = this.data[i];
 					objs[i] = data.m.readFromNBT(nbt, data.n);
 				}
-				return constructor.newInstance(objs);
+				if(constructor != null)
+					return constructor.newInstance(objs);
+				else
+				{
+					factory.setAccessible(true);
+					return (T) factory.invoke(null, objs);
+				}
 			}
 			catch(SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e)
 			{

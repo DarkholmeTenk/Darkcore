@@ -1,5 +1,13 @@
 package io.darkcraft.darkcore.mod.datastore;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.Vec3;
+import net.minecraft.world.World;
+
 import io.darkcraft.darkcore.mod.helpers.MathHelper;
 import io.darkcraft.darkcore.mod.helpers.WorldHelper;
 import io.darkcraft.darkcore.mod.interfaces.IPositionProvider;
@@ -9,13 +17,6 @@ import io.darkcraft.darkcore.mod.nbt.NBTHelper;
 import io.darkcraft.darkcore.mod.nbt.NBTProperty;
 import io.darkcraft.darkcore.mod.nbt.NBTProperty.SerialisableType;
 import io.darkcraft.darkcore.mod.nbt.NBTSerialisable;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.Vec3;
-import net.minecraft.world.World;
 
 @NBTSerialisable(createNew = true)
 public class SimpleDoubleCoordStore implements IPositionProvider
@@ -39,7 +40,7 @@ public class SimpleDoubleCoordStore implements IPositionProvider
 		this(WorldHelper.getWorldID(te), te.xCoord, te.yCoord, te.zCoord);
 	}
 
-	@NBTConstructor({"world", "x", "y", "z"})
+	@NBTConstructor({"w", "x", "y", "z"})
 	public SimpleDoubleCoordStore(int win, double xin, double yin, double zin)
 	{
 		world = win;
