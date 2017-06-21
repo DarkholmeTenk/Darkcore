@@ -38,6 +38,20 @@ public class MathHelper
 		return sin(degrees + 90);
 	}
 
+	public static double tan(double degrees)
+	{
+		double c = cos(degrees);
+		if(c == 0) return 0;
+		return sin(degrees) / c;
+	}
+
+	public static double cot(double degrees)
+	{
+		double c = sin(degrees);
+		if(c == 0) return 0;
+		return cos(degrees) / c;
+	}
+
 	public static float interpolate(float a, float b, float mix)
 	{
 		return (a * mix) + (b * (1-mix));

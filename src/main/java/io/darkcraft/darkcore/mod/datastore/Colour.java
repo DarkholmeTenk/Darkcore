@@ -40,6 +40,11 @@ public class Colour
 		this(_r,_g,_b,1f);
 	}
 
+	public static Colour fromRegular(int r, int g, int b)
+	{
+		return new Colour(r/255f, g/255f, b/255f);
+	}
+
 	public Colour(float _r, float _g, float _b, float _a)
 	{
 		r=_r;

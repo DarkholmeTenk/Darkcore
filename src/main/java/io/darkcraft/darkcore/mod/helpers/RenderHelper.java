@@ -17,6 +17,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.AdvancedModelLoader;
 import net.minecraftforge.client.model.IModelCustom;
 
+import io.darkcraft.darkcore.mod.client.TextRenderer;
 import io.darkcraft.darkcore.mod.datastore.Colour;
 import io.darkcraft.darkcore.mod.datastore.UVStore;
 import io.darkcraft.darkcore.mod.multiblock.IBlockState;
@@ -174,6 +175,11 @@ public class RenderHelper
 	{
 		if(fr == null) fr = Minecraft.getMinecraft().fontRenderer;
 		return fr;
+	}
+
+	public static TextRenderer getTextRenderer(int w, int h)
+	{
+		return new TextRenderer(w,h);
 	}
 
 	public static IModelCustom getModel(ResourceLocation location)
